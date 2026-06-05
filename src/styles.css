@@ -2,8 +2,7 @@
 @source "../src";
 @import "tw-animate-css";
 
-/* Google Fonts: Inter (display + body), JetBrains Mono (code) */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400&display=swap");
+/* Fonts (Inter + JetBrains Mono) are loaded via <link> in src/routes/__root.tsx. */
 
 @custom-variant dark (&:is(.dark *));
 
