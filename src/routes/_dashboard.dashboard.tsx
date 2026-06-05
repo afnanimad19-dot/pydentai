@@ -191,7 +191,7 @@ export function DashboardOverview() {
       {/* ROW 3: Main content - chart + right panels */}
       <div className="grid grid-cols-12 gap-5">
         {/* LEFT: chart */}
-        <div className="col-span-8 bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-6">
+        <div className="col-span-8 self-start bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
               <h3 className="text-white font-semibold text-[16px] tracking-[-0.02em]">
