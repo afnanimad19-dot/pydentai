@@ -12,10 +12,7 @@ const NAV_LINKS: Array<{ label: string; href: string }> = [
 
 function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2.5 no-underline group">
-      <span className="h-[34px] w-[34px] rounded-xl bg-[#7B5CFC]/15 border border-[#7B5CFC]/25 flex items-center justify-center">
-        <Smile size={18} className="text-[#7B5CFC]" />
-      </span>
+    <Link to="/" className="flex items-center no-underline group">
       <span className="flex items-baseline">
         <span className="font-display font-bold text-lg text-white group-hover:text-[#9B84FF] transition-colors">
           pydent
