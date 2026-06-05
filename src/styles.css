@@ -2,30 +2,63 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Google Fonts: Syne (display), Plus Jakarta Sans (body), JetBrains Mono (code) */
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap");
+
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * pydent.ai design system (dark luxury SaaS)
+ * Brand tokens registered as Tailwind utilities via @theme.
+ * Usage: bg-pd-black, text-pd-purple, border-pd-border, etc.
  */
 
+@theme {
+  /* Brand palette */
+  --color-pd-black: #06060f;
+  --color-pd-dark: #0b0b1a;
+  --color-pd-raised: #10101f;
+  --color-pd-elevated: #141428;
+  --color-pd-border: #1c1c34;
+  --color-pd-purple: #7b5cfc;
+  --color-pd-purple-2: #6047db;
+  --color-pd-purple-3: #9b84ff;
+  --color-pd-teal: #00d4aa;
+  --color-pd-amber: #ffab00;
+  --color-pd-text: #ffffff;
+  --color-pd-muted: #8b8fa8;
+  --color-pd-faint: #4a4a6a;
+
+  /* Typography */
+  --font-display: "Syne", sans-serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Custom keyframes + animations */
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2.5s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(123, 92, 252, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(123, 92, 252, 0.6); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+  }
+}
+
+/* shadcn semantic tokens — mapped to the dark luxury palette */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -45,91 +78,42 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --radius: 0.75rem;
+
+  /* Effects */
+  --glow-purple: rgba(123, 92, 252, 0.18);
+  --glow-teal: rgba(0, 212, 170, 0.12);
+  --gradient-hero: radial-gradient(ellipse 90% 55% at 50% -10%, rgba(123, 92, 252, 0.2) 0%, transparent 60%);
+  --gradient-card: linear-gradient(135deg, rgba(123, 92, 252, 0.07) 0%, rgba(0, 212, 170, 0.03) 100%);
+  --gradient-purple: linear-gradient(135deg, #7b5cfc 0%, #5b3fdc 100%);
+
+  /* shadcn dark-mapped values */
+  --background: #06060f;
+  --foreground: #ffffff;
+  --card: #0b0b1a;
+  --card-foreground: #ffffff;
+  --popover: #10101f;
+  --popover-foreground: #ffffff;
+  --primary: #7b5cfc;
+  --primary-foreground: #ffffff;
+  --secondary: #141428;
+  --secondary-foreground: #ffffff;
+  --muted: #10101f;
+  --muted-foreground: #8b8fa8;
+  --accent: #141428;
+  --accent-foreground: #ffffff;
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: #ffffff;
+  --border: #1c1c34;
+  --input: #1c1c34;
+  --ring: #7b5cfc;
 }
 
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+html {
+  scroll-behavior: smooth;
 }
 
 @layer base {
@@ -138,7 +122,37 @@
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    background: #06060f;
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  h1,
+  h2 {
+    font-family: "Syne", sans-serif;
+  }
+
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+  }
+}
+
+/* Custom dark scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #06060f;
+}
+::-webkit-scrollbar-thumb {
+  background: #1c1c34;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7b5cfc;
 }
