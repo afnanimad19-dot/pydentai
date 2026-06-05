@@ -529,7 +529,79 @@ export function DashboardOverview() {
               </div>
             </div>
           </div>
+
+          {/* Today's AI Summary */}
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
+            <h3 className="text-white font-semibold text-sm mb-4">Today's AI Summary</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { Icon: MessageSquare, color: "#7B5CFC", label: "Messages Handled", value: "247" },
+                { Icon: PhoneCall, color: "#00D4AA", label: "Calls Completed", value: "14" },
+                { Icon: CalendarCheck, color: "#22C55E", label: "Appointments Booked", value: "8" },
+                { Icon: Clock, color: "#F59E0B", label: "Avg Response", value: "1.8s" },
+              ].map((m) => {
+                const Icon = m.Icon;
+                return (
+                  <div key={m.label} className="bg-[#06060F] rounded-lg p-3">
+                    <Icon size={14} style={{ color: m.color }} />
+                    <div className="text-[#4A4A6A] text-[10px] uppercase tracking-[0.06em] mt-2">
+                      {m.label}
+                    </div>
+                    <div className="text-white text-[18px] font-[700] tracking-[-0.03em] mt-1">
+                      {m.value}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-3 pt-3 border-t border-[#1C1C34]">
+              <div className="text-[#4A4A6A] text-[10px] mb-2">vs yesterday</div>
+              <div className="flex items-center justify-between">
+                <span className="text-[#22C55E] text-xs font-medium">Messages ↑ 18%</span>
+                <span className="text-[#22C55E] text-xs font-medium">Calls ↑ 7%</span>
+                <span className="text-[#22C55E] text-xs font-medium">Bookings ↑ 33%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* WhatsApp Rate Limits */}
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-white font-semibold text-sm">WhatsApp Limits</h3>
+              <span className="bg-[#7B5CFC]/[0.12] border border-[#7B5CFC]/20 text-[#9B84FF] text-[10px] px-2 py-0.5 rounded-full font-semibold">
+                Tier 1
+              </span>
+            </div>
+            <div className="space-y-3">
+              {[
+                { label: "Daily Messages", used: "2,847 / 10,000", width: "28%", color: "#22C55E" },
+                { label: "Hourly Rate", used: "234 / 1,000", width: "23%", color: "#7B5CFC" },
+                { label: "Templates", used: "156 / 500", width: "31%", color: "#00D4AA" },
+              ].map((b) => (
+                <div key={b.label}>
+                  <div className="flex justify-between mb-1.5">
+                    <span className="text-[#8B8FA8] text-xs">{b.label}</span>
+                    <span className="text-white text-xs font-medium">{b.used}</span>
+                  </div>
+                  <div className="h-1.5 bg-[#1C1C34] rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full"
+                      style={{ width: b.width, background: b.color }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 pt-3 border-t border-[#1C1C34] flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-[#22C55E] rounded-full animate-pulse" />
+                <span className="text-[#22C55E] text-xs">API Connected</span>
+              </div>
+              <span className="text-[#4A4A6A] text-[11px]">Resets in 4h 12m</span>
+            </div>
+          </div>
         </div>
+
       </div>
 
       {/* ROW 4: 3 cards */}
