@@ -302,6 +302,72 @@ export function DashboardOverview() {
           </div>
         </div>
 
+        {/* Channel Overview card */}
+        <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5 mt-0">
+          <div className="flex justify-between items-center mb-5">
+            <h3 className="text-white font-semibold text-[15px] tracking-[-0.02em]">Channel Overview</h3>
+            <span className="bg-[#1C1C34] text-[#8B8FA8] text-[10px] px-2.5 py-1 rounded-full">All Channels</span>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              {
+                name: "Instagram", Icon: Camera, color: "#F59E0B",
+                status: "Inactive", statusBg: "bg-[#8B8FA8]/12", statusText: "text-[#8B8FA8]",
+                value: "0", label: "accounts connected",
+                secondary: "0 messages", delta: "—", deltaBg: "bg-[#1C1C34]", deltaText: "text-[#8B8FA8]",
+              },
+              {
+                name: "WhatsApp", Icon: MessageCircle, color: "#22C55E",
+                status: "Active", statusBg: "bg-[#22C55E]/15", statusText: "text-[#22C55E]",
+                value: "2,847", label: "messages sent",
+                secondary: "92% delivered", delta: "+12%", deltaBg: "bg-[#22C55E]/15", deltaText: "text-[#22C55E]",
+              },
+              {
+                name: "Voice", Icon: Phone, color: "#7B5CFC",
+                status: "Active", statusBg: "bg-[#7B5CFC]/15", statusText: "text-[#7B5CFC]",
+                value: "412", label: "calls handled",
+                secondary: "8 min avg", delta: "+5%", deltaBg: "bg-[#22C55E]/15", deltaText: "text-[#22C55E]",
+              },
+              {
+                name: "SMS", Icon: MessageSquare, color: "#00D4AA",
+                status: "Active", statusBg: "bg-[#00D4AA]/15", statusText: "text-[#00D4AA]",
+                value: "596", label: "messages sent",
+                secondary: "98% delivered", delta: "+8%", deltaBg: "bg-[#22C55E]/15", deltaText: "text-[#22C55E]",
+              },
+            ].map((ch) => {
+              const Icon = ch.Icon;
+              return (
+                <div key={ch.name} className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="rounded-lg flex items-center justify-center"
+                        style={{ width: 28, height: 28, background: `${ch.color}26` }}
+                      >
+                        <Icon size={14} style={{ color: ch.color }} />
+                      </div>
+                      <span className="text-white text-[13px] font-semibold">{ch.name}</span>
+                    </div>
+                    <span className={`h-5 px-2 text-[10px] rounded-full font-medium inline-flex items-center ${ch.statusBg} ${ch.statusText}`}>
+                      {ch.status}
+                    </span>
+                  </div>
+                  <div className="text-white font-bold text-[22px] tracking-[-0.03em]">{ch.value}</div>
+                  <div className="text-[#4A4A6A] text-[11px] mt-0.5">{ch.label}</div>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#1C1C34]">
+                    <span className="text-[#8B8FA8] text-xs">{ch.secondary}</span>
+                    <span className={`h-4 px-1.5 text-[10px] rounded-full font-medium inline-flex items-center ${ch.deltaBg} ${ch.deltaText}`}>
+                      {ch.delta}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        </div>
+
+
 
         {/* RIGHT: 3 stacked cards */}
         <div className="col-span-4 flex flex-col gap-4">
