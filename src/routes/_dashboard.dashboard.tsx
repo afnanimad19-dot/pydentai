@@ -429,11 +429,6 @@ export function DashboardOverview() {
               </div>
             </div>
           </div>
-
-          {/* Today's AI Summary */}
-          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5 hidden">
-            <h3 className="text-white font-semibold text-sm mb-4">Today's AI Summary</h3>
-          </div>
         </div>
       </div>
 
