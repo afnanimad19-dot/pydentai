@@ -5,6 +5,7 @@ import {
   Bot,
   BrainCircuit,
   Camera,
+  ChevronLeft,
   ChevronRight,
   Globe,
   LayoutDashboard,
@@ -21,6 +22,7 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
+import { useSidebar } from "./SidebarContext";
 
 type SubItem = {
   label: string;
@@ -206,6 +208,7 @@ const SECTIONS: Section[] = [
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { collapsed, setCollapsed } = useSidebar();
   const [open, setOpen] = useState<Record<string, boolean>>({
     "AI & Agents": true,
   });
@@ -213,41 +216,68 @@ export function AppSidebar() {
   const toggle = (k: string) => setOpen((o) => ({ ...o, [k]: !o[k] }));
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-[232px] bg-[#0B0B1A] border-r border-[#1C1C34] flex flex-col overflow-hidden z-40 font-sans">
+    <aside
+      className={`fixed left-0 top-0 h-screen bg-[#0B0B1A] border-r border-[#1C1C34] flex flex-col overflow-visible z-40 font-sans transition-all duration-200 ease-in-out ${
+        collapsed ? "w-14" : "w-[232px]"
+      }`}
+    >
+      {/* Collapse toggle */}
+      <button
+        onClick={() => setCollapsed(!collapsed)}
+        className="absolute right-[-12px] top-[72px] w-6 h-6 rounded-full bg-[#0B0B1A] border border-[#1C1C34] hover:border-[#7B5CFC]/50 hover:bg-[#1C1C34] flex items-center justify-center cursor-pointer z-[51] transition-colors"
+        aria-label="Toggle sidebar"
+      >
+        {collapsed ? (
+          <ChevronRight size={12} className="text-[#8B8FA8]" />
+        ) : (
+          <ChevronLeft size={12} className="text-[#8B8FA8]" />
+        )}
+      </button>
+
       {/* Logo */}
-      <div className="h-14 flex items-center px-5 gap-3 border-b border-[#1C1C34] flex-shrink-0">
-        <div className="w-8 h-8 rounded-lg bg-[#7B5CFC]/20 border border-[#7B5CFC]/25 flex items-center justify-center">
+      <div
+        className={`h-14 flex items-center border-b border-[#1C1C34] flex-shrink-0 ${
+          collapsed ? "justify-center px-0" : "px-5 gap-3"
+        }`}
+      >
+        <div className="w-8 h-8 rounded-lg bg-[#7B5CFC]/20 border border-[#7B5CFC]/25 flex items-center justify-center flex-shrink-0">
           <span className="font-bold text-[13px] text-[#7B5CFC]">Py</span>
         </div>
-        <span className="text-white font-bold text-[15px] tracking-[-0.02em]">
-          pydent<span className="text-[#7B5CFC]">.ai</span>
-        </span>
+        {!collapsed && (
+          <span className="text-white font-bold text-[15px] tracking-[-0.02em]">
+            pydent<span className="text-[#7B5CFC]">.ai</span>
+          </span>
+        )}
       </div>
 
       {/* Search */}
-      <div className="px-3 py-3 border-b border-[#1C1C34]">
-        <div className="relative">
-          <Search
-            size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4A4A6A]"
-          />
-          <input
-            placeholder="Search pages..."
-            className="w-full h-8 bg-[#06060F] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs pl-8 pr-8 focus:outline-none focus:border-[#7B5CFC]/40"
-          />
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#4A4A6A]">
-            ⌘K
-          </span>
+      {!collapsed && (
+        <div className="px-3 py-3 border-b border-[#1C1C34]">
+          <div className="relative">
+            <Search
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4A4A6A]"
+            />
+            <input
+              placeholder="Search pages..."
+              className="w-full h-8 bg-[#06060F] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs pl-8 pr-8 focus:outline-none focus:border-[#7B5CFC]/40"
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#4A4A6A]">
+              ⌘K
+            </span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-3">
+      <nav className="flex-1 overflow-y-auto overflow-x-visible py-3">
         {SECTIONS.map((section) => (
           <div key={section.title}>
-            <div className="px-4 pt-3 pb-1 text-[10px] uppercase tracking-[0.1em] text-[#4A4A6A] font-semibold select-none">
-              {section.title}
-            </div>
+            {!collapsed && (
+              <div className="px-4 pt-3 pb-1 text-[10px] uppercase tracking-[0.1em] text-[#4A4A6A] font-semibold select-none">
+                {section.title}
+              </div>
+            )}
             {section.items.map((item) => {
               const Icon = item.icon;
               const isActive =
@@ -256,13 +286,22 @@ export function AppSidebar() {
                   : item.sub
                   ? item.sub.some((s) => s.url && pathname === s.url)
                   : false;
-              const isOpen = open[item.label] ?? isActive;
-              const baseRow =
-                "flex items-center gap-2.5 mx-2 px-3 h-8 rounded-lg cursor-pointer transition-all duration-100 text-[13px]";
-              const activeCls =
-                "bg-[#7B5CFC]/[0.12] border-l-2 border-[#7B5CFC] -ml-0.5 pl-[10px] text-white";
+              const isOpen = !collapsed && (open[item.label] ?? isActive);
+
+              const baseRow = collapsed
+                ? "group relative flex items-center justify-center mx-2 h-8 rounded-lg cursor-pointer transition-all duration-100 text-[13px]"
+                : "flex items-center gap-2.5 mx-2 px-3 h-8 rounded-lg cursor-pointer transition-all duration-100 text-[13px]";
+              const activeCls = collapsed
+                ? "bg-[#7B5CFC]/[0.12] text-white"
+                : "bg-[#7B5CFC]/[0.12] border-l-2 border-[#7B5CFC] -ml-0.5 pl-[10px] text-white";
               const inactiveCls =
                 "text-[#8B8FA8] hover:bg-white/[0.04] hover:text-white";
+
+              const tooltip = collapsed ? (
+                <span className="pointer-events-none absolute left-[64px] top-1/2 -translate-y-1/2 bg-[#1C1C34] text-white text-xs px-2.5 py-1.5 rounded-lg whitespace-nowrap z-50 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                  {item.label}
+                </span>
+              ) : null;
 
               const content = (
                 <>
@@ -270,29 +309,34 @@ export function AppSidebar() {
                     size={16}
                     className={isActive ? "text-[#7B5CFC]" : ""}
                   />
-                  <span>{item.label}</span>
-                  {item.liveDot && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
+                  {!collapsed && (
+                    <>
+                      <span>{item.label}</span>
+                      {item.liveDot && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
+                      )}
+                      {item.badge && (
+                        <span className="ml-auto bg-[#1C1C34] text-[#8B8FA8] text-[10px] rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                          {item.badge}
+                        </span>
+                      )}
+                      {item.sub && (
+                        <ChevronRight
+                          size={14}
+                          className={`${
+                            item.badge ? "ml-1" : "ml-auto"
+                          } transition-transform ${isOpen ? "rotate-90" : ""}`}
+                        />
+                      )}
+                    </>
                   )}
-                  {item.badge && (
-                    <span className="ml-auto bg-[#1C1C34] text-[#8B8FA8] text-[10px] rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
-                      {item.badge}
-                    </span>
-                  )}
-                  {item.sub && (
-                    <ChevronRight
-                      size={14}
-                      className={`${
-                        item.badge ? "ml-1" : "ml-auto"
-                      } transition-transform ${isOpen ? "rotate-90" : ""}`}
-                    />
-                  )}
+                  {tooltip}
                 </>
               );
 
               return (
                 <div key={item.label}>
-                  {item.sub ? (
+                  {item.sub && !collapsed ? (
                     <button
                       onClick={() => toggle(item.label)}
                       className={`${baseRow} w-[calc(100%-1rem)] ${
@@ -303,7 +347,7 @@ export function AppSidebar() {
                     </button>
                   ) : (
                     <Link
-                      to={item.url!}
+                      to={item.url ?? item.sub?.[0]?.url ?? "/"}
                       className={`${baseRow} ${
                         isActive ? activeCls : inactiveCls
                       }`}
@@ -311,7 +355,7 @@ export function AppSidebar() {
                       {content}
                     </Link>
                   )}
-                  {item.sub && isOpen && (
+                  {item.sub && isOpen && !collapsed && (
                     <div className="pl-3 border-l border-[#1C1C34] ml-4 mt-0.5">
                       {item.sub.map((s) => {
                         const subActive = !!s.url && pathname === s.url;
@@ -364,35 +408,47 @@ export function AppSidebar() {
         ))}
 
         {/* Upgrade */}
-        <div className="mx-3 mb-3 mt-4 bg-[#7B5CFC]/[0.07] border border-[#7B5CFC]/15 rounded-xl p-4">
-          <Sparkles size={14} className="text-[#7B5CFC] mb-2" />
-          <div className="text-white text-xs font-semibold">Upgrade to Pro</div>
-          <div className="text-[#4A4A6A] text-[11px] mt-0.5 mb-3">
-            Voice AI + unlimited campaigns
+        {!collapsed && (
+          <div className="mx-3 mb-3 mt-4 bg-[#7B5CFC]/[0.07] border border-[#7B5CFC]/15 rounded-xl p-4">
+            <Sparkles size={14} className="text-[#7B5CFC] mb-2" />
+            <div className="text-white text-xs font-semibold">Upgrade to Pro</div>
+            <div className="text-[#4A4A6A] text-[11px] mt-0.5 mb-3">
+              Voice AI + unlimited campaigns
+            </div>
+            <button className="w-full h-8 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-xs font-semibold transition-colors">
+              Upgrade
+            </button>
           </div>
-          <button className="w-full h-8 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-xs font-semibold transition-colors">
-            Upgrade
-          </button>
-        </div>
+        )}
       </nav>
 
       {/* User */}
-      <div className="h-14 border-t border-[#1C1C34] px-3 flex items-center gap-2.5 flex-shrink-0">
+      <div
+        className={`h-14 border-t border-[#1C1C34] flex items-center flex-shrink-0 ${
+          collapsed ? "justify-center px-0" : "px-3 gap-2.5"
+        }`}
+      >
         <div className="w-[30px] h-[30px] rounded-full bg-gradient-to-br from-[#7B5CFC]/40 to-[#00D4AA]/30 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
           AK
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="text-white text-xs font-medium truncate">Ahmad K.</div>
-          <div className="text-[#4A4A6A] text-[10px]">Owner</div>
-        </div>
-        <Bell
-          size={15}
-          className="text-[#4A4A6A] hover:text-white cursor-pointer"
-        />
-        <LogOut
-          size={15}
-          className="text-[#4A4A6A] hover:text-[#FF4D6D] cursor-pointer"
-        />
+        {!collapsed && (
+          <>
+            <div className="flex-1 min-w-0">
+              <div className="text-white text-xs font-medium truncate">
+                Ahmad K.
+              </div>
+              <div className="text-[#4A4A6A] text-[10px]">Owner</div>
+            </div>
+            <Bell
+              size={15}
+              className="text-[#4A4A6A] hover:text-white cursor-pointer"
+            />
+            <LogOut
+              size={15}
+              className="text-[#4A4A6A] hover:text-[#FF4D6D] cursor-pointer"
+            />
+          </>
+        )}
       </div>
     </aside>
   );
