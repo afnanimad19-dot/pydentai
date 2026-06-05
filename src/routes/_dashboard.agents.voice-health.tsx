@@ -24,7 +24,7 @@ import {
   RadialBarChart,
   ResponsiveContainer,
 } from "recharts";
-import { PremiumBanner } from "@/components/dashboard/PremiumBanner";
+
 
 export const Route = createFileRoute("/_dashboard/agents/voice-health")({
   component: VoiceHealthPage,
@@ -42,10 +42,6 @@ const STATS = [
 function VoiceHealthPage() {
   return (
     <div className="font-sans">
-      <div className="px-6 pt-6">
-        <PremiumBanner />
-      </div>
-
       {/* Header */}
       <div className="px-6 pb-5 flex justify-between items-center">
         <div className="flex items-center gap-3">
