@@ -2,8 +2,8 @@
 @source "../src";
 @import "tw-animate-css";
 
-/* Google Fonts: Syne (display), Plus Jakarta Sans (body), JetBrains Mono (code) */
-@import url("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap");
+/* Google Fonts: Inter (display + body), JetBrains Mono (code) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
