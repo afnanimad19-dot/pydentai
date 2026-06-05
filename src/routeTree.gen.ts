@@ -17,6 +17,12 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as DashboardRouteImport } from './routes/_dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard.dashboard'
+import { Route as DashboardIntelligenceRevenueRouteImport } from './routes/_dashboard.intelligence.revenue'
+import { Route as DashboardIntelligenceInsightsRouteImport } from './routes/_dashboard.intelligence.insights'
+import { Route as DashboardIntelligenceDealCloserRouteImport } from './routes/_dashboard.intelligence.deal-closer'
+import { Route as DashboardIntelligenceConversationRouteImport } from './routes/_dashboard.intelligence.conversation'
+import { Route as DashboardIntelligenceBrainRouteImport } from './routes/_dashboard.intelligence.brain'
+import { Route as DashboardIntelligenceAutopilotRouteImport } from './routes/_dashboard.intelligence.autopilot'
 import { Route as DashboardAgentsWorkflowsRouteImport } from './routes/_dashboard.agents.workflows'
 import { Route as DashboardAgentsVoiceLabRouteImport } from './routes/_dashboard.agents.voice-lab'
 import { Route as DashboardAgentsVoiceHealthRouteImport } from './routes/_dashboard.agents.voice-health'
@@ -70,6 +76,42 @@ const DashboardDashboardRoute = DashboardDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardIntelligenceRevenueRoute =
+  DashboardIntelligenceRevenueRouteImport.update({
+    id: '/intelligence/revenue',
+    path: '/intelligence/revenue',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardIntelligenceInsightsRoute =
+  DashboardIntelligenceInsightsRouteImport.update({
+    id: '/intelligence/insights',
+    path: '/intelligence/insights',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardIntelligenceDealCloserRoute =
+  DashboardIntelligenceDealCloserRouteImport.update({
+    id: '/intelligence/deal-closer',
+    path: '/intelligence/deal-closer',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardIntelligenceConversationRoute =
+  DashboardIntelligenceConversationRouteImport.update({
+    id: '/intelligence/conversation',
+    path: '/intelligence/conversation',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardIntelligenceBrainRoute =
+  DashboardIntelligenceBrainRouteImport.update({
+    id: '/intelligence/brain',
+    path: '/intelligence/brain',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardIntelligenceAutopilotRoute =
+  DashboardIntelligenceAutopilotRouteImport.update({
+    id: '/intelligence/autopilot',
+    path: '/intelligence/autopilot',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardAgentsWorkflowsRoute =
   DashboardAgentsWorkflowsRouteImport.update({
     id: '/agents/workflows',
@@ -164,6 +206,12 @@ export interface FileRoutesByFullPath {
   '/agents/voice-health': typeof DashboardAgentsVoiceHealthRoute
   '/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
   '/agents/workflows': typeof DashboardAgentsWorkflowsRoute
+  '/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
+  '/intelligence/brain': typeof DashboardIntelligenceBrainRoute
+  '/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
+  '/intelligence/deal-closer': typeof DashboardIntelligenceDealCloserRoute
+  '/intelligence/insights': typeof DashboardIntelligenceInsightsRoute
+  '/intelligence/revenue': typeof DashboardIntelligenceRevenueRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
 }
 export interface FileRoutesByTo {
@@ -186,6 +234,12 @@ export interface FileRoutesByTo {
   '/agents/voice-health': typeof DashboardAgentsVoiceHealthRoute
   '/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
   '/agents/workflows': typeof DashboardAgentsWorkflowsRoute
+  '/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
+  '/intelligence/brain': typeof DashboardIntelligenceBrainRoute
+  '/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
+  '/intelligence/deal-closer': typeof DashboardIntelligenceDealCloserRoute
+  '/intelligence/insights': typeof DashboardIntelligenceInsightsRoute
+  '/intelligence/revenue': typeof DashboardIntelligenceRevenueRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
 }
 export interface FileRoutesById {
@@ -210,6 +264,12 @@ export interface FileRoutesById {
   '/_dashboard/agents/voice-health': typeof DashboardAgentsVoiceHealthRoute
   '/_dashboard/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
   '/_dashboard/agents/workflows': typeof DashboardAgentsWorkflowsRoute
+  '/_dashboard/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
+  '/_dashboard/intelligence/brain': typeof DashboardIntelligenceBrainRoute
+  '/_dashboard/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
+  '/_dashboard/intelligence/deal-closer': typeof DashboardIntelligenceDealCloserRoute
+  '/_dashboard/intelligence/insights': typeof DashboardIntelligenceInsightsRoute
+  '/_dashboard/intelligence/revenue': typeof DashboardIntelligenceRevenueRoute
   '/_dashboard/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
 }
 export interface FileRouteTypes {
@@ -234,6 +294,12 @@ export interface FileRouteTypes {
     | '/agents/voice-health'
     | '/agents/voice-lab'
     | '/agents/workflows'
+    | '/intelligence/autopilot'
+    | '/intelligence/brain'
+    | '/intelligence/conversation'
+    | '/intelligence/deal-closer'
+    | '/intelligence/insights'
+    | '/intelligence/revenue'
     | '/agents/studio/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -256,6 +322,12 @@ export interface FileRouteTypes {
     | '/agents/voice-health'
     | '/agents/voice-lab'
     | '/agents/workflows'
+    | '/intelligence/autopilot'
+    | '/intelligence/brain'
+    | '/intelligence/conversation'
+    | '/intelligence/deal-closer'
+    | '/intelligence/insights'
+    | '/intelligence/revenue'
     | '/agents/studio/$id'
   id:
     | '__root__'
@@ -279,6 +351,12 @@ export interface FileRouteTypes {
     | '/_dashboard/agents/voice-health'
     | '/_dashboard/agents/voice-lab'
     | '/_dashboard/agents/workflows'
+    | '/_dashboard/intelligence/autopilot'
+    | '/_dashboard/intelligence/brain'
+    | '/_dashboard/intelligence/conversation'
+    | '/_dashboard/intelligence/deal-closer'
+    | '/_dashboard/intelligence/insights'
+    | '/_dashboard/intelligence/revenue'
     | '/_dashboard/agents/studio/$id'
   fileRoutesById: FileRoutesById
 }
@@ -348,6 +426,48 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardDashboardRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/intelligence/revenue': {
+      id: '/_dashboard/intelligence/revenue'
+      path: '/intelligence/revenue'
+      fullPath: '/intelligence/revenue'
+      preLoaderRoute: typeof DashboardIntelligenceRevenueRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/intelligence/insights': {
+      id: '/_dashboard/intelligence/insights'
+      path: '/intelligence/insights'
+      fullPath: '/intelligence/insights'
+      preLoaderRoute: typeof DashboardIntelligenceInsightsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/intelligence/deal-closer': {
+      id: '/_dashboard/intelligence/deal-closer'
+      path: '/intelligence/deal-closer'
+      fullPath: '/intelligence/deal-closer'
+      preLoaderRoute: typeof DashboardIntelligenceDealCloserRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/intelligence/conversation': {
+      id: '/_dashboard/intelligence/conversation'
+      path: '/intelligence/conversation'
+      fullPath: '/intelligence/conversation'
+      preLoaderRoute: typeof DashboardIntelligenceConversationRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/intelligence/brain': {
+      id: '/_dashboard/intelligence/brain'
+      path: '/intelligence/brain'
+      fullPath: '/intelligence/brain'
+      preLoaderRoute: typeof DashboardIntelligenceBrainRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/intelligence/autopilot': {
+      id: '/_dashboard/intelligence/autopilot'
+      path: '/intelligence/autopilot'
+      fullPath: '/intelligence/autopilot'
+      preLoaderRoute: typeof DashboardIntelligenceAutopilotRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/agents/workflows': {
@@ -471,6 +591,12 @@ interface DashboardRouteChildren {
   DashboardAgentsVoiceHealthRoute: typeof DashboardAgentsVoiceHealthRoute
   DashboardAgentsVoiceLabRoute: typeof DashboardAgentsVoiceLabRoute
   DashboardAgentsWorkflowsRoute: typeof DashboardAgentsWorkflowsRoute
+  DashboardIntelligenceAutopilotRoute: typeof DashboardIntelligenceAutopilotRoute
+  DashboardIntelligenceBrainRoute: typeof DashboardIntelligenceBrainRoute
+  DashboardIntelligenceConversationRoute: typeof DashboardIntelligenceConversationRoute
+  DashboardIntelligenceDealCloserRoute: typeof DashboardIntelligenceDealCloserRoute
+  DashboardIntelligenceInsightsRoute: typeof DashboardIntelligenceInsightsRoute
+  DashboardIntelligenceRevenueRoute: typeof DashboardIntelligenceRevenueRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -487,6 +613,13 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAgentsVoiceHealthRoute: DashboardAgentsVoiceHealthRoute,
   DashboardAgentsVoiceLabRoute: DashboardAgentsVoiceLabRoute,
   DashboardAgentsWorkflowsRoute: DashboardAgentsWorkflowsRoute,
+  DashboardIntelligenceAutopilotRoute: DashboardIntelligenceAutopilotRoute,
+  DashboardIntelligenceBrainRoute: DashboardIntelligenceBrainRoute,
+  DashboardIntelligenceConversationRoute:
+    DashboardIntelligenceConversationRoute,
+  DashboardIntelligenceDealCloserRoute: DashboardIntelligenceDealCloserRoute,
+  DashboardIntelligenceInsightsRoute: DashboardIntelligenceInsightsRoute,
+  DashboardIntelligenceRevenueRoute: DashboardIntelligenceRevenueRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
