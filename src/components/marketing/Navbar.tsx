@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Smile } from "lucide-react";
 
-const NAV_LINKS: Array<{ label: string; href: string; external?: boolean }> = [
+const NAV_LINKS: Array<{ label: string; href: string }> = [
   { label: "Features", href: "/features" },
-  { label: "How It Works", href: "/#how-it-works", external: true },
+  { label: "How It Works", href: "/#how-it-works" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
-  { label: "Blog", href: "#", external: true },
+  { label: "Blog", href: "#" },
 ];
 
 function Logo() {
@@ -50,25 +50,15 @@ export function Navbar() {
 
         {/* Center nav */}
         <nav className="hidden lg:flex items-center gap-8">
-          {NAV_LINKS.map((link) =>
-            link.external ? (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-sm text-[#8B8FA8] hover:text-white transition-colors duration-200 font-medium"
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.label}
-                to={link.href}
-                className="text-sm text-[#8B8FA8] hover:text-white transition-colors duration-200 font-medium"
-              >
-                {link.label}
-              </Link>
-            ),
-          )}
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="text-sm text-[#8B8FA8] hover:text-white transition-colors duration-200 font-medium"
+            >
+              {link.label}
+            </a>
+          ))}
         </nav>
 
         {/* Right CTA */}
@@ -103,27 +93,16 @@ export function Navbar() {
       {mobileOpen && (
         <div className="lg:hidden bg-[#0B0B1A] border-b border-[#1C1C34] px-6 py-6">
           <nav className="flex flex-col gap-4">
-            {NAV_LINKS.map((link) =>
-              link.external ? (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-base text-[#8B8FA8] hover:text-white transition-colors font-medium py-2"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-base text-[#8B8FA8] hover:text-white transition-colors font-medium py-2"
-                >
-                  {link.label}
-                </Link>
-              ),
-            )}
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="text-base text-[#8B8FA8] hover:text-white transition-colors font-medium py-2"
+              >
+                {link.label}
+              </a>
+            ))}
           </nav>
           <div className="flex flex-col gap-3 mt-6">
             <a
