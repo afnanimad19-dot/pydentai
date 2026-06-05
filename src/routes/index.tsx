@@ -148,12 +148,12 @@ function Hero() {
         </div>
 
         <h1
-          className="font-display text-white text-center mb-6"
-          style={{ fontSize: "clamp(42px, 6.5vw, 80px)", fontWeight: 800, lineHeight: 1.05 }}
+          className="text-white text-center mb-6 tracking-tight"
+          style={{ fontSize: "clamp(40px, 5.6vw, 72px)", fontWeight: 700, lineHeight: 1.02, letterSpacing: "-0.035em" }}
         >
-          The AI-Powered Brain
+          Automate Every Patient
           <br />
-          for Your <em className="not-italic"><span className="italic text-[#7B5CFC]">Dental</span></em> Practice
+          Conversation with AI
         </h1>
 
         <p className="text-[#8B8FA8] text-xl leading-relaxed max-w-[600px] mx-auto text-center mb-10">
