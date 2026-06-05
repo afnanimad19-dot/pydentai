@@ -10,7 +10,7 @@ function DashboardLayout() {
   return (
     <div className="flex min-h-screen bg-[#06060F] font-sans">
       <AppSidebar />
-      <div className="flex flex-col flex-1 ml-[232px] min-w-0">
+      <div className="flex flex-col flex-1 ml-[232px] min-w-0 overflow-x-hidden">
         <TopBar />
         <main className="flex-1 overflow-y-auto">
           <Outlet />
