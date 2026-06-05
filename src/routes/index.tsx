@@ -393,13 +393,10 @@ function WhyPydent() {
         <div className="text-center mb-16">
           <SectionBadge>Why pydent.ai</SectionBadge>
           <h2
-            className="font-display text-white max-w-3xl mx-auto mt-5"
-            style={{ fontSize: 48, fontWeight: 800, lineHeight: 1.1 }}
+            className="text-white max-w-3xl mx-auto mt-5 tracking-tight"
+            style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, lineHeight: 1.05, letterSpacing: "-0.03em" }}
           >
-            Built Specifically for{" "}
-            <em className="italic text-[#7B5CFC] not-italic">
-              <span className="italic">Dental Practices</span>
-            </em>
+            Built specifically for dental practices
           </h2>
           <p className="text-[#8B8FA8] text-lg max-w-xl mx-auto mt-4">
             Most CRMs are generic. pydent.ai understands dental workflows — from first
