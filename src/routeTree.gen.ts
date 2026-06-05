@@ -19,12 +19,16 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard.dashboard'
 import { Route as DashboardAgentsWorkflowsRouteImport } from './routes/_dashboard.agents.workflows'
 import { Route as DashboardAgentsVoiceLabRouteImport } from './routes/_dashboard.agents.voice-lab'
+import { Route as DashboardAgentsVoiceHealthRouteImport } from './routes/_dashboard.agents.voice-health'
 import { Route as DashboardAgentsStudioRouteImport } from './routes/_dashboard.agents.studio'
 import { Route as DashboardAgentsPostCallRouteImport } from './routes/_dashboard.agents.post-call'
 import { Route as DashboardAgentsMessagingLabRouteImport } from './routes/_dashboard.agents.messaging-lab'
 import { Route as DashboardAgentsKnowledgeRouteImport } from './routes/_dashboard.agents.knowledge'
 import { Route as DashboardAgentsHubRouteImport } from './routes/_dashboard.agents.hub'
 import { Route as DashboardAgentsDocumentsRouteImport } from './routes/_dashboard.agents.documents'
+import { Route as DashboardAgentsAvatarSyncRouteImport } from './routes/_dashboard.agents.avatar-sync'
+import { Route as DashboardAgentsAvatarStudioRouteImport } from './routes/_dashboard.agents.avatar-studio'
+import { Route as DashboardAgentsAvatarManageRouteImport } from './routes/_dashboard.agents.avatar-manage'
 import { Route as DashboardAgentsStudioIdRouteImport } from './routes/_dashboard.agents.studio.$id'
 
 const SignupRoute = SignupRouteImport.update({
@@ -77,6 +81,12 @@ const DashboardAgentsVoiceLabRoute = DashboardAgentsVoiceLabRouteImport.update({
   path: '/agents/voice-lab',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAgentsVoiceHealthRoute =
+  DashboardAgentsVoiceHealthRouteImport.update({
+    id: '/agents/voice-health',
+    path: '/agents/voice-health',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardAgentsStudioRoute = DashboardAgentsStudioRouteImport.update({
   id: '/agents/studio',
   path: '/agents/studio',
@@ -110,6 +120,24 @@ const DashboardAgentsDocumentsRoute =
     path: '/agents/documents',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardAgentsAvatarSyncRoute =
+  DashboardAgentsAvatarSyncRouteImport.update({
+    id: '/agents/avatar-sync',
+    path: '/agents/avatar-sync',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardAgentsAvatarStudioRoute =
+  DashboardAgentsAvatarStudioRouteImport.update({
+    id: '/agents/avatar-studio',
+    path: '/agents/avatar-studio',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardAgentsAvatarManageRoute =
+  DashboardAgentsAvatarManageRouteImport.update({
+    id: '/agents/avatar-manage',
+    path: '/agents/avatar-manage',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardAgentsStudioIdRoute = DashboardAgentsStudioIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -124,12 +152,16 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof DashboardDashboardRoute
+  '/agents/avatar-manage': typeof DashboardAgentsAvatarManageRoute
+  '/agents/avatar-studio': typeof DashboardAgentsAvatarStudioRoute
+  '/agents/avatar-sync': typeof DashboardAgentsAvatarSyncRoute
   '/agents/documents': typeof DashboardAgentsDocumentsRoute
   '/agents/hub': typeof DashboardAgentsHubRoute
   '/agents/knowledge': typeof DashboardAgentsKnowledgeRoute
   '/agents/messaging-lab': typeof DashboardAgentsMessagingLabRoute
   '/agents/post-call': typeof DashboardAgentsPostCallRoute
   '/agents/studio': typeof DashboardAgentsStudioRouteWithChildren
+  '/agents/voice-health': typeof DashboardAgentsVoiceHealthRoute
   '/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
   '/agents/workflows': typeof DashboardAgentsWorkflowsRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
@@ -142,12 +174,16 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof DashboardDashboardRoute
+  '/agents/avatar-manage': typeof DashboardAgentsAvatarManageRoute
+  '/agents/avatar-studio': typeof DashboardAgentsAvatarStudioRoute
+  '/agents/avatar-sync': typeof DashboardAgentsAvatarSyncRoute
   '/agents/documents': typeof DashboardAgentsDocumentsRoute
   '/agents/hub': typeof DashboardAgentsHubRoute
   '/agents/knowledge': typeof DashboardAgentsKnowledgeRoute
   '/agents/messaging-lab': typeof DashboardAgentsMessagingLabRoute
   '/agents/post-call': typeof DashboardAgentsPostCallRoute
   '/agents/studio': typeof DashboardAgentsStudioRouteWithChildren
+  '/agents/voice-health': typeof DashboardAgentsVoiceHealthRoute
   '/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
   '/agents/workflows': typeof DashboardAgentsWorkflowsRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
@@ -162,12 +198,16 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
+  '/_dashboard/agents/avatar-manage': typeof DashboardAgentsAvatarManageRoute
+  '/_dashboard/agents/avatar-studio': typeof DashboardAgentsAvatarStudioRoute
+  '/_dashboard/agents/avatar-sync': typeof DashboardAgentsAvatarSyncRoute
   '/_dashboard/agents/documents': typeof DashboardAgentsDocumentsRoute
   '/_dashboard/agents/hub': typeof DashboardAgentsHubRoute
   '/_dashboard/agents/knowledge': typeof DashboardAgentsKnowledgeRoute
   '/_dashboard/agents/messaging-lab': typeof DashboardAgentsMessagingLabRoute
   '/_dashboard/agents/post-call': typeof DashboardAgentsPostCallRoute
   '/_dashboard/agents/studio': typeof DashboardAgentsStudioRouteWithChildren
+  '/_dashboard/agents/voice-health': typeof DashboardAgentsVoiceHealthRoute
   '/_dashboard/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
   '/_dashboard/agents/workflows': typeof DashboardAgentsWorkflowsRoute
   '/_dashboard/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
@@ -182,12 +222,16 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/dashboard'
+    | '/agents/avatar-manage'
+    | '/agents/avatar-studio'
+    | '/agents/avatar-sync'
     | '/agents/documents'
     | '/agents/hub'
     | '/agents/knowledge'
     | '/agents/messaging-lab'
     | '/agents/post-call'
     | '/agents/studio'
+    | '/agents/voice-health'
     | '/agents/voice-lab'
     | '/agents/workflows'
     | '/agents/studio/$id'
@@ -200,12 +244,16 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/dashboard'
+    | '/agents/avatar-manage'
+    | '/agents/avatar-studio'
+    | '/agents/avatar-sync'
     | '/agents/documents'
     | '/agents/hub'
     | '/agents/knowledge'
     | '/agents/messaging-lab'
     | '/agents/post-call'
     | '/agents/studio'
+    | '/agents/voice-health'
     | '/agents/voice-lab'
     | '/agents/workflows'
     | '/agents/studio/$id'
@@ -219,12 +267,16 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/_dashboard/dashboard'
+    | '/_dashboard/agents/avatar-manage'
+    | '/_dashboard/agents/avatar-studio'
+    | '/_dashboard/agents/avatar-sync'
     | '/_dashboard/agents/documents'
     | '/_dashboard/agents/hub'
     | '/_dashboard/agents/knowledge'
     | '/_dashboard/agents/messaging-lab'
     | '/_dashboard/agents/post-call'
     | '/_dashboard/agents/studio'
+    | '/_dashboard/agents/voice-health'
     | '/_dashboard/agents/voice-lab'
     | '/_dashboard/agents/workflows'
     | '/_dashboard/agents/studio/$id'
@@ -312,6 +364,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAgentsVoiceLabRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/agents/voice-health': {
+      id: '/_dashboard/agents/voice-health'
+      path: '/agents/voice-health'
+      fullPath: '/agents/voice-health'
+      preLoaderRoute: typeof DashboardAgentsVoiceHealthRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/agents/studio': {
       id: '/_dashboard/agents/studio'
       path: '/agents/studio'
@@ -354,6 +413,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAgentsDocumentsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/agents/avatar-sync': {
+      id: '/_dashboard/agents/avatar-sync'
+      path: '/agents/avatar-sync'
+      fullPath: '/agents/avatar-sync'
+      preLoaderRoute: typeof DashboardAgentsAvatarSyncRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/avatar-studio': {
+      id: '/_dashboard/agents/avatar-studio'
+      path: '/agents/avatar-studio'
+      fullPath: '/agents/avatar-studio'
+      preLoaderRoute: typeof DashboardAgentsAvatarStudioRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/avatar-manage': {
+      id: '/_dashboard/agents/avatar-manage'
+      path: '/agents/avatar-manage'
+      fullPath: '/agents/avatar-manage'
+      preLoaderRoute: typeof DashboardAgentsAvatarManageRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/agents/studio/$id': {
       id: '/_dashboard/agents/studio/$id'
       path: '/$id'
@@ -379,24 +459,32 @@ const DashboardAgentsStudioRouteWithChildren =
 
 interface DashboardRouteChildren {
   DashboardDashboardRoute: typeof DashboardDashboardRoute
+  DashboardAgentsAvatarManageRoute: typeof DashboardAgentsAvatarManageRoute
+  DashboardAgentsAvatarStudioRoute: typeof DashboardAgentsAvatarStudioRoute
+  DashboardAgentsAvatarSyncRoute: typeof DashboardAgentsAvatarSyncRoute
   DashboardAgentsDocumentsRoute: typeof DashboardAgentsDocumentsRoute
   DashboardAgentsHubRoute: typeof DashboardAgentsHubRoute
   DashboardAgentsKnowledgeRoute: typeof DashboardAgentsKnowledgeRoute
   DashboardAgentsMessagingLabRoute: typeof DashboardAgentsMessagingLabRoute
   DashboardAgentsPostCallRoute: typeof DashboardAgentsPostCallRoute
   DashboardAgentsStudioRoute: typeof DashboardAgentsStudioRouteWithChildren
+  DashboardAgentsVoiceHealthRoute: typeof DashboardAgentsVoiceHealthRoute
   DashboardAgentsVoiceLabRoute: typeof DashboardAgentsVoiceLabRoute
   DashboardAgentsWorkflowsRoute: typeof DashboardAgentsWorkflowsRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardDashboardRoute: DashboardDashboardRoute,
+  DashboardAgentsAvatarManageRoute: DashboardAgentsAvatarManageRoute,
+  DashboardAgentsAvatarStudioRoute: DashboardAgentsAvatarStudioRoute,
+  DashboardAgentsAvatarSyncRoute: DashboardAgentsAvatarSyncRoute,
   DashboardAgentsDocumentsRoute: DashboardAgentsDocumentsRoute,
   DashboardAgentsHubRoute: DashboardAgentsHubRoute,
   DashboardAgentsKnowledgeRoute: DashboardAgentsKnowledgeRoute,
   DashboardAgentsMessagingLabRoute: DashboardAgentsMessagingLabRoute,
   DashboardAgentsPostCallRoute: DashboardAgentsPostCallRoute,
   DashboardAgentsStudioRoute: DashboardAgentsStudioRouteWithChildren,
+  DashboardAgentsVoiceHealthRoute: DashboardAgentsVoiceHealthRoute,
   DashboardAgentsVoiceLabRoute: DashboardAgentsVoiceLabRoute,
   DashboardAgentsWorkflowsRoute: DashboardAgentsWorkflowsRoute,
 }
