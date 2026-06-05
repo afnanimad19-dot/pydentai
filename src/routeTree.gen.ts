@@ -17,6 +17,15 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as DashboardRouteImport } from './routes/_dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard.dashboard'
+import { Route as DashboardAgentsWorkflowsRouteImport } from './routes/_dashboard.agents.workflows'
+import { Route as DashboardAgentsVoiceLabRouteImport } from './routes/_dashboard.agents.voice-lab'
+import { Route as DashboardAgentsStudioRouteImport } from './routes/_dashboard.agents.studio'
+import { Route as DashboardAgentsPostCallRouteImport } from './routes/_dashboard.agents.post-call'
+import { Route as DashboardAgentsMessagingLabRouteImport } from './routes/_dashboard.agents.messaging-lab'
+import { Route as DashboardAgentsKnowledgeRouteImport } from './routes/_dashboard.agents.knowledge'
+import { Route as DashboardAgentsHubRouteImport } from './routes/_dashboard.agents.hub'
+import { Route as DashboardAgentsDocumentsRouteImport } from './routes/_dashboard.agents.documents'
+import { Route as DashboardAgentsStudioIdRouteImport } from './routes/_dashboard.agents.studio.$id'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -57,6 +66,55 @@ const DashboardDashboardRoute = DashboardDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAgentsWorkflowsRoute =
+  DashboardAgentsWorkflowsRouteImport.update({
+    id: '/agents/workflows',
+    path: '/agents/workflows',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardAgentsVoiceLabRoute = DashboardAgentsVoiceLabRouteImport.update({
+  id: '/agents/voice-lab',
+  path: '/agents/voice-lab',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAgentsStudioRoute = DashboardAgentsStudioRouteImport.update({
+  id: '/agents/studio',
+  path: '/agents/studio',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAgentsPostCallRoute = DashboardAgentsPostCallRouteImport.update({
+  id: '/agents/post-call',
+  path: '/agents/post-call',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAgentsMessagingLabRoute =
+  DashboardAgentsMessagingLabRouteImport.update({
+    id: '/agents/messaging-lab',
+    path: '/agents/messaging-lab',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardAgentsKnowledgeRoute =
+  DashboardAgentsKnowledgeRouteImport.update({
+    id: '/agents/knowledge',
+    path: '/agents/knowledge',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardAgentsHubRoute = DashboardAgentsHubRouteImport.update({
+  id: '/agents/hub',
+  path: '/agents/hub',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAgentsDocumentsRoute =
+  DashboardAgentsDocumentsRouteImport.update({
+    id: '/agents/documents',
+    path: '/agents/documents',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardAgentsStudioIdRoute = DashboardAgentsStudioIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DashboardAgentsStudioRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,6 +124,15 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof DashboardDashboardRoute
+  '/agents/documents': typeof DashboardAgentsDocumentsRoute
+  '/agents/hub': typeof DashboardAgentsHubRoute
+  '/agents/knowledge': typeof DashboardAgentsKnowledgeRoute
+  '/agents/messaging-lab': typeof DashboardAgentsMessagingLabRoute
+  '/agents/post-call': typeof DashboardAgentsPostCallRoute
+  '/agents/studio': typeof DashboardAgentsStudioRouteWithChildren
+  '/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
+  '/agents/workflows': typeof DashboardAgentsWorkflowsRoute
+  '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,6 +142,15 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof DashboardDashboardRoute
+  '/agents/documents': typeof DashboardAgentsDocumentsRoute
+  '/agents/hub': typeof DashboardAgentsHubRoute
+  '/agents/knowledge': typeof DashboardAgentsKnowledgeRoute
+  '/agents/messaging-lab': typeof DashboardAgentsMessagingLabRoute
+  '/agents/post-call': typeof DashboardAgentsPostCallRoute
+  '/agents/studio': typeof DashboardAgentsStudioRouteWithChildren
+  '/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
+  '/agents/workflows': typeof DashboardAgentsWorkflowsRoute
+  '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,6 +162,15 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
+  '/_dashboard/agents/documents': typeof DashboardAgentsDocumentsRoute
+  '/_dashboard/agents/hub': typeof DashboardAgentsHubRoute
+  '/_dashboard/agents/knowledge': typeof DashboardAgentsKnowledgeRoute
+  '/_dashboard/agents/messaging-lab': typeof DashboardAgentsMessagingLabRoute
+  '/_dashboard/agents/post-call': typeof DashboardAgentsPostCallRoute
+  '/_dashboard/agents/studio': typeof DashboardAgentsStudioRouteWithChildren
+  '/_dashboard/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
+  '/_dashboard/agents/workflows': typeof DashboardAgentsWorkflowsRoute
+  '/_dashboard/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +182,15 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/dashboard'
+    | '/agents/documents'
+    | '/agents/hub'
+    | '/agents/knowledge'
+    | '/agents/messaging-lab'
+    | '/agents/post-call'
+    | '/agents/studio'
+    | '/agents/voice-lab'
+    | '/agents/workflows'
+    | '/agents/studio/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,6 +200,15 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/dashboard'
+    | '/agents/documents'
+    | '/agents/hub'
+    | '/agents/knowledge'
+    | '/agents/messaging-lab'
+    | '/agents/post-call'
+    | '/agents/studio'
+    | '/agents/voice-lab'
+    | '/agents/workflows'
+    | '/agents/studio/$id'
   id:
     | '__root__'
     | '/'
@@ -116,6 +219,15 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/_dashboard/dashboard'
+    | '/_dashboard/agents/documents'
+    | '/_dashboard/agents/hub'
+    | '/_dashboard/agents/knowledge'
+    | '/_dashboard/agents/messaging-lab'
+    | '/_dashboard/agents/post-call'
+    | '/_dashboard/agents/studio'
+    | '/_dashboard/agents/voice-lab'
+    | '/_dashboard/agents/workflows'
+    | '/_dashboard/agents/studio/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -186,15 +298,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/agents/workflows': {
+      id: '/_dashboard/agents/workflows'
+      path: '/agents/workflows'
+      fullPath: '/agents/workflows'
+      preLoaderRoute: typeof DashboardAgentsWorkflowsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/voice-lab': {
+      id: '/_dashboard/agents/voice-lab'
+      path: '/agents/voice-lab'
+      fullPath: '/agents/voice-lab'
+      preLoaderRoute: typeof DashboardAgentsVoiceLabRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/studio': {
+      id: '/_dashboard/agents/studio'
+      path: '/agents/studio'
+      fullPath: '/agents/studio'
+      preLoaderRoute: typeof DashboardAgentsStudioRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/post-call': {
+      id: '/_dashboard/agents/post-call'
+      path: '/agents/post-call'
+      fullPath: '/agents/post-call'
+      preLoaderRoute: typeof DashboardAgentsPostCallRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/messaging-lab': {
+      id: '/_dashboard/agents/messaging-lab'
+      path: '/agents/messaging-lab'
+      fullPath: '/agents/messaging-lab'
+      preLoaderRoute: typeof DashboardAgentsMessagingLabRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/knowledge': {
+      id: '/_dashboard/agents/knowledge'
+      path: '/agents/knowledge'
+      fullPath: '/agents/knowledge'
+      preLoaderRoute: typeof DashboardAgentsKnowledgeRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/hub': {
+      id: '/_dashboard/agents/hub'
+      path: '/agents/hub'
+      fullPath: '/agents/hub'
+      preLoaderRoute: typeof DashboardAgentsHubRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/documents': {
+      id: '/_dashboard/agents/documents'
+      path: '/agents/documents'
+      fullPath: '/agents/documents'
+      preLoaderRoute: typeof DashboardAgentsDocumentsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/agents/studio/$id': {
+      id: '/_dashboard/agents/studio/$id'
+      path: '/$id'
+      fullPath: '/agents/studio/$id'
+      preLoaderRoute: typeof DashboardAgentsStudioIdRouteImport
+      parentRoute: typeof DashboardAgentsStudioRoute
+    }
   }
 }
 
+interface DashboardAgentsStudioRouteChildren {
+  DashboardAgentsStudioIdRoute: typeof DashboardAgentsStudioIdRoute
+}
+
+const DashboardAgentsStudioRouteChildren: DashboardAgentsStudioRouteChildren = {
+  DashboardAgentsStudioIdRoute: DashboardAgentsStudioIdRoute,
+}
+
+const DashboardAgentsStudioRouteWithChildren =
+  DashboardAgentsStudioRoute._addFileChildren(
+    DashboardAgentsStudioRouteChildren,
+  )
+
 interface DashboardRouteChildren {
   DashboardDashboardRoute: typeof DashboardDashboardRoute
+  DashboardAgentsDocumentsRoute: typeof DashboardAgentsDocumentsRoute
+  DashboardAgentsHubRoute: typeof DashboardAgentsHubRoute
+  DashboardAgentsKnowledgeRoute: typeof DashboardAgentsKnowledgeRoute
+  DashboardAgentsMessagingLabRoute: typeof DashboardAgentsMessagingLabRoute
+  DashboardAgentsPostCallRoute: typeof DashboardAgentsPostCallRoute
+  DashboardAgentsStudioRoute: typeof DashboardAgentsStudioRouteWithChildren
+  DashboardAgentsVoiceLabRoute: typeof DashboardAgentsVoiceLabRoute
+  DashboardAgentsWorkflowsRoute: typeof DashboardAgentsWorkflowsRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardDashboardRoute: DashboardDashboardRoute,
+  DashboardAgentsDocumentsRoute: DashboardAgentsDocumentsRoute,
+  DashboardAgentsHubRoute: DashboardAgentsHubRoute,
+  DashboardAgentsKnowledgeRoute: DashboardAgentsKnowledgeRoute,
+  DashboardAgentsMessagingLabRoute: DashboardAgentsMessagingLabRoute,
+  DashboardAgentsPostCallRoute: DashboardAgentsPostCallRoute,
+  DashboardAgentsStudioRoute: DashboardAgentsStudioRouteWithChildren,
+  DashboardAgentsVoiceLabRoute: DashboardAgentsVoiceLabRoute,
+  DashboardAgentsWorkflowsRoute: DashboardAgentsWorkflowsRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
