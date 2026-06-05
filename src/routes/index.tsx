@@ -581,12 +581,12 @@ function Stats() {
       <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2
-            className="font-display text-white"
-            style={{ fontSize: 48, fontWeight: 800, lineHeight: 1.1 }}
+            className="text-white tracking-tight"
+            style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, lineHeight: 1.05, letterSpacing: "-0.03em" }}
           >
-            Next-Level Performance
+            Next-level performance,
             <br />
-            Driven by pydent.<em className="italic text-[#7B5CFC]">ai</em>
+            driven by pydent.ai
           </h2>
         </div>
 
