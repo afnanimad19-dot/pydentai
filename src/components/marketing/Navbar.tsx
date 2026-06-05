@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Smile } from "lucide-react";
 
-const NAV_LINKS: Array<{ label: string; href: string; external?: boolean }> = [
+const NAV_LINKS: Array<{ label: string; href: string }> = [
   { label: "Features", href: "/features" },
-  { label: "How It Works", href: "/#how-it-works", external: true },
+  { label: "How It Works", href: "/#how-it-works" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
-  { label: "Blog", href: "#", external: true },
+  { label: "Blog", href: "#" },
 ];
 
 function Logo() {
