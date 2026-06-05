@@ -936,6 +936,131 @@ export function DashboardOverview() {
           </div>
         </div>
       </div>
+
+      {/* ROW 7: Campaign Performance */}
+      <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-6">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h3 className="text-white font-semibold text-[15px] tracking-[-0.02em]">
+              Campaign Performance
+            </h3>
+            <p className="text-[#4A4A6A] text-[11px] mt-0.5">
+              Last 30 days · WhatsApp + SMS
+            </p>
+          </div>
+          <button className="text-[#7B5CFC] text-xs hover:text-[#9B84FF]">
+            View All Campaigns →
+          </button>
+        </div>
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-8">
+            <div style={{ width: "100%", height: 180 }}>
+              <ResponsiveContainer>
+                <BarChart
+                  data={[
+                    { name: "Recall May", sent: 450, opened: 306, replied: 89 },
+                    { name: "Promo Jun", sent: 280, opened: 168, replied: 42 },
+                    { name: "Follow-up", sent: 320, opened: 246, replied: 78 },
+                    { name: "Reminder", sent: 180, opened: 144, replied: 61 },
+                    { name: "Newsletter", sent: 520, opened: 291, replied: 47 },
+                    { name: "No-Show", sent: 95, opened: 82, replied: 71 },
+                  ]}
+                  margin={{ top: 5, right: 10, left: -10, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1C1C34" vertical={false} />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fill: "#4A4A6A", fontSize: 11 }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    tick={{ fill: "#4A4A6A", fontSize: 11 }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={28}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "rgba(123,92,252,0.05)" }}
+                    contentStyle={{
+                      background: "#141428",
+                      border: "1px solid #1C1C34",
+                      borderRadius: 12,
+                      color: "#fff",
+                      fontSize: 13,
+                      padding: 12,
+                    }}
+                  />
+                  <Bar dataKey="sent" fill="#1C1C34" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="opened" fill="#7B5CFC" fillOpacity={0.85} radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="replied" fill="#00D4AA" fillOpacity={0.85} radius={[3, 3, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="flex gap-6 justify-center mt-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#1C1C34]" />
+                <span className="text-[#8B8FA8] text-xs">Sent</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#7B5CFC]" />
+                <span className="text-[#8B8FA8] text-xs">Opened</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#00D4AA]" />
+                <span className="text-[#8B8FA8] text-xs">Replied</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-span-4">
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { v: "8", l: "Campaigns", d: "this month", dc: "#4A4A6A", db: "#1C1C34" },
+                { v: "68%", l: "Avg Open Rate", d: "+4% ↑", dc: "#22C55E", db: "#22C55E1A" },
+                { v: "34%", l: "Reply Rate", d: "+2% ↑", dc: "#22C55E", db: "#22C55E1A" },
+                { v: "2,847", l: "Delivered", d: "97.2% delivery", dc: "#9B84FF", db: "#7B5CFC1F" },
+              ].map((s) => (
+                <div
+                  key={s.l}
+                  className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-4 text-center"
+                >
+                  <div className="text-white font-[700] text-[22px] tracking-[-0.03em] leading-none">
+                    {s.v}
+                  </div>
+                  <div className="text-[#4A4A6A] text-[10px] uppercase tracking-[0.06em] mt-1">
+                    {s.l}
+                  </div>
+                  <span
+                    className="inline-block text-[10px] mt-2 px-1.5 py-0.5 rounded-full font-medium"
+                    style={{ background: s.db, color: s.dc }}
+                  >
+                    {s.d}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4">
+              <div className="text-[#4A4A6A] text-[10px] uppercase tracking-wider mb-2">
+                Top Campaign
+              </div>
+              <div className="bg-[#06060F] border border-[#22C55E]/20 rounded-xl p-3">
+                <div className="flex justify-between items-start">
+                  <span className="text-white text-xs font-semibold">Recall May Campaign</span>
+                  <span className="text-[#22C55E] text-xs font-semibold">91% open</span>
+                </div>
+                <div className="text-[#4A4A6A] text-[11px] mt-1">
+                  450 recipients · 3 days ago
+                </div>
+                <div className="h-1 bg-[#1C1C34] rounded-full mt-2 overflow-hidden">
+                  <div className="h-full bg-[#22C55E] rounded-full" style={{ width: "91%" }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
+
