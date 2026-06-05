@@ -121,24 +121,40 @@ html {
   }
 
   body {
-    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
     background: #06060f;
     color: #ffffff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv11", "ss01", "ss03";
   }
 
-  h1,
-  h2 {
-    font-family: "Syne", sans-serif;
+  h1, h2, h3, h4 {
+    font-family: "Inter", system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 
-  code,
-  pre,
-  kbd,
-  samp {
+  code, pre, kbd, samp {
     font-family: "JetBrains Mono", ui-monospace, monospace;
   }
+}
+
+/* Subtle grid pattern background — Vortasky-style ambient texture */
+.bg-grid-faint {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Concentrated purple beam — tighter than the diffuse hero gradient */
+.bg-beam-purple {
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 0%,
+    rgba(123, 92, 252, 0.35) 0%,
+    rgba(123, 92, 252, 0.08) 35%,
+    transparent 70%
+  );
 }
 
 /* Custom dark scrollbar */
