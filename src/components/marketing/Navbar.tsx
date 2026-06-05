@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Smile } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV_LINKS: Array<{ label: string; href: string }> = [
   { label: "Features", href: "/features" },
