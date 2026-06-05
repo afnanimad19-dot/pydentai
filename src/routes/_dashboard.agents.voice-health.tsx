@@ -41,6 +41,7 @@ const STATS = [
 
 function VoiceHealthPage() {
   return (
+    <div className="font-sans">
       {/* Header */}
       <div className="px-6 pb-5 flex justify-between items-center">
         <div className="flex items-center gap-3">

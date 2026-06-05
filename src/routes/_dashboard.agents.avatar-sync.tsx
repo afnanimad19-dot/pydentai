@@ -15,6 +15,7 @@ export const Route = createFileRoute("/_dashboard/agents/avatar-sync")({
 
 function AvatarSyncPage() {
   return (
+    <div className="font-sans">
       <div className="px-6 pb-5">
         <div className="flex items-center gap-2 text-xs text-[#4A4A6A] mb-4">
           <Link
