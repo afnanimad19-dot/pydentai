@@ -431,78 +431,98 @@ export function DashboardOverview() {
           </div>
 
           {/* Today's AI Summary */}
-          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5 hidden">
             <h3 className="text-white font-semibold text-sm mb-4">Today's AI Summary</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { Icon: MessageSquare, color: "#7B5CFC", label: "Messages Handled", value: "247" },
-                { Icon: PhoneCall, color: "#00D4AA", label: "Calls Completed", value: "14" },
-                { Icon: CalendarCheck, color: "#22C55E", label: "Appointments Booked", value: "8" },
-                { Icon: Clock, color: "#F59E0B", label: "Avg Response", value: "1.8s" },
-              ].map((m) => {
-                const Icon = m.Icon;
-                return (
-                  <div key={m.label} className="bg-[#06060F] rounded-lg p-3">
-                    <Icon size={14} style={{ color: m.color }} />
-                    <div className="text-[#4A4A6A] text-[10px] uppercase tracking-[0.06em] mt-2">
-                      {m.label}
-                    </div>
-                    <div className="text-white text-[18px] font-[700] tracking-[-0.03em] mt-1">
-                      {m.value}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-3 pt-3 border-t border-[#1C1C34]">
-              <div className="text-[#4A4A6A] text-[10px] mb-2">vs yesterday</div>
-              <div className="flex items-center justify-between">
-                <span className="text-[#22C55E] text-xs font-medium">Messages ↑ 18%</span>
-                <span className="text-[#22C55E] text-xs font-medium">Calls ↑ 7%</span>
-                <span className="text-[#22C55E] text-xs font-medium">Bookings ↑ 33%</span>
-              </div>
-            </div>
           </div>
+        </div>
+      </div>
 
-          {/* WhatsApp Rate Limits */}
-          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-white font-semibold text-sm">WhatsApp Limits</h3>
-              <span className="bg-[#7B5CFC]/[0.12] border border-[#7B5CFC]/20 text-[#9B84FF] text-[10px] px-2 py-0.5 rounded-full font-semibold">
-                Tier 1
-              </span>
-            </div>
-            <div className="space-y-3">
-              {[
-                { label: "Daily Messages", used: "2,847 / 10,000", width: "28%", color: "#22C55E" },
-                { label: "Hourly Rate", used: "234 / 1,000", width: "23%", color: "#7B5CFC" },
-                { label: "Templates", used: "156 / 500", width: "31%", color: "#00D4AA" },
-              ].map((b) => (
-                <div key={b.label}>
-                  <div className="flex justify-between mb-1.5">
-                    <span className="text-[#8B8FA8] text-xs">{b.label}</span>
-                    <span className="text-white text-xs font-medium">{b.used}</span>
+      {/* ROW 3B: Recent Conversations + Message Volume */}
+      <div className="grid grid-cols-12 gap-5">
+        {/* Recent Conversations — col-span-7 */}
+        <div className="col-span-7 bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
+          <div className="flex justify-between items-center mb-5">
+            <h3 className="text-white font-semibold text-[15px] tracking-[-0.02em]">Recent Conversations</h3>
+            <span className="text-[#7B5CFC] text-xs hover:text-[#9B84FF] cursor-pointer transition-colors">View Inbox →</span>
+          </div>
+          <div className="space-y-1">
+            {[
+              { initials: "OA", name: "Omar Al Rashidi", grad: "from-[#7B5CFC]/60 to-[#4A3AFF]/40", ChIcon: MessageCircle, time: "12m", msg: "I'd like to book a checkup for next week", status: "Qualified", badgeCls: "bg-[#22C55E]/[0.12] text-[#22C55E]" },
+              { initials: "SM", name: "Sara Mohammed", grad: "from-[#00D4AA]/50 to-[#00A87A]/30", ChIcon: MessageSquare, time: "34m", msg: "What are your teeth whitening prices?", status: "New", badgeCls: "bg-blue-500/[0.12] text-blue-400" },
+              { initials: "AK", name: "Ahmed Khalid", grad: "from-[#F59E0B]/50 to-[#D97706]/30", ChIcon: Phone, time: "1h", msg: "Appointment confirmed for Thursday 2pm", status: "Contacted", badgeCls: "bg-[#7B5CFC]/[0.12] text-[#9B84FF]" },
+              { initials: "FR", name: "Fatima Rahman", grad: "from-[#FF4D6D]/50 to-[#E11D48]/30", ChIcon: MessageCircle, time: "2h", msg: "Can I reschedule my cleaning appointment?", status: "Qualified", badgeCls: "bg-[#22C55E]/[0.12] text-[#22C55E]" },
+            ].map((c) => {
+              const ChIcon = c.ChIcon;
+              return (
+                <div key={c.name} className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/[0.025] cursor-pointer transition-all -mx-1">
+                  <div className={`w-[34px] h-[34px] rounded-full bg-gradient-to-br ${c.grad} flex items-center justify-center text-white text-[11px] font-semibold flex-shrink-0`}>
+                    {c.initials}
                   </div>
-                  <div className="h-1.5 bg-[#1C1C34] rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full"
-                      style={{ width: b.width, background: b.color }}
-                    />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-white text-[13px] font-semibold">{c.name}</span>
+                      <ChIcon size={12} className="text-[#4A4A6A]" />
+                      <span className="text-[#4A4A6A] text-[10px]">·</span>
+                      <span className="text-[#4A4A6A] text-[11px]">{c.time}</span>
+                    </div>
+                    <div className="text-[#8B8FA8] text-[12px] truncate mt-0.5">{c.msg}</div>
+                  </div>
+                  <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+                    <span className={`h-5 px-2 text-[10px] rounded-full inline-flex items-center font-medium ${c.badgeCls}`}>
+                      {c.status}
+                    </span>
+                    <span className="bg-[#7B5CFC]/10 border border-[#7B5CFC]/20 text-[#9B84FF] text-[10px] px-1.5 rounded font-semibold">AI</span>
                   </div>
                 </div>
-              ))}
-            </div>
-            <div className="mt-3 pt-3 border-t border-[#1C1C34] flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-[#22C55E] rounded-full animate-pulse" />
-                <span className="text-[#22C55E] text-xs">API Connected</span>
-              </div>
-              <span className="text-[#4A4A6A] text-[11px]">Resets in 4h 12m</span>
-            </div>
+              );
+            })}
           </div>
         </div>
 
+        {/* Message Volume — col-span-5 */}
+        <div className="col-span-5 bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
+          <div className="flex justify-between items-center mb-5">
+            <h3 className="text-white font-semibold text-[15px] tracking-[-0.02em]">Message Volume</h3>
+            <span className="text-[#4A4A6A] text-xs">Last 7 Days</span>
+          </div>
+          <div className="mb-5">
+            <div className="text-white font-[700] text-[28px] tracking-[-0.035em] leading-none">3,855</div>
+            <div className="text-[#4A4A6A] text-[11px] mt-1">total messages across all channels</div>
+          </div>
+          <div className="space-y-4">
+            {[
+              { Icon: MessageCircle, iconColor: "#22C55E", name: "WhatsApp", count: "2,398", width: "74%", barColor: "#7B5CFC" },
+              { Icon: Phone, iconColor: "#7B5CFC", name: "Voice", count: "847", width: "42%", barColor: "#00D4AA" },
+              { Icon: MessageSquare, iconColor: "#00D4AA", name: "SMS", count: "412", width: "23%", barColor: "#F59E0B" },
+              { Icon: Camera, iconColor: "#F59E0B", name: "Instagram", count: "198", width: "12%", barColor: "#FF4D6D" },
+            ].map((r) => {
+              const Icon = r.Icon;
+              return (
+                <div key={r.name}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <Icon size={14} style={{ color: r.iconColor }} className="flex-shrink-0" />
+                      <span className="text-[#8B8FA8] text-[13px]">{r.name}</span>
+                    </div>
+                    <span className="text-white text-[13px] font-semibold">{r.count}</span>
+                  </div>
+                  <div className="bg-[#1C1C34] h-2 rounded-full w-full">
+                    <div className="h-full rounded-full transition-all" style={{ width: r.width, background: r.barColor }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-5 pt-4 border-t border-[#1C1C34] flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TrendingUp size={14} className="text-[#22C55E]" />
+              <span className="text-[#22C55E] text-xs font-medium">Total up 18% vs last week</span>
+            </div>
+            <span className="text-[#7B5CFC] text-xs cursor-pointer hover:text-[#9B84FF]">View Reports →</span>
+          </div>
+        </div>
       </div>
+
 
       {/* ROW 4: 3 cards */}
       <div className="grid grid-cols-3 gap-5">
