@@ -28,9 +28,9 @@
   --color-pd-muted: #8b8fa8;
   --color-pd-faint: #4a4a6a;
 
-  /* Typography */
-  --font-display: "Syne", sans-serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  /* Typography — modern grotesk, tight tracking, Vortasky-style */
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* Custom keyframes + animations */
