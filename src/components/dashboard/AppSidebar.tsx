@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Globe,
   LayoutDashboard,
+  Lock,
   LogOut,
   Mail,
   MessageCircle,
@@ -22,7 +23,13 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-type SubItem = { label: string; url: string };
+type SubItem = {
+  label: string;
+  url?: string;
+  locked?: boolean;
+  liveDot?: boolean;
+  badge?: { text: string; tone?: "live" };
+};
 type Item = {
   label: string;
   icon: LucideIcon;
@@ -45,23 +52,34 @@ const SECTIONS: Section[] = [
         label: "AI & Agents",
         icon: Bot,
         url: "/agents",
-        badge: "2",
+        badge: "12",
         sub: [
           { label: "Agent Studio", url: "/agents/studio" },
+          { label: "Agent Hub", url: "/agents/hub" },
           { label: "Workflow Builder", url: "/agents/workflows" },
           { label: "Voice Lab", url: "/agents/voice-lab" },
+          { label: "Messaging Lab", url: "/agents/messaging-lab" },
           { label: "Knowledge Base", url: "/agents/knowledge" },
+          { label: "Document Library", url: "/agents/documents" },
+          { label: "Post-Call Activity", url: "/agents/post-call" },
+          { label: "Avatar Studio", locked: true },
+          { label: "Avatar Manage", locked: true },
+          { label: "Avatar Sync Status", locked: true },
+          { label: "Voice Health", locked: true },
         ],
       },
       {
         label: "AI Intelligence",
         icon: BrainCircuit,
         url: "/intelligence",
+        badge: "6",
         sub: [
-          { label: "Conversation Intelligence", url: "/intelligence/conversation" },
           { label: "AI Brain", url: "/intelligence/brain" },
+          { label: "Conversation Intel", url: "/intelligence/conversation" },
+          { label: "AI Autopilot", url: "/intelligence/autopilot" },
+          { label: "Deal Closer", url: "/intelligence/deal-closer" },
           { label: "AI Insights", url: "/intelligence/insights" },
-          { label: "Revenue Dashboard", url: "/intelligence/revenue" },
+          { label: "Revenue", url: "/intelligence/revenue" },
         ],
       },
     ],
@@ -73,49 +91,77 @@ const SECTIONS: Section[] = [
         label: "WhatsApp",
         icon: MessageCircle,
         url: "/whatsapp",
-        badge: "3",
+        badge: "10",
         liveDot: true,
         sub: [
           { label: "Dashboard", url: "/whatsapp" },
           { label: "Inbox", url: "/whatsapp/inbox" },
+          { label: "Live Agent", url: "/whatsapp/live-agent", liveDot: true },
           { label: "Campaigns", url: "/whatsapp/campaigns" },
           { label: "Templates", url: "/whatsapp/templates" },
+          { label: "Chatbot", url: "/whatsapp/chatbot" },
           { label: "Contacts", url: "/whatsapp/contacts" },
+          { label: "Tags", url: "/whatsapp/tags" },
           { label: "Reports", url: "/whatsapp/reports" },
+          { label: "Setup", url: "/whatsapp/setup" },
         ],
       },
       {
         label: "SMS",
-        icon: Phone,
+        icon: MessageSquare,
         url: "/sms",
+        badge: "7",
         sub: [
+          { label: "Dashboard", url: "/sms" },
           { label: "Inbox", url: "/sms/inbox" },
           { label: "Campaigns", url: "/sms/campaigns" },
           { label: "Templates", url: "/sms/templates" },
           { label: "Contacts", url: "/sms/contacts" },
+          { label: "Reports", url: "/sms/reports" },
+          { label: "Setup", url: "/sms/setup" },
         ],
       },
       {
         label: "Email",
         icon: Mail,
         url: "/email",
+        badge: "9",
         sub: [
-          { label: "Inbox", url: "/email/inbox" },
+          { label: "Dashboard", url: "/email" },
           { label: "Campaigns", url: "/email/campaigns" },
+          { label: "Automation", url: "/email/automation" },
           { label: "Templates", url: "/email/templates" },
+          { label: "Contacts", url: "/email/contacts" },
+          { label: "Providers", url: "/email/providers" },
+          { label: "Test", url: "/email/test" },
+          { label: "Reports", url: "/email/reports" },
+          { label: "Setup", url: "/email/setup" },
         ],
       },
       {
         label: "Instagram",
         icon: Camera,
         url: "/instagram",
+        badge: "3",
         sub: [
-          { label: "Inbox", url: "/instagram/inbox" },
-          { label: "Chatbot", url: "/instagram/chatbot" },
-          { label: "Contacts", url: "/instagram/contacts" },
+          { label: "Content Planner", url: "/instagram/planner" },
+          { label: "Create Content", url: "/instagram/create" },
+          { label: "Trends & Insights", url: "/instagram/trends" },
         ],
       },
-      { label: "Website Chat", icon: Globe, url: "/webchat" },
+      {
+        label: "Website Chat",
+        icon: Globe,
+        url: "/webchat",
+        badge: "5",
+        sub: [
+          { label: "Dashboard", url: "/webchat" },
+          { label: "Widgets", url: "/webchat/widgets" },
+          { label: "Conversations", url: "/webchat/conversations" },
+          { label: "Visitors", url: "/webchat/visitors" },
+          { label: "Reports", url: "/webchat/reports" },
+        ],
+      },
     ],
   },
   {
@@ -124,13 +170,27 @@ const SECTIONS: Section[] = [
       {
         label: "Engage",
         icon: Zap,
+        url: "/engage",
+        badge: "13",
         sub: [
           { label: "Leads", url: "/engage/leads" },
           { label: "Call Status", url: "/engage/calls" },
-          { label: "Live Monitor", url: "/engage/monitor" },
+          {
+            label: "Live Monitoring",
+            url: "/engage/monitor",
+            liveDot: true,
+            badge: { text: "live", tone: "live" },
+          },
           { label: "Upcoming Calls", url: "/engage/upcoming" },
+          { label: "Reminders", url: "/engage/reminders" },
           { label: "Call Scripts", url: "/engage/scripts" },
           { label: "Call History", url: "/engage/history" },
+          { label: "Advanced Analytics", url: "/engage/analytics" },
+          { label: "Team", url: "/engage/team" },
+          { label: "Recurring Schedules", locked: true },
+          { label: "Automation Settings", locked: true },
+          { label: "Connections", locked: true },
+          { label: "Messaging Templates", locked: true },
         ],
       },
     ],
@@ -195,7 +255,7 @@ export function AppSidebar() {
                 item.url && pathname === item.url
                   ? true
                   : item.sub
-                  ? item.sub.some((s) => pathname === s.url)
+                  ? item.sub.some((s) => s.url && pathname === s.url)
                   : false;
               const isOpen = open[item.label] ?? isActive;
               const baseRow =
@@ -253,20 +313,46 @@ export function AppSidebar() {
                     </Link>
                   )}
                   {item.sub && isOpen && (
-                    <div className="ml-5 mt-0.5">
+                    <div className="pl-3 border-l border-[#1C1C34] ml-4 mt-0.5">
                       {item.sub.map((s) => {
-                        const subActive = pathname === s.url;
+                        const subActive = !!s.url && pathname === s.url;
+                        const subBase =
+                          "flex items-center gap-2 px-3 h-7 rounded-lg text-[12px] cursor-pointer transition-all duration-100 mx-1";
+
+                        if (s.locked) {
+                          return (
+                            <div
+                              key={s.label}
+                              className={`${subBase} text-[#4A4A6A]/40 cursor-not-allowed opacity-40 pointer-events-none`}
+                            >
+                              <span>{s.label}</span>
+                              <Lock
+                                size={10}
+                                className="ml-auto text-[#4A4A6A]/40"
+                              />
+                            </div>
+                          );
+                        }
+
+                        const subCls = subActive
+                          ? "text-white bg-[#7B5CFC]/[0.1]"
+                          : "text-[#4A4A6A] hover:text-[#8B8FA8] hover:bg-white/[0.03]";
+
                         return (
                           <Link
-                            key={s.url}
-                            to={s.url}
-                            className={`pl-5 border-l border-[#1C1C34] h-7 flex items-center text-[12px] cursor-pointer transition-colors ${
-                              subActive
-                                ? "text-white"
-                                : "text-[#4A4A6A] hover:text-[#8B8FA8]"
-                            }`}
+                            key={s.label}
+                            to={s.url!}
+                            className={`${subBase} ${subCls}`}
                           >
-                            {s.label}
+                            {s.liveDot && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse flex-shrink-0" />
+                            )}
+                            <span>{s.label}</span>
+                            {s.badge && (
+                              <span className="ml-auto bg-[#22C55E]/12 text-[#22C55E] text-[9px] px-1.5 rounded">
+                                {s.badge.text}
+                              </span>
+                            )}
                           </Link>
                         );
                       })}
