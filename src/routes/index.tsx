@@ -274,78 +274,141 @@ function BrowserBar({ url }: { url: string }) {
 }
 
 function DashboardMockup() {
+  const navItems = [
+    { label: "Inbox", count: "23", active: true },
+    { label: "Patients", count: "1.4k" },
+    { label: "Calendar" },
+    { label: "Campaigns" },
+    { label: "Analytics" },
+    { label: "Settings" },
+  ];
+  const metrics = [
+    { label: "Conversations", value: "1,284", delta: "+12.4%", tone: "text-[#00D4AA]" },
+    { label: "Booked Today", value: "47", delta: "+8", tone: "text-[#00D4AA]" },
+    { label: "Avg Response", value: "1.9s", delta: "-0.4s", tone: "text-[#00D4AA]" },
+    { label: "AI Handled", value: "94%", delta: "+3%", tone: "text-[#9B84FF]" },
+  ];
+
   return (
     <div className="bg-[#08081A] p-4 grid grid-cols-12 gap-3">
       {/* Sidebar */}
-      <div className="col-span-2 bg-[#0B0B1A] rounded-xl p-3 flex flex-col gap-2 h-[280px]">
-        <div className="h-8 w-full bg-[#7B5CFC]/15 rounded-lg mb-2" />
-        {[1, 0.7, 0.55, 0.4, 0.3, 0.25].map((o, i) => (
+      <div className="col-span-3 bg-[#0B0B1A] rounded-xl p-3 flex flex-col gap-1 h-[300px] border border-[#1C1C34]/60">
+        <div className="flex items-center gap-2 px-2 py-2 mb-2">
+          <span className="h-6 w-6 rounded-md bg-[#7B5CFC]/20 border border-[#7B5CFC]/30 flex items-center justify-center text-[10px] text-[#7B5CFC] font-bold">
+            p
+          </span>
+          <span className="text-[11px] text-white font-semibold tracking-tight">pydent.ai</span>
+        </div>
+        {navItems.map((item) => (
           <div
-            key={i}
-            className={`h-7 w-full rounded-md ${
-              i === 0 ? "bg-[#7B5CFC]/20" : "bg-[#1C1C34]"
+            key={item.label}
+            className={`flex items-center justify-between px-2 py-1.5 rounded-md text-[11px] ${
+              item.active ? "bg-[#7B5CFC]/15 text-white" : "text-[#8B8FA8]"
             }`}
-            style={i === 0 ? undefined : { opacity: o }}
-          />
+          >
+            <span>{item.label}</span>
+            {item.count && (
+              <span
+                className={`text-[9px] px-1.5 rounded ${
+                  item.active ? "bg-[#7B5CFC]/30 text-white" : "bg-[#1C1C34] text-[#8B8FA8]"
+                }`}
+              >
+                {item.count}
+              </span>
+            )}
+          </div>
         ))}
       </div>
 
       {/* Main */}
-      <div className="col-span-10 flex flex-col gap-3">
+      <div className="col-span-9 flex flex-col gap-3">
+        {/* Top bar */}
+        <div className="flex items-center justify-between bg-[#0B0B1A] border border-[#1C1C34]/60 rounded-xl px-3 py-2">
+          <div className="text-[11px] text-white font-semibold tracking-tight">Overview</div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] text-[#8B8FA8] bg-[#141428] rounded-md px-2 py-1">Last 30 days</span>
+            <span className="text-[9px] text-[#9B84FF] bg-[#7B5CFC]/15 border border-[#7B5CFC]/25 rounded-md px-2 py-1">
+              ● AI Active
+            </span>
+          </div>
+        </div>
+
         {/* Metrics */}
-        <div className="grid grid-cols-4 gap-3">
-          {[
-            "bg-[#7B5CFC]/40",
-            "bg-[#00D4AA]/30",
-            "bg-[#FFAB00]/30",
-            "bg-[#7B5CFC]/20",
-          ].map((c, i) => (
-            <div key={i} className="h-16 bg-[#0F0F22] rounded-xl border border-[#1C1C34] p-3">
-              <div className="h-2 w-16 bg-[#1C1C34] rounded-sm mb-2" />
-              <div className={`h-5 w-12 rounded-md ${c}`} />
+        <div className="grid grid-cols-4 gap-2">
+          {metrics.map((m) => (
+            <div
+              key={m.label}
+              className="bg-[#0B0B1A] border border-[#1C1C34]/60 rounded-xl p-2.5"
+            >
+              <div className="text-[9px] text-[#8B8FA8] mb-1">{m.label}</div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-white text-sm font-semibold tracking-tight">{m.value}</span>
+                <span className={`text-[9px] ${m.tone}`}>{m.delta}</span>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-3 gap-3 h-[180px]">
-          <div className="col-span-2 bg-[#0F0F22] rounded-xl border border-[#1C1C34] p-4 flex flex-col">
-            <svg viewBox="0 0 300 120" preserveAspectRatio="none" className="flex-1 w-full">
+        {/* Chart + side */}
+        <div className="grid grid-cols-3 gap-2 flex-1">
+          <div className="col-span-2 bg-[#0B0B1A] border border-[#1C1C34]/60 rounded-xl p-3 flex flex-col">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] text-white font-medium">Conversations</span>
+              <div className="flex items-center gap-2 text-[9px]">
+                <span className="flex items-center gap-1 text-[#8B8FA8]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#7B5CFC]" /> Total
+                </span>
+                <span className="flex items-center gap-1 text-[#8B8FA8]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#00D4AA]" /> Booked
+                </span>
+              </div>
+            </div>
+            <svg viewBox="0 0 300 100" preserveAspectRatio="none" className="flex-1 w-full">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stopColor="#7B5CFC" stopOpacity="0.35" />
+                  <stop offset="100%" stopColor="#7B5CFC" stopOpacity="0" />
+                </linearGradient>
+              </defs>
               <path
-                d="M0,100 C30,80 60,40 90,50 S150,20 180,30 S240,10 300,20 L300,120 L0,120 Z"
-                fill="rgba(123,92,252,0.12)"
+                d="M0,80 C30,70 60,30 90,40 S150,15 180,25 S240,8 300,18 L300,100 L0,100 Z"
+                fill="url(#g1)"
                 stroke="#7B5CFC"
-                strokeWidth="2"
+                strokeWidth="1.5"
               />
               <path
-                d="M0,110 C30,95 60,70 90,80 S150,60 180,65 S240,50 300,55 L300,120 L0,120 Z"
-                fill="rgba(0,212,170,0.1)"
+                d="M0,90 C30,82 60,60 90,68 S150,50 180,55 S240,42 300,46"
+                fill="none"
                 stroke="#00D4AA"
-                strokeWidth="2"
+                strokeWidth="1.5"
+                strokeDasharray="3 2"
               />
             </svg>
-            <div className="flex justify-between mt-2 text-[9px] text-[#4A4A6A]">
-              {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((m) => (
+            <div className="flex justify-between mt-1 text-[8px] text-[#4A4A6A]">
+              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((m) => (
                 <span key={m}>{m}</span>
               ))}
             </div>
           </div>
 
-          <div className="col-span-1 flex flex-col gap-3">
-            <div className="bg-[#0F0F22] rounded-xl border border-[#1C1C34] p-3 flex-1 flex flex-col gap-3 justify-center">
-              {[
-                { c: "bg-[#7B5CFC]/30", w: "70%", b: "bg-[#7B5CFC]" },
-                { c: "bg-[#00D4AA]/30", w: "50%", b: "bg-[#00D4AA]" },
-                { c: "bg-[#FFAB00]/30", w: "85%", b: "bg-[#FFAB00]" },
-              ].map((r, i) => (
-                <div key={i} className="h-6 flex gap-2 items-center">
-                  <span className={`w-4 h-4 rounded-full ${r.c}`} />
-                  <div className="flex-1 h-2 rounded-full bg-[#1C1C34] overflow-hidden">
-                    <div className={`h-full ${r.b}`} style={{ width: r.w }} />
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="bg-[#0B0B1A] border border-[#1C1C34]/60 rounded-xl p-3 flex flex-col gap-2">
+            <div className="text-[10px] text-white font-medium mb-1">Recent Bookings</div>
+            {[
+              { i: "OA", n: "Omar A.", t: "2:00 PM", c: "#7B5CFC" },
+              { i: "SA", n: "Sara A.", t: "3:30 PM", c: "#00D4AA" },
+              { i: "KM", n: "Khalid M.", t: "4:15 PM", c: "#FFAB00" },
+            ].map((b) => (
+              <div key={b.n} className="flex items-center gap-1.5">
+                <span
+                  className="h-5 w-5 rounded-full flex items-center justify-center text-[8px] font-semibold text-white"
+                  style={{ background: `${b.c}40`, color: b.c }}
+                >
+                  {b.i}
+                </span>
+                <span className="text-[9px] text-white flex-1 truncate">{b.n}</span>
+                <span className="text-[9px] text-[#8B8FA8]">{b.t}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
