@@ -13,7 +13,6 @@ import {
   Mail,
   MessageCircle,
   MessageSquare,
-  Phone,
   Search,
   Settings,
   Sparkles,
