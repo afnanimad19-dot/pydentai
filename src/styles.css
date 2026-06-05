@@ -2,8 +2,7 @@
 @source "../src";
 @import "tw-animate-css";
 
-/* Google Fonts: Syne (display), Plus Jakarta Sans (body), JetBrains Mono (code) */
-@import url("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap");
+/* Fonts (Inter + JetBrains Mono) are loaded via <link> in src/routes/__root.tsx. */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -29,9 +28,9 @@
   --color-pd-muted: #8b8fa8;
   --color-pd-faint: #4a4a6a;
 
-  /* Typography */
-  --font-display: "Syne", sans-serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  /* Typography — modern grotesk, tight tracking, Vortasky-style */
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* Custom keyframes + animations */
@@ -86,7 +85,7 @@
   /* Effects */
   --glow-purple: rgba(123, 92, 252, 0.18);
   --glow-teal: rgba(0, 212, 170, 0.12);
-  --gradient-hero: radial-gradient(ellipse 90% 55% at 50% -10%, rgba(123, 92, 252, 0.2) 0%, transparent 60%);
+  --gradient-hero: radial-gradient(ellipse 55% 45% at 50% 0%, rgba(123, 92, 252, 0.32) 0%, rgba(123, 92, 252, 0.06) 40%, transparent 70%);
   --gradient-card: linear-gradient(135deg, rgba(123, 92, 252, 0.07) 0%, rgba(0, 212, 170, 0.03) 100%);
   --gradient-purple: linear-gradient(135deg, #7b5cfc 0%, #5b3fdc 100%);
 
@@ -122,24 +121,40 @@ html {
   }
 
   body {
-    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
     background: #06060f;
     color: #ffffff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv11", "ss01", "ss03";
   }
 
-  h1,
-  h2 {
-    font-family: "Syne", sans-serif;
+  h1, h2, h3, h4 {
+    font-family: "Inter", system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 
-  code,
-  pre,
-  kbd,
-  samp {
+  code, pre, kbd, samp {
     font-family: "JetBrains Mono", ui-monospace, monospace;
   }
+}
+
+/* Subtle grid pattern background — Vortasky-style ambient texture */
+.bg-grid-faint {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Concentrated purple beam — tighter than the diffuse hero gradient */
+.bg-beam-purple {
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 0%,
+    rgba(123, 92, 252, 0.35) 0%,
+    rgba(123, 92, 252, 0.08) 35%,
+    transparent 70%
+  );
 }
 
 /* Custom dark scrollbar */
