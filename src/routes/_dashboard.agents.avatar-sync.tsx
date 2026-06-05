@@ -7,7 +7,7 @@ import {
   Filter,
   RefreshCw,
 } from "lucide-react";
-import { PremiumBanner } from "@/components/dashboard/PremiumBanner";
+
 
 export const Route = createFileRoute("/_dashboard/agents/avatar-sync")({
   component: AvatarSyncPage,
@@ -15,11 +15,6 @@ export const Route = createFileRoute("/_dashboard/agents/avatar-sync")({
 
 function AvatarSyncPage() {
   return (
-    <div className="font-sans">
-      <div className="px-6 pt-6">
-        <PremiumBanner />
-      </div>
-
       <div className="px-6 pb-5">
         <div className="flex items-center gap-2 text-xs text-[#4A4A6A] mb-4">
           <Link

@@ -20,7 +20,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { PremiumBanner } from "@/components/dashboard/PremiumBanner";
+
 
 export const Route = createFileRoute("/_dashboard/agents/avatar-manage")({
   component: AvatarManagePage,
@@ -53,10 +53,6 @@ function AvatarManagePage() {
 
   return (
     <div className="font-sans">
-      <div className="px-6 pt-6">
-        <PremiumBanner />
-      </div>
-
       <div className="px-6 pb-5 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-[#00D4AA]/15 border border-[#00D4AA]/20 flex items-center justify-center">

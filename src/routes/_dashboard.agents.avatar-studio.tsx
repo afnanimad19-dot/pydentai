@@ -7,7 +7,7 @@ import {
   TrendingUp,
   Video,
 } from "lucide-react";
-import { PremiumBanner } from "@/components/dashboard/PremiumBanner";
+
 
 export const Route = createFileRoute("/_dashboard/agents/avatar-studio")({
   component: AvatarStudioPage,
@@ -51,10 +51,6 @@ function AvatarStudioPage() {
         </div>
       </div>
 
-      {/* Premium banner inline */}
-      <div className="px-6 pt-4">
-        <PremiumBanner />
-      </div>
 
       <div className="flex flex-1 overflow-hidden">
         {/* Avatar Canvas */}
