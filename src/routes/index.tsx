@@ -794,11 +794,10 @@ function ProductShowcase() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2
-            className="font-display text-white"
-            style={{ fontSize: 48, fontWeight: 800, lineHeight: 1.1 }}
+            className="text-white tracking-tight"
+            style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, lineHeight: 1.05, letterSpacing: "-0.03em" }}
           >
-            Power Your Next Move with{" "}
-            <em className="italic text-[#7B5CFC]">pydent.ai</em>
+            Everything you need, in one inbox
           </h2>
         </div>
 
