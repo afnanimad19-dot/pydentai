@@ -50,25 +50,15 @@ export function Navbar() {
 
         {/* Center nav */}
         <nav className="hidden lg:flex items-center gap-8">
-          {NAV_LINKS.map((link) =>
-            link.external ? (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-sm text-[#8B8FA8] hover:text-white transition-colors duration-200 font-medium"
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.label}
-                to={link.href}
-                className="text-sm text-[#8B8FA8] hover:text-white transition-colors duration-200 font-medium"
-              >
-                {link.label}
-              </Link>
-            ),
-          )}
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="text-sm text-[#8B8FA8] hover:text-white transition-colors duration-200 font-medium"
+            >
+              {link.label}
+            </a>
+          ))}
         </nav>
 
         {/* Right CTA */}
