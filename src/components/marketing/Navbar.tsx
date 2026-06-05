@@ -93,27 +93,16 @@ export function Navbar() {
       {mobileOpen && (
         <div className="lg:hidden bg-[#0B0B1A] border-b border-[#1C1C34] px-6 py-6">
           <nav className="flex flex-col gap-4">
-            {NAV_LINKS.map((link) =>
-              link.external ? (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-base text-[#8B8FA8] hover:text-white transition-colors font-medium py-2"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-base text-[#8B8FA8] hover:text-white transition-colors font-medium py-2"
-                >
-                  {link.label}
-                </Link>
-              ),
-            )}
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="text-base text-[#8B8FA8] hover:text-white transition-colors font-medium py-2"
+              >
+                {link.label}
+              </a>
+            ))}
           </nav>
           <div className="flex flex-col gap-3 mt-6">
             <a
