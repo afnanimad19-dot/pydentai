@@ -1065,12 +1065,10 @@ function FinalCTA() {
             </div>
 
             <h2
-              className="font-display text-white mb-4"
-              style={{ fontSize: 44, fontWeight: 800, lineHeight: 1.15 }}
+              className="text-white mb-4 tracking-tight"
+              style={{ fontSize: "clamp(30px, 3.6vw, 44px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.03em" }}
             >
-              Experience the Power of pydent.ai
-              <br />
-              Start with a Free Demo Today
+              Start automating your clinic today
             </h2>
 
             <p className="text-[#8B8FA8] text-lg mb-10 max-w-md mx-auto">
