@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   BarChart3,
   Bot,
+  CalendarCheck,
   CalendarDays,
   Camera,
   ChevronLeft,
@@ -25,6 +26,8 @@ import {
 import {
   Area,
   AreaChart,
+  Bar,
+  BarChart,
   CartesianGrid,
   Cell,
   Pie,
@@ -34,6 +37,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+
 
 export const Route = createFileRoute("/_dashboard/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — pydent.ai" }] }),
