@@ -411,23 +411,26 @@ export function DashboardOverview() {
           {/* Card A — Patient Sources donut */}
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
             <h3 className="text-white font-semibold text-sm mb-4">Patient Sources</h3>
-            <div className="relative flex justify-center">
-              <PieChart width={200} height={160}>
-                <Pie
-                  data={sourceData}
-                  innerRadius={50}
-                  outerRadius={72}
-                  paddingAngle={3}
-                  startAngle={90}
-                  endAngle={-270}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {sourceData.map((d) => (
-                    <Cell key={d.name} fill={d.fill} />
-                  ))}
-                </Pie>
-              </PieChart>
+            <div className="relative flex justify-center" style={{ width: "100%", height: 160 }}>
+              <ResponsiveContainer width={200} height={160}>
+                <PieChart>
+                  <Pie
+                    data={sourceData}
+                    innerRadius={50}
+                    outerRadius={72}
+                    paddingAngle={3}
+                    startAngle={90}
+                    endAngle={-270}
+                    dataKey="value"
+                    stroke="none"
+                    isAnimationActive={false}
+                  >
+                    {sourceData.map((d) => (
+                      <Cell key={d.name} fill={d.fill} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <div className="text-white font-bold text-[18px] tracking-[-0.03em] leading-none">
                   1,284
@@ -435,6 +438,7 @@ export function DashboardOverview() {
                 <div className="text-[#4A4A6A] text-[10px] mt-1">total</div>
               </div>
             </div>
+
             <div className="space-y-2 mt-4">
               {sourceData.map((d) => (
                 <div key={d.name} className="flex items-center justify-between">
