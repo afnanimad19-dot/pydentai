@@ -1001,11 +1001,10 @@ function Testimonials() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2
-            className="font-display text-white max-w-4xl mx-auto"
-            style={{ fontSize: 48, fontWeight: 800, lineHeight: 1.1 }}
+            className="text-white max-w-4xl mx-auto tracking-tight"
+            style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, lineHeight: 1.05, letterSpacing: "-0.03em" }}
           >
-            See How Dental Clinics Are Living the{" "}
-            <em className="italic text-[#7B5CFC]">Future of Patient Management</em>
+            Loved by dental teams across the GCC
           </h2>
         </div>
 
