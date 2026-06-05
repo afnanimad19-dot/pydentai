@@ -85,7 +85,7 @@
   /* Effects */
   --glow-purple: rgba(123, 92, 252, 0.18);
   --glow-teal: rgba(0, 212, 170, 0.12);
-  --gradient-hero: radial-gradient(ellipse 90% 55% at 50% -10%, rgba(123, 92, 252, 0.2) 0%, transparent 60%);
+  --gradient-hero: radial-gradient(ellipse 55% 45% at 50% 0%, rgba(123, 92, 252, 0.32) 0%, rgba(123, 92, 252, 0.06) 40%, transparent 70%);
   --gradient-card: linear-gradient(135deg, rgba(123, 92, 252, 0.07) 0%, rgba(0, 212, 170, 0.03) 100%);
   --gradient-purple: linear-gradient(135deg, #7b5cfc 0%, #5b3fdc 100%);
 
