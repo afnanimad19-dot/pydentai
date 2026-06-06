@@ -202,7 +202,7 @@ function SmsDashboard() {
                 </div>
                 <span className="bg-[#F59E0B]/12 text-[#F59E0B] text-[10px] px-2 py-0.5 rounded-full">Setup Required</span>
               </div>
-              <button className="w-full h-9 mt-3 border border-[#1C1C34] text-[#8B8FA8] rounded-xl text-sm hover:text-white">Configure Provider</button>
+              <button onClick={() => navigate({ to: "/sms/setup" })} className="w-full h-9 mt-3 border border-[#1C1C34] text-[#8B8FA8] rounded-xl text-sm hover:text-white">Configure Provider</button>
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div className="bg-[#06060F] rounded-lg p-3">
