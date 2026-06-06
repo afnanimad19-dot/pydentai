@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { X } from "lucide-react";
 import {
   Activity,
   AlertCircle,
@@ -48,8 +49,22 @@ const TABS = [
   "Health",
 ];
 
+const QUICK_TO_TAB: Record<string, string> = {
+  "Test Lab": "Test Lab",
+  "Schedule Meeting": "Schedule",
+  "Browse Avatars": "Avatars",
+  "Health Check": "Health",
+};
+
 function AvatarManagePage() {
   const [tab, setTab] = useState("Overview");
+  const [meetingOpen, setMeetingOpen] = useState(false);
+  const [meetingForm, setMeetingForm] = useState({
+    customer: "",
+    email: "",
+    agent: "Dental Assistant",
+    when: "",
+  });
 
   return (
     <div className="font-sans">
