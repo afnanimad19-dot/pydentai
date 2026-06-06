@@ -122,13 +122,13 @@ function SmsDashboard() {
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
             <div className="flex items-center mb-3">
               <span className="text-white font-semibold text-sm">Recent Campaigns</span>
-              <button className="ml-auto text-[#8B8FA8] text-xs hover:text-white">+ New</button>
+              <button onClick={() => setCampOpen(true)} className="ml-auto text-[#8B8FA8] text-xs hover:text-white">+ New</button>
             </div>
             <div className="py-10 text-center">
               <Megaphone size={32} className="text-[#1C1C34] mx-auto mb-3" />
               <div className="text-[#4A4A6A] text-sm">No campaigns yet</div>
               <div className="text-[#4A4A6A] text-xs">Create your first SMS campaign</div>
-              <button className="h-8 px-3 rounded-lg bg-[#3B82F6] text-white text-xs font-semibold mt-4">+ Create Campaign</button>
+              <button onClick={() => setCampOpen(true)} className="h-8 px-3 rounded-lg bg-[#3B82F6] text-white text-xs font-semibold mt-4">+ Create Campaign</button>
             </div>
           </div>
         </div>
