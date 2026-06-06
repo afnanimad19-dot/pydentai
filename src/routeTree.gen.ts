@@ -47,6 +47,7 @@ import { Route as DashboardIntelligenceAutopilotRouteImport } from './routes/_da
 import { Route as DashboardInstagramTrendsRouteImport } from './routes/_dashboard.instagram.trends'
 import { Route as DashboardInstagramCreateContentRouteImport } from './routes/_dashboard.instagram.create-content'
 import { Route as DashboardInstagramContentPlannerRouteImport } from './routes/_dashboard.instagram.content-planner'
+import { Route as DashboardEngageLiveMonitoringRouteImport } from './routes/_dashboard.engage.live-monitoring'
 import { Route as DashboardEngageLeadsRouteImport } from './routes/_dashboard.engage.leads'
 import { Route as DashboardEngageCallStatusRouteImport } from './routes/_dashboard.engage.call-status'
 import { Route as DashboardEmailTestRouteImport } from './routes/_dashboard.email.test'
@@ -282,6 +283,12 @@ const DashboardInstagramContentPlannerRoute =
     path: '/instagram/content-planner',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardEngageLiveMonitoringRoute =
+  DashboardEngageLiveMonitoringRouteImport.update({
+    id: '/engage/live-monitoring',
+    path: '/engage/live-monitoring',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardEngageLeadsRoute = DashboardEngageLeadsRouteImport.update({
   id: '/engage/leads',
   path: '/engage/leads',
@@ -462,6 +469,7 @@ export interface FileRoutesByFullPath {
   '/email/test': typeof DashboardEmailTestRoute
   '/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/engage/leads': typeof DashboardEngageLeadsRoute
+  '/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
   '/instagram/trends': typeof DashboardInstagramTrendsRoute
@@ -528,6 +536,7 @@ export interface FileRoutesByTo {
   '/email/test': typeof DashboardEmailTestRoute
   '/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/engage/leads': typeof DashboardEngageLeadsRoute
+  '/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
   '/instagram/trends': typeof DashboardInstagramTrendsRoute
@@ -596,6 +605,7 @@ export interface FileRoutesById {
   '/_dashboard/email/test': typeof DashboardEmailTestRoute
   '/_dashboard/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/_dashboard/engage/leads': typeof DashboardEngageLeadsRoute
+  '/_dashboard/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
   '/_dashboard/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/_dashboard/instagram/create-content': typeof DashboardInstagramCreateContentRoute
   '/_dashboard/instagram/trends': typeof DashboardInstagramTrendsRoute
@@ -664,6 +674,7 @@ export interface FileRouteTypes {
     | '/email/test'
     | '/engage/call-status'
     | '/engage/leads'
+    | '/engage/live-monitoring'
     | '/instagram/content-planner'
     | '/instagram/create-content'
     | '/instagram/trends'
@@ -730,6 +741,7 @@ export interface FileRouteTypes {
     | '/email/test'
     | '/engage/call-status'
     | '/engage/leads'
+    | '/engage/live-monitoring'
     | '/instagram/content-planner'
     | '/instagram/create-content'
     | '/instagram/trends'
@@ -797,6 +809,7 @@ export interface FileRouteTypes {
     | '/_dashboard/email/test'
     | '/_dashboard/engage/call-status'
     | '/_dashboard/engage/leads'
+    | '/_dashboard/engage/live-monitoring'
     | '/_dashboard/instagram/content-planner'
     | '/_dashboard/instagram/create-content'
     | '/_dashboard/instagram/trends'
@@ -1112,6 +1125,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardInstagramContentPlannerRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/engage/live-monitoring': {
+      id: '/_dashboard/engage/live-monitoring'
+      path: '/engage/live-monitoring'
+      fullPath: '/engage/live-monitoring'
+      preLoaderRoute: typeof DashboardEngageLiveMonitoringRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/engage/leads': {
       id: '/_dashboard/engage/leads'
       path: '/engage/leads'
@@ -1341,6 +1361,7 @@ interface DashboardRouteChildren {
   DashboardEmailTestRoute: typeof DashboardEmailTestRoute
   DashboardEngageCallStatusRoute: typeof DashboardEngageCallStatusRoute
   DashboardEngageLeadsRoute: typeof DashboardEngageLeadsRoute
+  DashboardEngageLiveMonitoringRoute: typeof DashboardEngageLiveMonitoringRoute
   DashboardInstagramContentPlannerRoute: typeof DashboardInstagramContentPlannerRoute
   DashboardInstagramCreateContentRoute: typeof DashboardInstagramCreateContentRoute
   DashboardInstagramTrendsRoute: typeof DashboardInstagramTrendsRoute
@@ -1401,6 +1422,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardEmailTestRoute: DashboardEmailTestRoute,
   DashboardEngageCallStatusRoute: DashboardEngageCallStatusRoute,
   DashboardEngageLeadsRoute: DashboardEngageLeadsRoute,
+  DashboardEngageLiveMonitoringRoute: DashboardEngageLiveMonitoringRoute,
   DashboardInstagramContentPlannerRoute: DashboardInstagramContentPlannerRoute,
   DashboardInstagramCreateContentRoute: DashboardInstagramCreateContentRoute,
   DashboardInstagramTrendsRoute: DashboardInstagramTrendsRoute,
