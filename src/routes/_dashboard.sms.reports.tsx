@@ -1,5 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { BarChart, BarChart3, RefreshCw, Smartphone } from "lucide-react";
+import { SMSCampaignModal } from "@/components/sms/SmsModals";
 
 export const Route = createFileRoute("/_dashboard/sms/reports")({ component: SmsReports });
 
@@ -10,6 +12,8 @@ const STEPS = [
 ] as const;
 
 function SmsReports() {
+  const navigate = useNavigate();
+  const [campOpen, setCampOpen] = useState(false);
   return (
     <div className="font-sans">
       <div className="px-6 pt-6 pb-4 flex justify-between items-center">
