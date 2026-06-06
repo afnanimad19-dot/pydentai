@@ -129,9 +129,12 @@ html {
     font-feature-settings: "cv11", "ss01", "ss03";
   }
 
-  h1, h2, h3, h4 {
+  h1, h2, h3, h4, h5, h6 {
     font-family: "Inter", system-ui, sans-serif;
     letter-spacing: -0.02em;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: 0;
   }
 
   code, pre, kbd, samp {
