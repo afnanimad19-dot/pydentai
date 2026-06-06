@@ -29,6 +29,8 @@ import { Route as DashboardWhatsappInboxRouteImport } from './routes/_dashboard.
 import { Route as DashboardWhatsappContactsRouteImport } from './routes/_dashboard.whatsapp.contacts'
 import { Route as DashboardWhatsappChatbotRouteImport } from './routes/_dashboard.whatsapp.chatbot'
 import { Route as DashboardWebsiteChatWidgetsRouteImport } from './routes/_dashboard.website-chat.widgets'
+import { Route as DashboardWebsiteChatVisitorsRouteImport } from './routes/_dashboard.website-chat.visitors'
+import { Route as DashboardWebsiteChatReportsRouteImport } from './routes/_dashboard.website-chat.reports'
 import { Route as DashboardWebsiteChatConversationsRouteImport } from './routes/_dashboard.website-chat.conversations'
 import { Route as DashboardSmsTemplatesRouteImport } from './routes/_dashboard.sms.templates'
 import { Route as DashboardSmsSetupRouteImport } from './routes/_dashboard.sms.setup'
@@ -174,6 +176,18 @@ const DashboardWebsiteChatWidgetsRoute =
   DashboardWebsiteChatWidgetsRouteImport.update({
     id: '/website-chat/widgets',
     path: '/website-chat/widgets',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardWebsiteChatVisitorsRoute =
+  DashboardWebsiteChatVisitorsRouteImport.update({
+    id: '/website-chat/visitors',
+    path: '/website-chat/visitors',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardWebsiteChatReportsRoute =
+  DashboardWebsiteChatReportsRouteImport.update({
+    id: '/website-chat/reports',
+    path: '/website-chat/reports',
     getParentRoute: () => DashboardRoute,
   } as any)
 const DashboardWebsiteChatConversationsRoute =
@@ -449,6 +463,8 @@ export interface FileRoutesByFullPath {
   '/sms/setup': typeof DashboardSmsSetupRoute
   '/sms/templates': typeof DashboardSmsTemplatesRoute
   '/website-chat/conversations': typeof DashboardWebsiteChatConversationsRoute
+  '/website-chat/reports': typeof DashboardWebsiteChatReportsRoute
+  '/website-chat/visitors': typeof DashboardWebsiteChatVisitorsRoute
   '/website-chat/widgets': typeof DashboardWebsiteChatWidgetsRoute
   '/whatsapp/chatbot': typeof DashboardWhatsappChatbotRoute
   '/whatsapp/contacts': typeof DashboardWhatsappContactsRoute
@@ -511,6 +527,8 @@ export interface FileRoutesByTo {
   '/sms/setup': typeof DashboardSmsSetupRoute
   '/sms/templates': typeof DashboardSmsTemplatesRoute
   '/website-chat/conversations': typeof DashboardWebsiteChatConversationsRoute
+  '/website-chat/reports': typeof DashboardWebsiteChatReportsRoute
+  '/website-chat/visitors': typeof DashboardWebsiteChatVisitorsRoute
   '/website-chat/widgets': typeof DashboardWebsiteChatWidgetsRoute
   '/whatsapp/chatbot': typeof DashboardWhatsappChatbotRoute
   '/whatsapp/contacts': typeof DashboardWhatsappContactsRoute
@@ -575,6 +593,8 @@ export interface FileRoutesById {
   '/_dashboard/sms/setup': typeof DashboardSmsSetupRoute
   '/_dashboard/sms/templates': typeof DashboardSmsTemplatesRoute
   '/_dashboard/website-chat/conversations': typeof DashboardWebsiteChatConversationsRoute
+  '/_dashboard/website-chat/reports': typeof DashboardWebsiteChatReportsRoute
+  '/_dashboard/website-chat/visitors': typeof DashboardWebsiteChatVisitorsRoute
   '/_dashboard/website-chat/widgets': typeof DashboardWebsiteChatWidgetsRoute
   '/_dashboard/whatsapp/chatbot': typeof DashboardWhatsappChatbotRoute
   '/_dashboard/whatsapp/contacts': typeof DashboardWhatsappContactsRoute
@@ -639,6 +659,8 @@ export interface FileRouteTypes {
     | '/sms/setup'
     | '/sms/templates'
     | '/website-chat/conversations'
+    | '/website-chat/reports'
+    | '/website-chat/visitors'
     | '/website-chat/widgets'
     | '/whatsapp/chatbot'
     | '/whatsapp/contacts'
@@ -701,6 +723,8 @@ export interface FileRouteTypes {
     | '/sms/setup'
     | '/sms/templates'
     | '/website-chat/conversations'
+    | '/website-chat/reports'
+    | '/website-chat/visitors'
     | '/website-chat/widgets'
     | '/whatsapp/chatbot'
     | '/whatsapp/contacts'
@@ -764,6 +788,8 @@ export interface FileRouteTypes {
     | '/_dashboard/sms/setup'
     | '/_dashboard/sms/templates'
     | '/_dashboard/website-chat/conversations'
+    | '/_dashboard/website-chat/reports'
+    | '/_dashboard/website-chat/visitors'
     | '/_dashboard/website-chat/widgets'
     | '/_dashboard/whatsapp/chatbot'
     | '/_dashboard/whatsapp/contacts'
@@ -933,6 +959,20 @@ declare module '@tanstack/react-router' {
       path: '/website-chat/widgets'
       fullPath: '/website-chat/widgets'
       preLoaderRoute: typeof DashboardWebsiteChatWidgetsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/website-chat/visitors': {
+      id: '/_dashboard/website-chat/visitors'
+      path: '/website-chat/visitors'
+      fullPath: '/website-chat/visitors'
+      preLoaderRoute: typeof DashboardWebsiteChatVisitorsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/website-chat/reports': {
+      id: '/_dashboard/website-chat/reports'
+      path: '/website-chat/reports'
+      fullPath: '/website-chat/reports'
+      preLoaderRoute: typeof DashboardWebsiteChatReportsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/website-chat/conversations': {
@@ -1276,6 +1316,8 @@ interface DashboardRouteChildren {
   DashboardSmsSetupRoute: typeof DashboardSmsSetupRoute
   DashboardSmsTemplatesRoute: typeof DashboardSmsTemplatesRoute
   DashboardWebsiteChatConversationsRoute: typeof DashboardWebsiteChatConversationsRoute
+  DashboardWebsiteChatReportsRoute: typeof DashboardWebsiteChatReportsRoute
+  DashboardWebsiteChatVisitorsRoute: typeof DashboardWebsiteChatVisitorsRoute
   DashboardWebsiteChatWidgetsRoute: typeof DashboardWebsiteChatWidgetsRoute
   DashboardWhatsappChatbotRoute: typeof DashboardWhatsappChatbotRoute
   DashboardWhatsappContactsRoute: typeof DashboardWhatsappContactsRoute
@@ -1334,6 +1376,8 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardSmsTemplatesRoute: DashboardSmsTemplatesRoute,
   DashboardWebsiteChatConversationsRoute:
     DashboardWebsiteChatConversationsRoute,
+  DashboardWebsiteChatReportsRoute: DashboardWebsiteChatReportsRoute,
+  DashboardWebsiteChatVisitorsRoute: DashboardWebsiteChatVisitorsRoute,
   DashboardWebsiteChatWidgetsRoute: DashboardWebsiteChatWidgetsRoute,
   DashboardWhatsappChatbotRoute: DashboardWhatsappChatbotRoute,
   DashboardWhatsappContactsRoute: DashboardWhatsappContactsRoute,
@@ -1368,3 +1412,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
