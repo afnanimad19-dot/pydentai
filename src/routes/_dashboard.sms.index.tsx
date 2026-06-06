@@ -115,7 +115,7 @@ function SmsDashboard() {
               <Megaphone size={40} className="text-[#1C1C34] mx-auto mb-3" />
               <div className="text-[#4A4A6A] text-sm">No campaigns yet</div>
               <div className="text-[#4A4A6A] text-xs">Create your first campaign to see performance</div>
-              <button className="h-8 px-3 rounded-lg bg-[#3B82F6] text-white text-xs font-semibold mt-4">+ Create Campaign</button>
+              <button onClick={() => setCampOpen(true)} className="h-8 px-3 rounded-lg bg-[#3B82F6] text-white text-xs font-semibold mt-4">+ Create Campaign</button>
             </div>
           </div>
 
