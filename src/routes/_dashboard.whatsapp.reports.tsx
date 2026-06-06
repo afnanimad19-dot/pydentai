@@ -1,71 +1,64 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { BarChart3, RefreshCw, MessageSquare } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { BarChart3, RefreshCw, Search } from "lucide-react";
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  RadialBarChart,
-  RadialBar,
-  PolarAngleAxis,
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis as PA,
-  Tooltip,
+  LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer,
+  BarChart, Bar, Tooltip,
 } from "recharts";
 
-export const Route = createFileRoute("/_dashboard/whatsapp/reports")({
-  component: Reports,
-});
+export const Route = createFileRoute("/_dashboard/whatsapp/reports")({ component: Reports });
 
 const METRICS = [
-  { label: "Contacts", value: "0" },
-  { label: "Total Msgs", value: "0" },
-  { label: "Sent", value: "0" },
-  { label: "Received", value: "0" },
-  { label: "Delivered", value: "0", sub: "+0%" },
-  { label: "Read Rate", value: "0.0%" },
-  { label: "Reply Rate", value: "0.0%" },
-  { label: "Resp Time", value: "0m" },
-  { label: "Bounce", value: "0.0%" },
-  { label: "Campaigns", value: "0" },
+  { label: "Contacts", value: "0" }, { label: "Total Msgs", value: "0" },
+  { label: "Sent", value: "0" }, { label: "Received", value: "0" },
+  { label: "Delivered", value: "0", sub: "+0%" }, { label: "Read Rate", value: "0.0%" },
+  { label: "Reply Rate", value: "0.0%" }, { label: "Resp Time", value: "0m" },
+  { label: "Bounce", value: "0.0%" }, { label: "Campaigns", value: "0" },
 ];
 
-const TABS = ["Overview", "Delivery Funnel", "Engagement", "Campaigns", "AI Intelligence", "Data Table"];
+const TABS = [
+  { id: "delivery", label: "Delivery" },
+  { id: "engagement", label: "Engagement" },
+  { id: "campaigns", label: "Campaigns" },
+  { id: "ai", label: "AI Intel" },
+  { id: "data", label: "Data Table" },
+] as const;
 
-const TREND_DATA = [
-  { week: "Week 1", sent: 0, delivered: 0, read: 0, replied: 0 },
-  { week: "Week 2", sent: 0, delivered: 0, read: 0, replied: 0 },
-  { week: "Week 3", sent: 0, delivered: 0, read: 0, replied: 0 },
-  { week: "Week 4", sent: 0, delivered: 0, read: 0, replied: 0 },
+const DELIVERY = [
+  { d: "Mon", v: 84 }, { d: "Tue", v: 88 }, { d: "Wed", v: 91 },
+  { d: "Thu", v: 94 }, { d: "Fri", v: 96 }, { d: "Sat", v: 92 }, { d: "Sun", v: 89 },
 ];
 
-const DAILY = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => ({ day: d, messages: 0, responses: 0 }));
-
-const RADAR = [
-  { axis: "Delivery", v: 0 },
-  { axis: "Open Rate", v: 0 },
-  { axis: "Volume", v: 0 },
-  { axis: "Speed", v: 0 },
-  { axis: "Growth", v: 0 },
-  { axis: "Reply", v: 0 },
+const ENGAGEMENT = [
+  { d: "W1", open: 38, reply: 12 }, { d: "W2", open: 44, reply: 16 },
+  { d: "W3", open: 48, reply: 18 }, { d: "W4", open: 52, reply: 21 },
 ];
 
-const BOTTOM = [
-  { l: "Avg Sent/Day", v: "0" },
-  { l: "Avg Received/Day", v: "0" },
-  { l: "Read:Sent", v: "0%", c: "text-[#F59E0B]" },
-  { l: "Response Rate", v: "0%", c: "text-[#F59E0B]" },
-  { l: "New Contacts/Day", v: "0.0" },
-  { l: "Campaign Success", v: "—", c: "text-[#FF4D6D]" },
+const CAMPAIGNS = [
+  { name: "Promo A", sent: 320, opened: 220, replied: 80 },
+  { name: "Welcome", sent: 410, opened: 360, replied: 120 },
+  { name: "Reminder", sent: 280, opened: 230, replied: 60 },
 ];
+
+const ROWS = Array.from({ length: 10 }).map((_, i) => ({
+  id: i + 1, contact: `Contact ${i + 1}`, campaign: ["Promo A", "Welcome", "Reminder"][i % 3],
+  status: ["Delivered", "Read", "Replied"][i % 3], time: `${i + 1}m ago`,
+}));
 
 function Reports() {
+  const [tab, setTab] = useState<typeof TABS[number]["id"]>("delivery");
+  const [q, setQ] = useState("");
+  const filtered = ROWS.filter((r) => r.contact.toLowerCase().includes(q.toLowerCase()));
+
+  const exportCsv = () => {
+    const csv = "id,contact,campaign,status,time\n" + ROWS.map((r) => `${r.id},${r.contact},${r.campaign},${r.status},${r.time}`).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = "whatsapp-report.csv"; a.click();
+    URL.revokeObjectURL(url); toast.success("Exported");
+  };
+
   return (
     <div className="font-sans">
       <div className="px-6 pt-6 pb-4 flex justify-between items-start">
@@ -91,7 +84,7 @@ function Reports() {
           <button className="h-9 w-9 rounded-lg border border-[#1C1C34] hover:bg-[#1C1C34] flex items-center justify-center">
             <RefreshCw size={14} className="text-[#8B8FA8]" />
           </button>
-          <button className="h-9 px-4 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-sm font-semibold">Export</button>
+          <button onClick={exportCsv} className="h-9 px-4 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-sm font-semibold">Export</button>
         </div>
       </div>
 
@@ -108,130 +101,109 @@ function Reports() {
       </div>
 
       <div className="px-6 flex gap-1 border-b border-[#1C1C34] mb-5">
-        {TABS.map((t, i) => (
+        {TABS.map((t) => (
           <button
-            key={t}
-            className={
-              i === 0
-                ? "text-white border-b-2 border-[#22C55E] px-4 py-2.5 text-sm font-medium -mb-px"
-                : "text-[#8B8FA8] hover:text-white px-4 py-2.5 text-sm"
-            }
-          >
-            {t}
-          </button>
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={tab === t.id
+              ? "text-white border-b-2 border-[#22C55E] px-4 py-2.5 text-sm font-medium -mb-px"
+              : "text-[#8B8FA8] hover:text-white px-4 py-2.5 text-sm"}
+          >{t.label}</button>
         ))}
       </div>
 
-      <div className="px-6 pb-6 grid grid-cols-12 gap-5">
-        <div className="col-span-8 flex flex-col gap-4">
+      <div className="px-6 pb-6">
+        {tab === "delivery" && (
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-white font-semibold text-sm">Message Activity Trend</div>
-              <div className="flex gap-3 text-xs">
-                {[
-                  { l: "Sent", c: "bg-[#7B5CFC]" },
-                  { l: "Delivered", c: "bg-[#22C55E]" },
-                  { l: "Read", c: "bg-[#3B82F6]" },
-                  { l: "Replied", c: "bg-[#00D4AA]" },
-                ].map((leg) => (
-                  <span key={leg.l} className="flex items-center gap-1 text-[#8B8FA8]">
-                    <span className={`w-2 h-2 rounded-full ${leg.c}`} /> {leg.l}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={TREND_DATA}>
+            <div className="text-white font-semibold text-sm mb-4">Delivery Rate (last 7 days)</div>
+            <ResponsiveContainer width="100%" height={280}>
+              <AreaChart data={DELIVERY}>
                 <CartesianGrid stroke="#1C1C34" strokeDasharray="3 3" />
-                <XAxis dataKey="week" stroke="#4A4A6A" fontSize={11} />
+                <XAxis dataKey="d" stroke="#4A4A6A" fontSize={11} />
                 <YAxis stroke="#4A4A6A" fontSize={11} />
                 <Tooltip contentStyle={{ background: "#0B0B1A", border: "1px solid #1C1C34", borderRadius: 8 }} />
-                <Line dataKey="sent" stroke="#7B5CFC" strokeWidth={2} dot={false} />
-                <Line dataKey="delivered" stroke="#22C55E" strokeWidth={2} dot={false} />
-                <Line dataKey="read" stroke="#3B82F6" strokeWidth={2} dot={false} />
-                <Line dataKey="replied" stroke="#00D4AA" strokeWidth={2} dot={false} />
+                <Area dataKey="v" stroke="#22C55E" fill="#22C55E" fillOpacity={0.25} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+        {tab === "engagement" && (
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
+            <div className="text-white font-semibold text-sm mb-4">Open Rate & Reply Rate</div>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={ENGAGEMENT}>
+                <CartesianGrid stroke="#1C1C34" strokeDasharray="3 3" />
+                <XAxis dataKey="d" stroke="#4A4A6A" fontSize={11} />
+                <YAxis stroke="#4A4A6A" fontSize={11} />
+                <Tooltip contentStyle={{ background: "#0B0B1A", border: "1px solid #1C1C34", borderRadius: 8 }} />
+                <Line dataKey="open" stroke="#3B82F6" strokeWidth={2} dot={false} />
+                <Line dataKey="reply" stroke="#00D4AA" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
+        )}
 
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
-              <div className="text-white font-semibold text-sm mb-3">Daily Message Activity</div>
-              <ResponsiveContainer width="100%" height={120}>
-                <BarChart data={DAILY}>
-                  <XAxis dataKey="day" stroke="#4A4A6A" fontSize={10} />
-                  <Bar dataKey="messages" fill="#22C55E" />
-                  <Bar dataKey="responses" fill="#7B5CFC" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
-              <div className="text-white font-semibold text-sm mb-3">Message Flow</div>
-              <div className="flex flex-col items-center justify-center h-[120px]">
-                <MessageSquare size={32} className="text-[#1C1C34] mb-2" />
-                <div className="text-[#4A4A6A] text-xs">No messages yet</div>
-              </div>
-            </div>
-            <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
-              <div className="text-white font-semibold text-sm mb-3">Peak Hours</div>
-              <div className="flex justify-between text-[#4A4A6A] text-[9px] mb-2">
-                {[0, 4, 8, 12, 16, 20, 22].map((h) => <span key={h}>{h}h</span>)}
-              </div>
-              <div className="h-8 bg-[#06060F] rounded" />
-              <div className="text-[#4A4A6A] text-[10px] mt-3">9AM-5PM PEAK WINDOW</div>
-              <div className="text-[#4A4A6A] text-[10px]">0 AVG/DAY · N/A IN/OUT RATIO</div>
-            </div>
+        {tab === "campaigns" && (
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
+            <div className="text-white font-semibold text-sm mb-4">Per-Campaign Comparison</div>
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={CAMPAIGNS}>
+                <CartesianGrid stroke="#1C1C34" strokeDasharray="3 3" />
+                <XAxis dataKey="name" stroke="#4A4A6A" fontSize={11} />
+                <YAxis stroke="#4A4A6A" fontSize={11} />
+                <Tooltip contentStyle={{ background: "#0B0B1A", border: "1px solid #1C1C34", borderRadius: 8 }} />
+                <Bar dataKey="sent" fill="#7B5CFC" />
+                <Bar dataKey="opened" fill="#3B82F6" />
+                <Bar dataKey="replied" fill="#00D4AA" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
+        )}
 
-          <div className="grid grid-cols-6 gap-3">
-            {BOTTOM.map((b) => (
-              <div key={b.l} className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-4 py-3 text-center">
-                <div className={`text-lg font-bold ${b.c ?? "text-white"}`}>{b.v}</div>
-                <div className="text-[#4A4A6A] text-[10px] uppercase mt-1">{b.l}</div>
+        {tab === "ai" && (
+          <div className="grid grid-cols-4 gap-4">
+            {[
+              { l: "AI Response Accuracy", v: "94%", c: "text-[#22C55E]" },
+              { l: "Avg Confidence", v: "0.87", c: "text-[#3B82F6]" },
+              { l: "Auto-Resolution Rate", v: "76%", c: "text-[#00D4AA]" },
+              { l: "Escalation Rate", v: "12%", c: "text-[#F59E0B]" },
+            ].map((s) => (
+              <div key={s.l} className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
+                <div className={`text-2xl font-bold ${s.c}`}>{s.v}</div>
+                <div className="text-[#8B8FA8] text-xs mt-1">{s.l}</div>
               </div>
             ))}
           </div>
-        </div>
+        )}
 
-        <div className="col-span-4 flex flex-col gap-4">
+        {tab === "data" && (
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
             <div className="flex items-center justify-between mb-3">
-              <div className="text-white font-semibold text-sm">Channel Health Score</div>
-              <span className="bg-[#FF4D6D]/12 text-[#FF4D6D] text-[10px] px-2 py-0.5 rounded-full">NEEDS WORK</span>
-            </div>
-            <div className="relative w-[100px] h-[100px] mx-auto">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadialBarChart innerRadius="70%" outerRadius="100%" data={[{ v: 100 }]} startAngle={90} endAngle={-270}>
-                  <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-                  <RadialBar dataKey="v" fill="#FF4D6D" />
-                </RadialBarChart>
-              </ResponsiveContainer>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="text-white font-bold text-2xl">0</div>
-                <div className="text-[#FF4D6D] text-[10px]">NEEDS WORK</div>
+              <div className="relative w-64">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4A4A6A]" />
+                <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search contacts..." className="w-full h-9 bg-[#06060F] border border-[#1C1C34] rounded-lg pl-8 pr-3 text-white text-xs" />
               </div>
+              <button onClick={exportCsv} className="h-9 px-4 rounded-lg bg-[#22C55E] text-white text-xs font-semibold">Export CSV</button>
             </div>
-            <div className="space-y-2 mt-4">
-              {["Delivery", "Open Rate", "Reply Rate", "Growth"].map((l) => (
-                <div key={l} className="flex justify-between">
-                  <span className="text-[#8B8FA8] text-xs">{l}</span>
-                  <span className="text-white text-xs font-medium">0%</span>
-                </div>
-              ))}
-            </div>
+            <table className="w-full text-sm">
+              <thead className="text-[#4A4A6A] text-[10px] uppercase">
+                <tr><th className="text-left py-2">#</th><th className="text-left">Contact</th><th className="text-left">Campaign</th><th className="text-left">Status</th><th className="text-left">Time</th></tr>
+              </thead>
+              <tbody>
+                {filtered.map((r) => (
+                  <tr key={r.id} className="border-t border-[#1C1C34]">
+                    <td className="py-2 text-[#8B8FA8]">{r.id}</td>
+                    <td className="text-white">{r.contact}</td>
+                    <td className="text-[#8B8FA8]">{r.campaign}</td>
+                    <td className="text-[#22C55E] text-xs">{r.status}</td>
+                    <td className="text-[#4A4A6A]">{r.time}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-
-          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
-            <div className="text-white font-semibold text-sm mb-3">Performance Radar</div>
-            <ResponsiveContainer width="100%" height={140}>
-              <RadarChart data={RADAR}>
-                <PolarGrid stroke="#1C1C34" />
-                <PA dataKey="axis" stroke="#4A4A6A" fontSize={10} />
-                <Radar dataKey="v" stroke="#7B5CFC" fill="#7B5CFC" fillOpacity={0.3} />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

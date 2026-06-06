@@ -1,33 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
-  MessageCircle,
-  RefreshCw,
-  Send,
-  Megaphone,
-  Bot,
-  FileText,
-  Phone,
-  BarChart,
-  Image as ImageIcon,
-  Settings,
-  Zap,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  MessageSquare,
-  Reply,
-  Sparkles,
+  MessageCircle, RefreshCw, Send, Megaphone, Bot, FileText, Phone, BarChart,
+  Image as ImageIcon, Settings, Zap, Clock, CheckCircle, AlertTriangle,
+  MessageSquare, Reply, Sparkles,
 } from "lucide-react";
-import {
-  RadialBarChart,
-  RadialBar,
-  PolarAngleAxis,
-  ResponsiveContainer,
-} from "recharts";
+import { RadialBarChart, RadialBar, PolarAngleAxis, ResponsiveContainer } from "recharts";
 
-export const Route = createFileRoute("/_dashboard/whatsapp/")({
-  component: WhatsAppDashboard,
-});
+export const Route = createFileRoute("/_dashboard/whatsapp/")({ component: WhatsAppDashboard });
 
 const METRICS = [
   { label: "Contacts", value: "0", sub: "+0" },
@@ -38,17 +17,6 @@ const METRICS = [
   { label: "Delivery", value: "0.0%", sub: "" },
   { label: "Campaigns", value: "0", sub: "live" },
   { label: "Health", value: "0", sub: "Needs Attention", red: true },
-];
-
-const QUICK_ACTIONS = [
-  { icon: Send, color: "text-[#7B5CFC]", name: "New Campaign", desc: "Create & launch" },
-  { icon: Megaphone, color: "text-[#00D4AA]", name: "Send Broadcast", desc: "Mass message delivery" },
-  { icon: Bot, color: "text-[#F59E0B]", name: "Chatbot Builder", desc: "Design conversation flows" },
-  { icon: FileText, color: "text-[#3B82F6]", name: "Templates", desc: "Manage message templates" },
-  { icon: Phone, color: "text-[#22C55E]", name: "Validate Numbers", desc: "Verify phone numbers" },
-  { icon: BarChart, color: "text-[#7B5CFC]", name: "View Analytics", desc: "Deep performance insights" },
-  { icon: ImageIcon, color: "text-[#00D4AA]", name: "Media Library", desc: "Images, videos & docs" },
-  { icon: Settings, color: "text-[#8B8FA8]", name: "Settings", desc: "API & account config" },
 ];
 
 const ACTIVITY = [
@@ -76,9 +44,20 @@ const INSIGHTS = [
 ];
 
 function WhatsAppDashboard() {
+  const navigate = useNavigate();
+  const QUICK_ACTIONS = [
+    { icon: Send, color: "text-[#7B5CFC]", name: "New Campaign", desc: "Create & launch", to: "/whatsapp/campaigns", search: { action: "new" } },
+    { icon: Megaphone, color: "text-[#00D4AA]", name: "Send Broadcast", desc: "Mass message delivery", to: "/whatsapp/campaigns", search: { action: "new" } },
+    { icon: Bot, color: "text-[#F59E0B]", name: "Chatbot Builder", desc: "Design conversation flows", to: "/whatsapp/chatbot" },
+    { icon: FileText, color: "text-[#3B82F6]", name: "Templates", desc: "Manage message templates", to: "/whatsapp/templates" },
+    { icon: Phone, color: "text-[#22C55E]", name: "Validate Numbers", desc: "Verify phone numbers", to: "/whatsapp/contacts" },
+    { icon: BarChart, color: "text-[#7B5CFC]", name: "View Analytics", desc: "Deep performance insights", to: "/whatsapp/reports" },
+    { icon: ImageIcon, color: "text-[#00D4AA]", name: "Media Library", desc: "Images, videos & docs", to: "/whatsapp/templates" },
+    { icon: Settings, color: "text-[#8B8FA8]", name: "Settings", desc: "API & account config", to: "/whatsapp/setup" },
+  ] as const;
+
   return (
     <div className="font-sans">
-      {/* Header */}
       <div className="px-6 pt-6 pb-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-full bg-[#22C55E]/15 border border-[#22C55E]/20 flex items-center justify-center">
@@ -96,11 +75,10 @@ function WhatsAppDashboard() {
           <button className="h-9 w-9 rounded-lg border border-[#1C1C34] hover:bg-[#1C1C34] flex items-center justify-center">
             <RefreshCw size={14} className="text-[#8B8FA8]" />
           </button>
-          <button className="h-9 px-4 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-sm font-semibold">+ New Campaign</button>
+          <button onClick={() => navigate({ to: "/whatsapp/campaigns", search: { action: "new" } as any })} className="h-9 px-4 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-sm font-semibold">+ New Campaign</button>
         </div>
       </div>
 
-      {/* 8 metric strip */}
       <div className="px-6 mb-5 overflow-x-auto">
         <div className="flex gap-3 min-w-max">
           {METRICS.map((m) => (
@@ -113,7 +91,6 @@ function WhatsAppDashboard() {
         </div>
       </div>
 
-      {/* Row 1 */}
       <div className="px-6 mb-4 grid grid-cols-3 gap-4">
         <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
           <div className="flex items-start justify-between mb-2">
@@ -136,7 +113,7 @@ function WhatsAppDashboard() {
           </div>
           <div className="text-[#4A4A6A] text-xs text-center mt-2">No account connected</div>
           <div className="flex justify-center mt-3">
-            <button className="h-8 px-4 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-xs font-semibold">Connect Now</button>
+            <button onClick={() => navigate({ to: "/whatsapp/setup" })} className="h-8 px-4 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-xs font-semibold">Connect Now</button>
           </div>
         </div>
 
@@ -182,7 +159,6 @@ function WhatsAppDashboard() {
         </div>
       </div>
 
-      {/* Row 2 */}
       <div className="px-6 mb-4 grid grid-cols-12 gap-4">
         <div className="col-span-8 bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
           <div className="flex items-center gap-2">
@@ -192,11 +168,15 @@ function WhatsAppDashboard() {
           </div>
           <div className="grid grid-cols-4 gap-3 mt-4">
             {QUICK_ACTIONS.map((a) => (
-              <div key={a.name} className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-4 cursor-pointer hover:border-[#22C55E]/30 hover:bg-[#0E0E1C] transition-all">
+              <button
+                key={a.name}
+                onClick={() => navigate({ to: a.to as any, search: (a as any).search })}
+                className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-4 cursor-pointer hover:border-[#22C55E]/30 hover:bg-[#0E0E1C] transition-all text-left"
+              >
                 <a.icon size={22} className={a.color} />
                 <div className="text-white text-xs font-semibold mt-2">{a.name}</div>
                 <div className="text-[#4A4A6A] text-[10px]">{a.desc}</div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -223,7 +203,6 @@ function WhatsAppDashboard() {
         </div>
       </div>
 
-      {/* Row 3 */}
       <div className="px-6 pb-6 grid grid-cols-3 gap-4">
         <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
           <div className="flex items-center gap-2">
@@ -294,7 +273,7 @@ function WhatsAppDashboard() {
               </div>
             ))}
           </div>
-          <div className="text-[#22C55E] text-xs mt-4 cursor-pointer">View Full Analytics →</div>
+          <button onClick={() => navigate({ to: "/whatsapp/reports" })} className="text-[#22C55E] text-xs mt-4 cursor-pointer hover:underline">View Full Analytics →</button>
         </div>
       </div>
     </div>
