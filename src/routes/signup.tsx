@@ -174,6 +174,42 @@ function StepAccount({
   strengthLabels,
   onNext,
 }: any) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmPwd, setConfirmPwd] = useState("");
+  const [agree, setAgree] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (pwd !== confirmPwd) {
+      setError("Passwords do not match");
+      return;
+    }
+    if (!agree) {
+      setError("Please accept the Terms of Service to continue");
+      return;
+    }
+    setLoading(true);
+    const { error: err } = await supabase.auth.signUp({
+      email,
+      password: pwd,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+        data: { first_name: firstName, last_name: lastName },
+      },
+    });
+    setLoading(false);
+    if (err) {
+      setError(err.message);
+      return;
+    }
+    onNext();
+  };
+
   return (
     <>
       <h2 className="text-[20px] font-bold tracking-[-0.02em] text-white mb-1">
@@ -182,26 +218,20 @@ function StepAccount({
       <p className="text-[#4A4A6A] text-sm mb-6">
         14-day free trial · No credit card needed
       </p>
-      <form
-        className="space-y-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onNext();
-        }}
-      >
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className={labelCls}>First Name</label>
-            <input className={inputCls} placeholder="Ahmad" />
+            <input className={inputCls} placeholder="Ahmad" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
           </div>
           <div>
             <label className={labelCls}>Last Name</label>
-            <input className={inputCls} placeholder="Khan" />
+            <input className={inputCls} placeholder="Khan" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
           </div>
         </div>
         <div>
           <label className={labelCls}>Email</label>
-          <input type="email" className={inputCls} placeholder="you@clinic.com" />
+          <input type="email" className={inputCls} placeholder="you@clinic.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div>
           <label className={labelCls}>Password</label>
@@ -212,6 +242,8 @@ function StepAccount({
               onChange={(e) => setPwd(e.target.value)}
               className={inputCls + " pr-10"}
               placeholder="••••••••"
+              required
+              minLength={6}
             />
             <button
               type="button"
@@ -250,12 +282,14 @@ function StepAccount({
         </div>
         <div>
           <label className={labelCls}>Confirm Password</label>
-          <input type="password" className={inputCls} placeholder="••••••••" />
+          <input type="password" className={inputCls} placeholder="••••••••" value={confirmPwd} onChange={(e) => setConfirmPwd(e.target.value)} required />
         </div>
 
         <label className="flex items-start gap-2.5 mt-2 cursor-pointer">
           <input
             type="checkbox"
+            checked={agree}
+            onChange={(e) => setAgree(e.target.checked)}
             className="mt-0.5 w-4 h-4 bg-[#06060F] border border-[#1C1C34] rounded accent-[#7B5CFC]"
           />
           <span className="text-[#8B8FA8] text-xs leading-relaxed">
@@ -265,11 +299,19 @@ function StepAccount({
           </span>
         </label>
 
+        {error && (
+          <div className="text-[#FF4D6D] text-xs bg-[#FF4D6D]/[0.08] border border-[#FF4D6D]/20 rounded-lg px-3 py-2">
+            {error}
+          </div>
+        )}
+
         <button
           type="submit"
-          className="w-full h-11 rounded-xl bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold mt-4 transition-colors"
+          disabled={loading}
+          className="w-full h-11 rounded-xl bg-[#7B5CFC] hover:bg-[#6047DB] disabled:opacity-60 text-white text-sm font-semibold mt-4 transition-colors flex items-center justify-center gap-2"
         >
-          Continue
+          {loading && <Loader2 size={14} className="animate-spin" />}
+          {loading ? "Creating account..." : "Continue"}
         </button>
       </form>
     </>
