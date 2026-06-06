@@ -118,9 +118,9 @@ function AgentHubPage() {
             </div>
           </div>
         </div>
-        <button className="h-9 px-4 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm">
+        <Link to="/agents/studio" className="h-9 px-4 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm flex items-center">
           Manage Agents
-        </button>
+        </Link>
       </div>
 
       {/* Stats */}
