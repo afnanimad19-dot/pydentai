@@ -67,7 +67,7 @@ function WebsiteChatDashboard() {
           </div>
 
           <div className="grid grid-cols-4 gap-4">
-            {[[Zap, "#22C55E", "1.2s", "Avg Response", "-0.3s faster"], [Target, "#3B82F6", "0%", "Completion Rate", ""], [Bot, "#00D4AA", "87%", "AI Handled", "15% escalated"], [TrendingUp, "#F59E0B", "50%", "Conversion Rate", "Visitors to leads"]].map(([Icon, c, v, l, d]) => (
+            {([[Zap, "#22C55E", "1.2s", "Avg Response", "-0.3s faster"], [Target, "#3B82F6", "0%", "Completion Rate", ""], [Bot, "#00D4AA", "87%", "AI Handled", "15% escalated"], [TrendingUp, "#F59E0B", "50%", "Conversion Rate", "Visitors to leads"]] as any[]).map(([Icon, c, v, l, d]: any[]) => (
               <div key={l as string} className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-5 py-4">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: `${c}25` }}><Icon size={16} style={{ color: c as string }} /></div>
                 <div className="text-white font-bold text-[22px] mt-2 tracking-[-0.03em]">{v}</div>
@@ -106,7 +106,7 @@ function WebsiteChatDashboard() {
               <PieChart><Pie data={PIE} dataKey="value" innerRadius={35} outerRadius={55}>{PIE.map((e, i) => <Cell key={i} fill={e.c} />)}</Pie></PieChart>
             </ResponsiveContainer>
             <div className="grid grid-cols-3 gap-2 mt-3">
-              {[[ThumbsUp, "#22C55E", "0", "Positive"], [Minus, "#F59E0B", "7", "Neutral"], [ThumbsDown, "#FF4D6D", "0", "Negative"]].map(([Icon, c, v, l]) => (
+              {([[ThumbsUp, "#22C55E", "0", "Positive"], [Minus, "#F59E0B", "7", "Neutral"], [ThumbsDown, "#FF4D6D", "0", "Negative"]] as any[]).map(([Icon, c, v, l]: any[]) => (
                 <div key={l as string} className="bg-[#06060F] rounded-lg p-2.5 text-center">
                   <Icon size={14} style={{ color: c as string }} className="mx-auto" />
                   <div className="text-white font-bold text-lg">{v}</div>
@@ -136,7 +136,7 @@ function WebsiteChatDashboard() {
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
             <div className="text-white font-semibold text-sm mb-3">Quick Actions</div>
             <div className="grid grid-cols-2 gap-2">
-              {[[Globe, "#00D4AA", "Widgets"], [Users, "#3B82F6", "Visitors"], [Settings, "#8B8FA8", "Settings"], [Bot, "#7B5CFC", "AI Agents"]].map(([Icon, c, l]) => (
+              {([[Globe, "#00D4AA", "Widgets"], [Users, "#3B82F6", "Visitors"], [Settings, "#8B8FA8", "Settings"], [Bot, "#7B5CFC", "AI Agents"]] as any[]).map(([Icon, c, l]: any[]) => (
                 <div key={l as string} className="bg-[#06060F] border border-[#1C1C34] rounded-lg p-3 flex flex-col items-center gap-1.5 cursor-pointer hover:border-[#00D4AA]/30">
                   <Icon size={18} style={{ color: c as string }} />
                   <span className="text-[11px] text-[#8B8FA8]">{l}</span>
