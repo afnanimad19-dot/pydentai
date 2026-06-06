@@ -223,6 +223,8 @@ function SmsDashboard() {
           </div>
         </div>
       </div>
+      <SMSCampaignModal open={campOpen} onClose={() => setCampOpen(false)} />
+      <BuyCreditsModal open={creditsOpen} onClose={() => setCreditsOpen(false)} />
     </div>
   );
 }
