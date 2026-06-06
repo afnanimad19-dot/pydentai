@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Bot, Circle, Info, Link2, Settings, Zap } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_dashboard/sms/setup")({ component: SmsSetup });
 
@@ -13,7 +14,12 @@ const BULLETS = [
 ];
 
 function SmsSetup() {
-  const [tab, setTab] = useState<"ai" | "provider" | "settings">("ai");
+  const navigate = useNavigate();
+  const [smsSetupTab, setSmsSetupTab] = useState<"provider" | "ai" | "templates" | "compliance">("provider");
+  const [aiEnabled, setAiEnabled] = useState(false);
+  const [autoRespond, setAutoRespond] = useState(false);
+  const [stopKw, setStopKw] = useState(true);
+  const [tcpa, setTcpa] = useState(true);
   return (
     <div className="font-sans pb-6">
       <div className="px-6 pt-6 pb-4 flex justify-between items-center">
