@@ -33,6 +33,17 @@ const QUICK = [
 ];
 
 function SmsDashboard() {
+  const navigate = useNavigate();
+  const [campOpen, setCampOpen] = useState(false);
+  const [creditsOpen, setCreditsOpen] = useState(false);
+  const quickHandlers: Record<string, () => void> = {
+    "New Campaign": () => setCampOpen(true),
+    "Create Template": () => navigate({ to: "/sms/templates" }),
+    "Import Contacts": () => navigate({ to: "/sms/contacts" }),
+    "View Analytics": () => navigate({ to: "/sms/reports" }),
+    "Manage Contacts": () => navigate({ to: "/sms/contacts" }),
+    "Schedule Message": () => setCampOpen(true),
+  };
   return (
     <div className="font-sans">
       <div className="px-6 pt-6 pb-4 flex justify-between items-center">
