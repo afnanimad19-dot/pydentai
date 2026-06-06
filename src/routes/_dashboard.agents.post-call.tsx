@@ -108,12 +108,12 @@ function PostCallPage() {
             </div>
 
             <div className="flex gap-3 justify-center mt-6">
-              <button className="h-9 px-4 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold">
+              <Link to="/agents/studio" className="h-9 px-4 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold flex items-center">
                 Open Agent Studio
-              </button>
-              <button className="h-9 px-4 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm">
+              </Link>
+              <Link to="/agents/documents" className="h-9 px-4 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm flex items-center">
                 Upload Document
-              </button>
+              </Link>
             </div>
           </div>
         </div>
