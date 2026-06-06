@@ -139,19 +139,6 @@ function AvatarSyncPage() {
           className="h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg px-3 text-[#8B8FA8] text-sm"
         />
         <div className="flex gap-1 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg p-1">
-          <button className="px-3 py-1 rounded-md text-xs font-medium bg-[#7B5CFC] text-white flex items-center gap-1">
-            <BarChart3 size={12} />
-            Overview
-          </button>
-          <button className="px-3 py-1 rounded-md text-xs font-medium text-[#8B8FA8] flex items-center gap-1">
-            <Activity size={12} />
-            Timeline
-          </button>
-        </div>
-        <span className="text-[#4A4A6A] text-sm">0 runs</span>
-      </div>
-
-        <div className="flex gap-1 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg p-1">
           {(["Overview", "Timeline"] as const).map((v) => (
             <button
               key={v}
@@ -169,6 +156,7 @@ function AvatarSyncPage() {
         </div>
         <span className="text-[#4A4A6A] text-sm">0 runs</span>
       </div>
+
 
       {view === "Overview" ? (
         <div className="px-6 pb-6 grid grid-cols-2 gap-4">
