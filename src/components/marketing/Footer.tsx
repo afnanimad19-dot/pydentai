@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Smile, Twitter, Linkedin, Instagram, Youtube } from "lucide-react";
+import { Twitter, Linkedin, Instagram, Youtube } from "lucide-react";
 
 type ColumnLink = { label: string; href: string };
 
@@ -45,16 +45,11 @@ const SOCIALS = [
 
 function FooterLogo() {
   return (
-    <Link to="/" className="flex items-center gap-2.5 no-underline group">
-      <span className="h-[34px] w-[34px] rounded-xl bg-[#7B5CFC]/15 border border-[#7B5CFC]/25 flex items-center justify-center">
-        <Smile size={18} className="text-[#7B5CFC]" />
+    <Link to="/" className="flex items-baseline no-underline group">
+      <span className="font-display font-bold text-lg text-white group-hover:text-[#9B84FF] transition-colors">
+        pydent
       </span>
-      <span className="flex items-baseline">
-        <span className="font-display font-bold text-lg text-white group-hover:text-[#9B84FF] transition-colors">
-          pydent
-        </span>
-        <span className="font-display font-bold text-lg text-[#7B5CFC]">.ai</span>
-      </span>
+      <span className="font-display font-bold text-lg text-[#7B5CFC]">.ai</span>
     </Link>
   );
 }
