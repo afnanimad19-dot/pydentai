@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   BarChart, Clock, FileText, Mail, RefreshCw, Search, Send, Shield,
   TrendingUp, Users, Zap,
@@ -31,6 +32,7 @@ const TIMES = [
 ] as const;
 
 function EmailCampaigns() {
+  const [activeTab, setActiveTab] = useState(0);
   return (
     <div className="font-sans flex overflow-hidden h-[calc(100vh-56px)]">
       <div className="flex-1 overflow-y-auto px-6 py-5">
@@ -45,9 +47,9 @@ function EmailCampaigns() {
             </div>
           </div>
           <div className="flex gap-2">
-            <button className="h-9 px-3 rounded-lg bg-[#0B0B1A] border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white">Templates</button>
-            <button className="h-9 px-3 rounded-lg bg-[#0B0B1A] border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white">Contacts</button>
-            <button className="h-9 px-4 rounded-lg bg-[#6366F1] hover:bg-[#4F46E5] text-white text-sm font-semibold">+ New Campaign</button>
+            <Link to="/email/templates" className="h-9 px-3 rounded-lg bg-[#0B0B1A] border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white flex items-center">Templates</Link>
+            <Link to="/email/contacts" className="h-9 px-3 rounded-lg bg-[#0B0B1A] border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white flex items-center">Contacts</Link>
+            <Link to="/email/campaigns/new" className="h-9 px-4 rounded-lg bg-[#6366F1] hover:bg-[#4F46E5] text-white text-sm font-semibold flex items-center">+ New Campaign</Link>
           </div>
         </div>
 
@@ -64,7 +66,7 @@ function EmailCampaigns() {
         <div className="flex items-center gap-3 mb-4">
           <div className="flex gap-1">
             {TABS.map((t, i) => (
-              <button key={t} className={i === 0
+              <button key={t} onClick={() => setActiveTab(i)} className={i === activeTab
                 ? "bg-[#6366F1]/12 text-[#6366F1] border border-[#6366F1]/20 px-3 py-1 text-xs rounded-full"
                 : "border border-[#1C1C34] text-[#4A4A6A] hover:text-white px-3 py-1 text-xs rounded-full"}>{t}</button>
             ))}
@@ -80,7 +82,7 @@ function EmailCampaigns() {
           <Mail size={48} className="text-[#1C1C34] mb-4" />
           <div className="text-white text-lg font-semibold mb-2">No Campaigns Found</div>
           <div className="text-[#4A4A6A] text-sm text-center mb-8">Create your first campaign to start engaging your audience with targeted emails.</div>
-          <button className="h-10 px-5 rounded-lg bg-[#6366F1] text-white text-sm font-semibold">+ Create Campaign</button>
+          <Link to="/email/campaigns/new" className="h-10 px-5 rounded-lg bg-[#6366F1] text-white text-sm font-semibold flex items-center">+ Create Campaign</Link>
         </div>
       </div>
 

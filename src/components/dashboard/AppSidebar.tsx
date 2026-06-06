@@ -187,7 +187,6 @@ const SECTIONS: Section[] = [
           { label: "Call Scripts", url: "/engage/call-scripts" },
           { label: "Call History", url: "/engage/call-history" },
           { label: "Advanced Analytics", url: "/engage/advanced-analytics" },
-          { label: "Team", url: "/engage/team" },
         ],
       },
     ],
@@ -231,20 +230,22 @@ export function AppSidebar() {
       </button>
 
       {/* Logo */}
-      <div
+      <Link
+        to="/dashboard"
         className={`h-14 flex items-center border-b border-[#1C1C34] flex-shrink-0 ${
-          collapsed ? "justify-center px-0" : "px-5 gap-3"
+          collapsed ? "justify-center px-0" : "px-5"
         }`}
       >
-        <div className="w-8 h-8 rounded-lg bg-[#7B5CFC]/20 border border-[#7B5CFC]/25 flex items-center justify-center flex-shrink-0">
-          <span className="font-bold text-[13px] text-[#7B5CFC]">Py</span>
-        </div>
-        {!collapsed && (
+        {!collapsed ? (
           <span className="text-white font-bold text-[15px] tracking-[-0.02em]">
             pydent<span className="text-[#7B5CFC]">.ai</span>
           </span>
+        ) : (
+          <span className="text-white font-bold text-[13px] tracking-[-0.02em]">
+            p<span className="text-[#7B5CFC]">.</span>
+          </span>
         )}
-      </div>
+      </Link>
 
       {/* Search */}
       {!collapsed && (
@@ -411,9 +412,12 @@ export function AppSidebar() {
             <div className="text-[#4A4A6A] text-[11px] mt-0.5 mb-3">
               Voice AI + unlimited campaigns
             </div>
-            <button className="w-full h-8 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-xs font-semibold transition-colors">
+            <Link
+              to="/pricing"
+              className="w-full h-8 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-xs font-semibold transition-colors flex items-center justify-center"
+            >
               Upgrade
-            </button>
+            </Link>
           </div>
         )}
       </nav>
