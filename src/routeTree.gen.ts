@@ -48,9 +48,11 @@ import { Route as DashboardInstagramTrendsRouteImport } from './routes/_dashboar
 import { Route as DashboardInstagramCreateContentRouteImport } from './routes/_dashboard.instagram.create-content'
 import { Route as DashboardInstagramContentPlannerRouteImport } from './routes/_dashboard.instagram.content-planner'
 import { Route as DashboardEngageUpcomingCallsRouteImport } from './routes/_dashboard.engage.upcoming-calls'
+import { Route as DashboardEngageRemindersRouteImport } from './routes/_dashboard.engage.reminders'
 import { Route as DashboardEngageLiveMonitoringRouteImport } from './routes/_dashboard.engage.live-monitoring'
 import { Route as DashboardEngageLeadsRouteImport } from './routes/_dashboard.engage.leads'
 import { Route as DashboardEngageCallStatusRouteImport } from './routes/_dashboard.engage.call-status'
+import { Route as DashboardEngageCallScriptsRouteImport } from './routes/_dashboard.engage.call-scripts'
 import { Route as DashboardEmailTestRouteImport } from './routes/_dashboard.email.test'
 import { Route as DashboardEmailTemplatesRouteImport } from './routes/_dashboard.email.templates'
 import { Route as DashboardEmailSetupRouteImport } from './routes/_dashboard.email.setup'
@@ -290,6 +292,12 @@ const DashboardEngageUpcomingCallsRoute =
     path: '/engage/upcoming-calls',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardEngageRemindersRoute =
+  DashboardEngageRemindersRouteImport.update({
+    id: '/engage/reminders',
+    path: '/engage/reminders',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardEngageLiveMonitoringRoute =
   DashboardEngageLiveMonitoringRouteImport.update({
     id: '/engage/live-monitoring',
@@ -305,6 +313,12 @@ const DashboardEngageCallStatusRoute =
   DashboardEngageCallStatusRouteImport.update({
     id: '/engage/call-status',
     path: '/engage/call-status',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEngageCallScriptsRoute =
+  DashboardEngageCallScriptsRouteImport.update({
+    id: '/engage/call-scripts',
+    path: '/engage/call-scripts',
     getParentRoute: () => DashboardRoute,
   } as any)
 const DashboardEmailTestRoute = DashboardEmailTestRouteImport.update({
@@ -474,9 +488,11 @@ export interface FileRoutesByFullPath {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/engage/call-scripts': typeof DashboardEngageCallScriptsRoute
   '/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/engage/leads': typeof DashboardEngageLeadsRoute
   '/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
+  '/engage/reminders': typeof DashboardEngageRemindersRoute
   '/engage/upcoming-calls': typeof DashboardEngageUpcomingCallsRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
@@ -542,9 +558,11 @@ export interface FileRoutesByTo {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/engage/call-scripts': typeof DashboardEngageCallScriptsRoute
   '/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/engage/leads': typeof DashboardEngageLeadsRoute
   '/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
+  '/engage/reminders': typeof DashboardEngageRemindersRoute
   '/engage/upcoming-calls': typeof DashboardEngageUpcomingCallsRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
@@ -612,9 +630,11 @@ export interface FileRoutesById {
   '/_dashboard/email/setup': typeof DashboardEmailSetupRoute
   '/_dashboard/email/templates': typeof DashboardEmailTemplatesRoute
   '/_dashboard/email/test': typeof DashboardEmailTestRoute
+  '/_dashboard/engage/call-scripts': typeof DashboardEngageCallScriptsRoute
   '/_dashboard/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/_dashboard/engage/leads': typeof DashboardEngageLeadsRoute
   '/_dashboard/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
+  '/_dashboard/engage/reminders': typeof DashboardEngageRemindersRoute
   '/_dashboard/engage/upcoming-calls': typeof DashboardEngageUpcomingCallsRoute
   '/_dashboard/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/_dashboard/instagram/create-content': typeof DashboardInstagramCreateContentRoute
@@ -682,9 +702,11 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/engage/call-scripts'
     | '/engage/call-status'
     | '/engage/leads'
     | '/engage/live-monitoring'
+    | '/engage/reminders'
     | '/engage/upcoming-calls'
     | '/instagram/content-planner'
     | '/instagram/create-content'
@@ -750,9 +772,11 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/engage/call-scripts'
     | '/engage/call-status'
     | '/engage/leads'
     | '/engage/live-monitoring'
+    | '/engage/reminders'
     | '/engage/upcoming-calls'
     | '/instagram/content-planner'
     | '/instagram/create-content'
@@ -819,9 +843,11 @@ export interface FileRouteTypes {
     | '/_dashboard/email/setup'
     | '/_dashboard/email/templates'
     | '/_dashboard/email/test'
+    | '/_dashboard/engage/call-scripts'
     | '/_dashboard/engage/call-status'
     | '/_dashboard/engage/leads'
     | '/_dashboard/engage/live-monitoring'
+    | '/_dashboard/engage/reminders'
     | '/_dashboard/engage/upcoming-calls'
     | '/_dashboard/instagram/content-planner'
     | '/_dashboard/instagram/create-content'
@@ -1145,6 +1171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEngageUpcomingCallsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/engage/reminders': {
+      id: '/_dashboard/engage/reminders'
+      path: '/engage/reminders'
+      fullPath: '/engage/reminders'
+      preLoaderRoute: typeof DashboardEngageRemindersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/engage/live-monitoring': {
       id: '/_dashboard/engage/live-monitoring'
       path: '/engage/live-monitoring'
@@ -1164,6 +1197,13 @@ declare module '@tanstack/react-router' {
       path: '/engage/call-status'
       fullPath: '/engage/call-status'
       preLoaderRoute: typeof DashboardEngageCallStatusRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/call-scripts': {
+      id: '/_dashboard/engage/call-scripts'
+      path: '/engage/call-scripts'
+      fullPath: '/engage/call-scripts'
+      preLoaderRoute: typeof DashboardEngageCallScriptsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/email/test': {
@@ -1379,9 +1419,11 @@ interface DashboardRouteChildren {
   DashboardEmailSetupRoute: typeof DashboardEmailSetupRoute
   DashboardEmailTemplatesRoute: typeof DashboardEmailTemplatesRoute
   DashboardEmailTestRoute: typeof DashboardEmailTestRoute
+  DashboardEngageCallScriptsRoute: typeof DashboardEngageCallScriptsRoute
   DashboardEngageCallStatusRoute: typeof DashboardEngageCallStatusRoute
   DashboardEngageLeadsRoute: typeof DashboardEngageLeadsRoute
   DashboardEngageLiveMonitoringRoute: typeof DashboardEngageLiveMonitoringRoute
+  DashboardEngageRemindersRoute: typeof DashboardEngageRemindersRoute
   DashboardEngageUpcomingCallsRoute: typeof DashboardEngageUpcomingCallsRoute
   DashboardInstagramContentPlannerRoute: typeof DashboardInstagramContentPlannerRoute
   DashboardInstagramCreateContentRoute: typeof DashboardInstagramCreateContentRoute
@@ -1441,9 +1483,11 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardEmailSetupRoute: DashboardEmailSetupRoute,
   DashboardEmailTemplatesRoute: DashboardEmailTemplatesRoute,
   DashboardEmailTestRoute: DashboardEmailTestRoute,
+  DashboardEngageCallScriptsRoute: DashboardEngageCallScriptsRoute,
   DashboardEngageCallStatusRoute: DashboardEngageCallStatusRoute,
   DashboardEngageLeadsRoute: DashboardEngageLeadsRoute,
   DashboardEngageLiveMonitoringRoute: DashboardEngageLiveMonitoringRoute,
+  DashboardEngageRemindersRoute: DashboardEngageRemindersRoute,
   DashboardEngageUpcomingCallsRoute: DashboardEngageUpcomingCallsRoute,
   DashboardInstagramContentPlannerRoute: DashboardInstagramContentPlannerRoute,
   DashboardInstagramCreateContentRoute: DashboardInstagramCreateContentRoute,
@@ -1499,3 +1543,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
