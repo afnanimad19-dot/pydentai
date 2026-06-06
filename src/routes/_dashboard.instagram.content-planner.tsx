@@ -12,7 +12,7 @@ const METRICS = [
   [LayoutGrid, "#7B5CFC", "0", "Carousels"],
   [BookOpen, "#00D4AA", "0", "Stories"],
   [Percent, "#E1306C", "0%", "Week Coverage"],
-] as const;
+] as any[];
 
 const DAYS = [
   ["MON", Lightbulb, "#F59E0B", "Motivation & Goals"],
@@ -22,7 +22,7 @@ const DAYS = [
   ["FRI", Zap, "#FB923C", "Fun & Engagement"],
   ["SAT", Star, "#EAB308", "Community Spotlight"],
   ["SUN", Moon, "#8B8FA8", "Rest & Preview"],
-] as const;
+] as any[];
 
 const SLOTS = [
   ["09:00", "Morning Peak", 97, "#22C55E"],
@@ -30,7 +30,7 @@ const SLOTS = [
   ["17:00", "After Work", 78, "#3B82F6"],
   ["20:00", "Evening Prime", 89, "#7B5CFC"],
   ["22:00", "Night Scroll", 83, "#E1306C"],
-] as const;
+] as any[];
 
 function ContentPlanner() {
   const days = Array.from({ length: 35 }, (_, i) => i - 0);

@@ -8,7 +8,7 @@ const MODULES = [
   [BarChart2, "#3B82F6", "4 Format Performance Reports"],
   [Hash, "#22C55E", "8+ Hashtag Growth Signals"],
   [Target, "#FF4D6D", "Opportunity Scoring Matrix"],
-] as const;
+] as any[];
 
 const BENCHMARKS = [
   [Play, "#FF4D6D", "Reels Avg. Reach", "vs static posts", "2.5x"],
@@ -16,7 +16,7 @@ const BENCHMARKS = [
   [BookOpen, "#7B5CFC", "Stories Completion", "avg view-through", "72%"],
   [Clock, "#F59E0B", "Optimal Posting", "peak engagement", "6-9 PM"],
   [Hash, "#22C55E", "Hashtag Sweet Spot", "tags per post", "8-15"],
-] as const;
+] as any[];
 
 const INDUSTRIES = [
   [Globe, "#7B5CFC", "General Business", true],
@@ -28,14 +28,14 @@ const INDUSTRIES = [
   [UtensilsCrossed, "#FB923C", "Hospitality", false],
   [Dumbbell, "#E1306C", "Fitness & Wellness", false],
   [TrendingUp, "#EAB308", "Finance & Crypto", false],
-] as const;
+] as any[];
 
 const STEPS = [
   ["Select Industry", "Choose your market vertical for targeted analysis"],
   ["AI Scans Trends", "Our engine analyzes viral patterns & hashtag velocity"],
   ["Get Strategies", "Receive scored content ideas with captions & timing"],
   ["Execute & Grow", "Apply insights to boost engagement & reach"],
-] as const;
+] as any[];
 
 const TIPS = [
   ["#F59E0B", "Hook viewers in the first 0.5 seconds — use pattern interrupts or bold text overlays on Reels."],
@@ -43,7 +43,7 @@ const TIPS = [
   ["#22C55E", "Use 3-5 niche-specific hashtags + 3-5 broad ones for optimal discoverability."],
   ["#7B5CFC", "Engage with 30 accounts in your niche before and after posting to boost algorithm signals."],
   ["#00D4AA", "Repurpose top-performing Reels into carousels and stories for 2x content output."],
-] as const;
+] as any[];
 
 function Trends() {
   return (

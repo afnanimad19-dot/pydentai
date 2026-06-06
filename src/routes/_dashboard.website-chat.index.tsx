@@ -11,12 +11,12 @@ const METRICS = [
   [Mail, "#F59E0B", "60", "Messages", "+24% vs last period", "g"],
   [UserCheck, "#7B5CFC", "7", "Email Leads", "+5% vs last period", "g"],
   [Phone, "#FF4D6D", "0", "Phone Leads", "-2% vs last period", "r"],
-] as const;
+] as any[];
 
 const CHART = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) => ({ d, c: [20, 35, 50, 75, 80, 60, 30][i], m: [8, 14, 20, 26, 28, 20, 10][i] }));
 const PIE = [{ name: "Positive", value: 0, c: "#22C55E" }, { name: "Neutral", value: 7, c: "#F59E0B" }, { name: "Negative", value: 0, c: "#FF4D6D" }];
 const HOURS = Array.from({ length: 24 }, (_, i) => ({ h: i, v: [1, 1, 0, 0, 0, 0, 2, 3, 4, 6, 7, 8, 9, 10, 14, 20, 18, 12, 9, 6, 4, 3, 2, 1][i] }));
-const CONVOS = [["D", "Daniyal", "1h ago"], ["A", "awwias", "4h ago"], ["A", "awais", "4h ago"], ["A", "amin", "3d ago"], ["M", "Mohammad", "4d ago"]] as const;
+const CONVOS = [["D", "Daniyal", "1h ago"], ["A", "awwias", "4h ago"], ["A", "awais", "4h ago"], ["A", "amin", "3d ago"], ["M", "Mohammad", "4d ago"]] as any[];
 
 function WebsiteChatDashboard() {
   return (

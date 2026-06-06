@@ -3,20 +3,20 @@ import { Wand2, ChevronRight, ChevronDown, Check, Image as ImageIcon, Play, Layo
 
 export const Route = createFileRoute("/_dashboard/instagram/create-content")({ component: CreateContent });
 
-const STEPS = [["Format", "active"], ["Brief", "pending"], ["Create", "pending"], ["Publish", "pending"]] as const;
+const STEPS = [["Format", "active"], ["Brief", "pending"], ["Create", "pending"], ["Publish", "pending"]] as any[];
 const FORMATS = [
   [ImageIcon, "#E1306C", "Single Post", "High quality photo or designed graphic", true],
   [Play, "#FF4D6D", "Reel/Video", "Short-form vertical video (15-30s)", false],
   [LayoutGrid, "#7B5CFC", "Carousel", "Multi-slide swipeable content", false],
   [BookOpen, "#00D4AA", "Story", "24h ephemeral — polls, Q&A, links", false],
-] as const;
+] as any[];
 const TEMPLATES = [
   ["Hook → Story → CTA", "Reel", "45s"],
   ["Top 5 Listicle", "Carousel", "5 slides"],
   ["Before / After", "Single Post", ""],
   ["Myth vs Reality", "Carousel", ""],
   ["Day in the Life", "Reel", "Daily"],
-] as const;
+] as any[];
 
 function CreateContent() {
   return (
