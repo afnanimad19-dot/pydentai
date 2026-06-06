@@ -84,6 +84,7 @@ import { Route as DashboardWhatsappCampaignsIndexRouteImport } from './routes/_d
 import { Route as DashboardWhatsappTemplatesNewRouteImport } from './routes/_dashboard.whatsapp.templates.new'
 import { Route as DashboardWhatsappCampaignsNewRouteImport } from './routes/_dashboard.whatsapp.campaigns.new'
 import { Route as DashboardEmailCampaignsNewRouteImport } from './routes/_dashboard.email.campaigns.new'
+import { Route as DashboardAgentsWorkflowsCanvasRouteImport } from './routes/_dashboard.agents.workflows.canvas'
 import { Route as DashboardAgentsStudioIdRouteImport } from './routes/_dashboard.agents.studio.$id'
 
 const SignupRoute = SignupRouteImport.update({
@@ -499,6 +500,12 @@ const DashboardEmailCampaignsNewRoute =
     path: '/new',
     getParentRoute: () => DashboardEmailCampaignsRoute,
   } as any)
+const DashboardAgentsWorkflowsCanvasRoute =
+  DashboardAgentsWorkflowsCanvasRouteImport.update({
+    id: '/canvas',
+    path: '/canvas',
+    getParentRoute: () => DashboardAgentsWorkflowsRoute,
+  } as any)
 const DashboardAgentsStudioIdRoute = DashboardAgentsStudioIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -527,7 +534,7 @@ export interface FileRoutesByFullPath {
   '/agents/studio': typeof DashboardAgentsStudioRouteWithChildren
   '/agents/voice-health': typeof DashboardAgentsVoiceHealthRoute
   '/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
-  '/agents/workflows': typeof DashboardAgentsWorkflowsRoute
+  '/agents/workflows': typeof DashboardAgentsWorkflowsRouteWithChildren
   '/email/automation': typeof DashboardEmailAutomationRoute
   '/email/campaigns': typeof DashboardEmailCampaignsRouteWithChildren
   '/email/contacts': typeof DashboardEmailContactsRoute
@@ -576,6 +583,7 @@ export interface FileRoutesByFullPath {
   '/website-chat/': typeof DashboardWebsiteChatIndexRoute
   '/whatsapp/': typeof DashboardWhatsappIndexRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
+  '/agents/workflows/canvas': typeof DashboardAgentsWorkflowsCanvasRoute
   '/email/campaigns/new': typeof DashboardEmailCampaignsNewRoute
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
   '/whatsapp/templates/new': typeof DashboardWhatsappTemplatesNewRoute
@@ -604,7 +612,7 @@ export interface FileRoutesByTo {
   '/agents/studio': typeof DashboardAgentsStudioRouteWithChildren
   '/agents/voice-health': typeof DashboardAgentsVoiceHealthRoute
   '/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
-  '/agents/workflows': typeof DashboardAgentsWorkflowsRoute
+  '/agents/workflows': typeof DashboardAgentsWorkflowsRouteWithChildren
   '/email/automation': typeof DashboardEmailAutomationRoute
   '/email/campaigns': typeof DashboardEmailCampaignsRouteWithChildren
   '/email/contacts': typeof DashboardEmailContactsRoute
@@ -653,6 +661,7 @@ export interface FileRoutesByTo {
   '/website-chat': typeof DashboardWebsiteChatIndexRoute
   '/whatsapp': typeof DashboardWhatsappIndexRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
+  '/agents/workflows/canvas': typeof DashboardAgentsWorkflowsCanvasRoute
   '/email/campaigns/new': typeof DashboardEmailCampaignsNewRoute
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
   '/whatsapp/templates/new': typeof DashboardWhatsappTemplatesNewRoute
@@ -683,7 +692,7 @@ export interface FileRoutesById {
   '/_dashboard/agents/studio': typeof DashboardAgentsStudioRouteWithChildren
   '/_dashboard/agents/voice-health': typeof DashboardAgentsVoiceHealthRoute
   '/_dashboard/agents/voice-lab': typeof DashboardAgentsVoiceLabRoute
-  '/_dashboard/agents/workflows': typeof DashboardAgentsWorkflowsRoute
+  '/_dashboard/agents/workflows': typeof DashboardAgentsWorkflowsRouteWithChildren
   '/_dashboard/email/automation': typeof DashboardEmailAutomationRoute
   '/_dashboard/email/campaigns': typeof DashboardEmailCampaignsRouteWithChildren
   '/_dashboard/email/contacts': typeof DashboardEmailContactsRoute
@@ -732,6 +741,7 @@ export interface FileRoutesById {
   '/_dashboard/website-chat/': typeof DashboardWebsiteChatIndexRoute
   '/_dashboard/whatsapp/': typeof DashboardWhatsappIndexRoute
   '/_dashboard/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
+  '/_dashboard/agents/workflows/canvas': typeof DashboardAgentsWorkflowsCanvasRoute
   '/_dashboard/email/campaigns/new': typeof DashboardEmailCampaignsNewRoute
   '/_dashboard/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
   '/_dashboard/whatsapp/templates/new': typeof DashboardWhatsappTemplatesNewRoute
@@ -811,6 +821,7 @@ export interface FileRouteTypes {
     | '/website-chat/'
     | '/whatsapp/'
     | '/agents/studio/$id'
+    | '/agents/workflows/canvas'
     | '/email/campaigns/new'
     | '/whatsapp/campaigns/new'
     | '/whatsapp/templates/new'
@@ -888,6 +899,7 @@ export interface FileRouteTypes {
     | '/website-chat'
     | '/whatsapp'
     | '/agents/studio/$id'
+    | '/agents/workflows/canvas'
     | '/email/campaigns/new'
     | '/whatsapp/campaigns/new'
     | '/whatsapp/templates/new'
@@ -966,6 +978,7 @@ export interface FileRouteTypes {
     | '/_dashboard/website-chat/'
     | '/_dashboard/whatsapp/'
     | '/_dashboard/agents/studio/$id'
+    | '/_dashboard/agents/workflows/canvas'
     | '/_dashboard/email/campaigns/new'
     | '/_dashboard/whatsapp/campaigns/new'
     | '/_dashboard/whatsapp/templates/new'
@@ -1510,6 +1523,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEmailCampaignsNewRouteImport
       parentRoute: typeof DashboardEmailCampaignsRoute
     }
+    '/_dashboard/agents/workflows/canvas': {
+      id: '/_dashboard/agents/workflows/canvas'
+      path: '/canvas'
+      fullPath: '/agents/workflows/canvas'
+      preLoaderRoute: typeof DashboardAgentsWorkflowsCanvasRouteImport
+      parentRoute: typeof DashboardAgentsWorkflowsRoute
+    }
     '/_dashboard/agents/studio/$id': {
       id: '/_dashboard/agents/studio/$id'
       path: '/$id'
@@ -1531,6 +1551,20 @@ const DashboardAgentsStudioRouteChildren: DashboardAgentsStudioRouteChildren = {
 const DashboardAgentsStudioRouteWithChildren =
   DashboardAgentsStudioRoute._addFileChildren(
     DashboardAgentsStudioRouteChildren,
+  )
+
+interface DashboardAgentsWorkflowsRouteChildren {
+  DashboardAgentsWorkflowsCanvasRoute: typeof DashboardAgentsWorkflowsCanvasRoute
+}
+
+const DashboardAgentsWorkflowsRouteChildren: DashboardAgentsWorkflowsRouteChildren =
+  {
+    DashboardAgentsWorkflowsCanvasRoute: DashboardAgentsWorkflowsCanvasRoute,
+  }
+
+const DashboardAgentsWorkflowsRouteWithChildren =
+  DashboardAgentsWorkflowsRoute._addFileChildren(
+    DashboardAgentsWorkflowsRouteChildren,
   )
 
 interface DashboardEmailCampaignsRouteChildren {
@@ -1563,7 +1597,7 @@ interface DashboardRouteChildren {
   DashboardAgentsStudioRoute: typeof DashboardAgentsStudioRouteWithChildren
   DashboardAgentsVoiceHealthRoute: typeof DashboardAgentsVoiceHealthRoute
   DashboardAgentsVoiceLabRoute: typeof DashboardAgentsVoiceLabRoute
-  DashboardAgentsWorkflowsRoute: typeof DashboardAgentsWorkflowsRoute
+  DashboardAgentsWorkflowsRoute: typeof DashboardAgentsWorkflowsRouteWithChildren
   DashboardEmailAutomationRoute: typeof DashboardEmailAutomationRoute
   DashboardEmailCampaignsRoute: typeof DashboardEmailCampaignsRouteWithChildren
   DashboardEmailContactsRoute: typeof DashboardEmailContactsRoute
@@ -1633,7 +1667,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAgentsStudioRoute: DashboardAgentsStudioRouteWithChildren,
   DashboardAgentsVoiceHealthRoute: DashboardAgentsVoiceHealthRoute,
   DashboardAgentsVoiceLabRoute: DashboardAgentsVoiceLabRoute,
-  DashboardAgentsWorkflowsRoute: DashboardAgentsWorkflowsRoute,
+  DashboardAgentsWorkflowsRoute: DashboardAgentsWorkflowsRouteWithChildren,
   DashboardEmailAutomationRoute: DashboardEmailAutomationRoute,
   DashboardEmailCampaignsRoute: DashboardEmailCampaignsRouteWithChildren,
   DashboardEmailContactsRoute: DashboardEmailContactsRoute,

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Bot,
@@ -118,9 +118,9 @@ function AgentHubPage() {
             </div>
           </div>
         </div>
-        <button className="h-9 px-4 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm">
+        <Link to="/agents/studio" className="h-9 px-4 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm flex items-center">
           Manage Agents
-        </button>
+        </Link>
       </div>
 
       {/* Stats */}
@@ -172,12 +172,12 @@ function AgentHubPage() {
             Agents auto-respond using their knowledge base & FAQs
           </span>
           <div className="ml-auto flex gap-2">
-            <button className="h-8 px-3 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-xs">
+            <Link to="/agents/knowledge" className="h-8 px-3 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-xs flex items-center">
               Knowledge
-            </button>
-            <button className="h-8 px-3 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-xs">
+            </Link>
+            <Link to="/agents/documents" className="h-8 px-3 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-xs flex items-center">
               Documents
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -265,9 +265,9 @@ function ChannelCard({
         >
           {channel.statusText}
         </span>
-        <button className="text-[#7B5CFC] hover:text-[#9B84FF] text-xs">
+        <Link to="/agents/studio" className="text-[#7B5CFC] hover:text-[#9B84FF] text-xs">
           Configure →
-        </button>
+        </Link>
       </div>
     </div>
   );
