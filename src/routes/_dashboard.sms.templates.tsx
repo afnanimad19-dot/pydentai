@@ -22,6 +22,10 @@ const STARTERS = [
 ];
 
 function SmsTemplates() {
+  const [tplOpen, setTplOpen] = useState(false);
+  const [campOpen, setCampOpen] = useState(false);
+  const [prefill, setPrefill] = useState("");
+  const useStarter = (msg: string) => { setPrefill(msg); setCampOpen(true); };
   return (
     <div className="font-sans">
       <div className="px-6 pt-6 pb-4 flex justify-between items-center">
