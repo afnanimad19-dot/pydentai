@@ -19,7 +19,7 @@ export const Route = createFileRoute("/features")({
 });
 
 const PrimaryBtn = ({ children }: { children: React.ReactNode }) => (
-  <a href="/sign-up" className="inline-flex items-center gap-2 bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold px-6 h-11 rounded-xl transition-colors">
+  <a href="/signup" className="inline-flex items-center gap-2 bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold px-6 h-11 rounded-xl transition-colors">
     {children} <ArrowRight size={16} />
   </a>
 );

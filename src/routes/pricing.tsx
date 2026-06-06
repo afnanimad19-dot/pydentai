@@ -293,7 +293,7 @@ function PricingPage() {
           </h2>
           <p className="text-[#8B8FA8] mt-4 max-w-md mx-auto">14-day Pro access. No credit card. Cancel anytime.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-            <a href="/sign-up" className="inline-flex items-center justify-center gap-2 bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold px-6 h-11 rounded-xl transition-colors">
+            <a href="/signup" className="inline-flex items-center justify-center gap-2 bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold px-6 h-11 rounded-xl transition-colors">
               Get Started Free <ArrowRight size={16} />
             </a>
             <a href="#" className="inline-flex items-center justify-center gap-2 border border-[#1C1C34] hover:bg-white/5 text-white text-sm font-semibold px-6 h-11 rounded-xl transition-colors">
