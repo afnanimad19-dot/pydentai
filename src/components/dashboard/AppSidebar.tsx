@@ -308,7 +308,7 @@ export function AppSidebar() {
                   />
                   {!collapsed && (
                     <>
-                      <span>{item.label}</span>
+                      <span className="whitespace-nowrap">{item.label}</span>
                       {item.liveDot && (
                         <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
                       )}
