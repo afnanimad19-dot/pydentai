@@ -90,11 +90,13 @@ function SmsTemplates() {
               </div>
               <div className="text-white text-sm font-semibold mb-2">{s.name}</div>
               <p className="text-[#4A4A6A] text-xs leading-relaxed line-clamp-3 font-mono mb-4">{s.msg}</p>
-              <button className="w-full h-8 text-xs border border-[#1C1C34] hover:border-[#3B82F6]/40 text-[#8B8FA8] rounded-lg">Use Template</button>
+              <button onClick={() => useStarter(s.msg)} className="w-full h-8 text-xs border border-[#1C1C34] hover:border-[#3B82F6]/40 text-[#8B8FA8] rounded-lg">Use Template</button>
             </div>
           ))}
         </div>
       </div>
+      <SMSTemplateModal open={tplOpen} onClose={() => setTplOpen(false)} />
+      <SMSCampaignModal open={campOpen} onClose={() => setCampOpen(false)} initialMessage={prefill} />
     </div>
   );
 }
