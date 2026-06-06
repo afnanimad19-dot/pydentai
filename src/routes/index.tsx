@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Sparkles,
   PlayCircle,
@@ -58,36 +58,42 @@ function Avatar({ initials, from, to }: { initials: string; from: string; to: st
 function PrimaryButton({
   children,
   large = false,
+  to = "/signup",
 }: {
   children: React.ReactNode;
   large?: boolean;
+  to?: string;
 }) {
   return (
-    <button
-      className={`bg-[#7B5CFC] hover:bg-[#6047DB] text-white rounded-xl font-semibold transition-all duration-200 hover:shadow-[0_0_30px_rgba(123,92,252,0.55)] ${
+    <Link
+      to={to}
+      className={`inline-flex items-center justify-center bg-[#7B5CFC] hover:bg-[#6047DB] text-white rounded-xl font-semibold transition-all duration-200 hover:shadow-[0_0_30px_rgba(123,92,252,0.55)] ${
         large ? "px-8 py-4 text-base" : "px-8 py-3.5 text-base"
       }`}
     >
       {children}
-    </button>
+    </Link>
   );
 }
 
 function GhostButton({
   children,
   large = false,
+  to = "/pricing",
 }: {
   children: React.ReactNode;
   large?: boolean;
+  to?: string;
 }) {
   return (
-    <button
-      className={`border border-[#1C1C34] hover:border-[#7B5CFC]/40 text-white rounded-xl hover:bg-white/[0.04] transition-all flex items-center gap-2 ${
+    <Link
+      to={to}
+      className={`border border-[#1C1C34] hover:border-[#7B5CFC]/40 text-white rounded-xl hover:bg-white/[0.04] transition-all inline-flex items-center justify-center gap-2 ${
         large ? "px-8 py-4 text-base" : "px-8 py-3.5 text-base"
       }`}
     >
       {children}
-    </button>
+    </Link>
   );
 }
 
