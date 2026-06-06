@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Bot,
   ChevronDown,
@@ -32,40 +32,54 @@ const QUICK_REPLIES = [
   "Do you offer discounts?",
 ];
 
-type Msg = { from: "agent" | "user"; text: string; t: string };
+type Msg = { role: "agent" | "user"; text: string; t: string };
+
+const WELCOME: Msg = {
+  role: "agent",
+  text: "Hello! I'm ready to help. How can I assist you today?",
+  t: nowStr(),
+};
 
 function nowStr() {
   return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-function fakeReply(input: string): string {
-  const i = input.toLowerCase();
-  if (i.includes("price")) return "Our consultation starts at AED 250, and full check-ups are AED 450. Want me to send the full price list?";
-  if (i.includes("book") || i.includes("appointment")) return "Sure — what day and time work best for you?";
-  if (i.includes("brochure")) return "Sending our latest brochure to your WhatsApp now. Anything specific you'd like covered?";
-  if (i.includes("location") || i.includes("where")) return "We're at Jumeirah Beach Road, Dubai. Open 9 AM – 9 PM, 7 days a week.";
-  if (i.includes("discount")) return "We have a new patient offer: 20% off your first cleaning. Want me to apply it?";
-  return "Got it — let me look into that for you. Could you share a bit more detail?";
+function getAutoReply(msg: string): string {
+  const m = msg.toLowerCase();
+  if (m.includes("appoint") || m.includes("book")) return "I can help with that! We have slots available this week. Would Thursday or Friday work for you?";
+  if (m.includes("price") || m.includes("cost") || m.includes("fee")) return "Our consultation starts from AED 299. Would you like a full breakdown of our services and pricing?";
+  if (m.includes("hour") || m.includes("open") || m.includes("time")) return "We're open Saturday–Thursday, 9am–8pm. Fridays by appointment only. Would you like to schedule a visit?";
+  if (m.includes("location") || m.includes("address") || m.includes("where")) return "We're in Dubai Marina, near the Metro Station. Can I send you the exact pin on WhatsApp?";
+  if (m.includes("cancel") || m.includes("reschedule")) return "No problem at all! I can reschedule that for you. What new date would you prefer?";
+  return "Thank you for your message! I'm here to help — could you tell me more about what you're looking for?";
 }
 
 function MessagingLabPage() {
-  const [messages, setMessages] = useState<Msg[]>([
-    {
-      from: "agent",
-      text: "Hello and welcome to Dubai Smile Clinic! I'm your AI Dental Advisor. Please tell me, what brings you here today?",
-      t: nowStr(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Msg[]>([WELCOME]);
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const send = (raw?: string) => {
-    const text = (raw ?? input).trim();
-    if (!text) return;
-    setMessages((m) => [...m, { from: "user", text, t: nowStr() }]);
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [messages, isTyping]);
+
+  const sendMessage = (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    setMessages((m) => [...m, { role: "user", text: trimmed, t: nowStr() }]);
     setInput("");
+    setIsTyping(true);
     setTimeout(() => {
-      setMessages((m) => [...m, { from: "agent", text: fakeReply(text), t: nowStr() }]);
-    }, 600);
+      setIsTyping(false);
+      setMessages((m) => [...m, { role: "agent", text: getAutoReply(trimmed), t: nowStr() }]);
+    }, 1500);
+  };
+
+  const reset = () => {
+    setMessages([{ ...WELCOME, t: nowStr() }]);
+    setIsTyping(false);
+    setInput("");
   };
 
   return (
@@ -119,13 +133,7 @@ function MessagingLabPage() {
             <div className="ml-auto flex gap-3 text-[#8B8FA8]">
               <Video size={16} className="hover:text-white cursor-pointer" />
               <Phone size={16} className="hover:text-white cursor-pointer" />
-              <button
-                onClick={() =>
-                  setMessages([
-                    { from: "agent", text: "Conversation reset. How can I help?", t: nowStr() },
-                  ])
-                }
-              >
+              <button onClick={reset}>
                 <RefreshCw size={16} className="hover:text-white cursor-pointer" />
               </button>
             </div>
@@ -134,9 +142,9 @@ function MessagingLabPage() {
           <div className="px-5 py-2.5 bg-[#0B0B1A]/50 border-b border-[#1C1C34] flex items-center gap-3 flex-shrink-0">
             <Zap size={12} className="text-[#7B5CFC]" />
             <span className="text-[#8B8FA8] text-xs">Quick persona test</span>
-            <span className="text-[#4A4A6A] text-[11px]">sends 'hi' and verifies persona</span>
+            <span className="text-[#4A4A6A] text-[11px]">sends a test inquiry and verifies persona</span>
             <button
-              onClick={() => send("hi")}
+              onClick={() => sendMessage("Hello, I'd like some information about your services")}
               className="ml-auto h-7 px-3 rounded-md border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-xs flex items-center gap-1"
             >
               <Play size={12} />
@@ -144,7 +152,7 @@ function MessagingLabPage() {
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-5">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-5">
             <div className="text-center mb-4 flex items-center justify-center gap-1.5 text-[#4A4A6A] text-xs">
               <Shield size={12} />
               Messages are end-to-end encrypted in sandbox mode
@@ -152,31 +160,42 @@ function MessagingLabPage() {
             <div className="text-[#4A4A6A] text-[10px] text-center py-2">TODAY</div>
 
             {messages.map((m, i) => (
-              <div key={i} className={`flex mb-4 gap-2 ${m.from === "user" ? "justify-end" : "justify-start"}`}>
-                {m.from === "agent" && (
+              <div key={i} className={`flex mb-4 gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                {m.role === "agent" && (
                   <div className="w-8 h-8 rounded-full bg-[#00D4AA]/20 text-[#00D4AA] font-semibold text-xs flex items-center justify-center flex-shrink-0">
                     DA
                   </div>
                 )}
                 <div
                   className={`max-w-[75%] px-4 py-3 ${
-                    m.from === "user"
+                    m.role === "user"
                       ? "bg-[#7B5CFC] text-white rounded-2xl rounded-tr-[4px]"
                       : "bg-[#0B0B1A] border border-[#1C1C34] text-white rounded-2xl rounded-tl-[4px]"
                   }`}
                 >
                   <div className="text-sm">{m.text}</div>
-                  <div className={`text-[10px] mt-1.5 ${m.from === "user" ? "text-white/60" : "text-[#4A4A6A]"}`}>{m.t}</div>
+                  <div className={`text-[10px] mt-1.5 ${m.role === "user" ? "text-white/60" : "text-[#4A4A6A]"}`}>{m.t}</div>
                 </div>
               </div>
             ))}
 
-            {messages.length <= 1 && (
+            {isTyping && (
+              <div className="flex mb-4 gap-2 justify-start">
+                <div className="w-8 h-8 rounded-full bg-[#00D4AA]/20 text-[#00D4AA] font-semibold text-xs flex items-center justify-center flex-shrink-0">DA</div>
+                <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-2xl rounded-tl-[4px] px-4 py-3 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#4A4A6A] animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#4A4A6A] animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#4A4A6A] animate-bounce" style={{ animationDelay: "300ms" }} />
+                </div>
+              </div>
+            )}
+
+            {messages.length <= 1 && !isTyping && (
               <div className="flex flex-wrap gap-2 mb-4 ml-10">
                 {QUICK_REPLIES.map((q) => (
                   <button
                     key={q}
-                    onClick={() => send(q)}
+                    onClick={() => sendMessage(q)}
                     className="bg-[#0B0B1A] border border-[#1C1C34] rounded-full px-4 py-2 text-white text-xs hover:border-[#7B5CFC]/40"
                   >
                     {q}
@@ -191,13 +210,18 @@ function MessagingLabPage() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && send()}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage(input);
+                }
+              }}
               placeholder="Type a message..."
               className="flex-1 bg-transparent border-0 outline-none text-white text-sm placeholder:text-[#4A4A6A]"
             />
             <Paperclip size={18} className="text-[#8B8FA8] hover:text-white cursor-pointer" />
             <button
-              onClick={() => send()}
+              onClick={() => sendMessage(input)}
               disabled={!input.trim()}
               className="h-8 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] disabled:bg-[#1C1C34] disabled:text-[#4A4A6A] text-white text-sm font-semibold flex items-center gap-1"
             >

@@ -12,6 +12,7 @@ import {
   Search,
   Trash2,
   Upload,
+  UploadCloud,
   X,
 } from "lucide-react";
 
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/_dashboard/agents/documents")({
 });
 
 type Doc = { id: string; name: string; size: string; project: string; status: "Ready" | "Processing" };
-type Project = { id: string; name: string };
+type Project = { id: string; name: string; description?: string; category?: string; docs: number };
 
 function fmtSize(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -37,32 +38,21 @@ function DocumentsPage() {
   const [showUpload, setShowUpload] = useState(false);
   const [showScrape, setShowScrape] = useState(false);
   const [showNewProject, setShowNewProject] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
+
+  const addDocs = (newDocs: Doc[]) => {
+    setDocs((d) => [...newDocs, ...d]);
+    setTimeout(() => {
+      setDocs((all) =>
+        all.map((d) => (newDocs.find((n) => n.id === d.id) ? { ...d, status: "Ready" } : d))
+      );
+    }, 2000);
+  };
 
   const filtered = docs.filter(
     (d) =>
       (status === "All" || d.status === status) &&
-      d.name.toLowerCase().includes(search.toLowerCase()),
+      d.name.toLowerCase().includes(search.toLowerCase())
   );
-
-  const handleFiles = (files: FileList | null) => {
-    if (!files) return;
-    const next: Doc[] = Array.from(files).map((f, i) => ({
-      id: `${Date.now()}-${i}`,
-      name: f.name,
-      size: fmtSize(f.size),
-      project: projects[0]?.name ?? "Default",
-      status: "Processing",
-    }));
-    setDocs((d) => [...next, ...d]);
-    setShowUpload(false);
-    // simulate processing
-    setTimeout(() => {
-      setDocs((all) =>
-        all.map((d) => (next.find((n) => n.id === d.id) ? { ...d, status: "Ready" } : d)),
-      );
-    }, 1200);
-  };
 
   const totalMB = docs.length ? (docs.length * 0.5).toFixed(1) : "0.0";
   const ready = docs.filter((d) => d.status === "Ready").length;
@@ -180,6 +170,26 @@ function DocumentsPage() {
       </div>
 
       <div className="px-6 pb-6">
+        {view === "projects" && projects.length > 0 && (
+          <div className="grid grid-cols-3 gap-4 mb-5">
+            {projects.map((p) => (
+              <div key={p.id} className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-[#7B5CFC]/15 flex items-center justify-center">
+                    <FolderPlus size={18} className="text-[#7B5CFC]" />
+                  </div>
+                  <div>
+                    <div className="text-white font-semibold text-sm">{p.name}</div>
+                    <div className="text-[#4A4A6A] text-xs">{p.category ?? "Custom"}</div>
+                  </div>
+                </div>
+                {p.description && <div className="text-[#8B8FA8] text-xs mb-3">{p.description}</div>}
+                <div className="text-[#4A4A6A] text-xs">{p.docs} docs</div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {docs.length === 0 ? (
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl flex flex-col items-center justify-center py-20">
             <Inbox size={48} className="text-[#1C1C34] mx-auto mb-4" />
@@ -214,10 +224,7 @@ function DocumentsPage() {
               <div className="col-span-1"></div>
             </div>
             {filtered.map((d) => (
-              <div
-                key={d.id}
-                className="border-t border-[#1C1C34] grid grid-cols-12 items-center px-4 py-3 hover:bg-[#06060F]/60"
-              >
+              <div key={d.id} className="border-t border-[#1C1C34] grid grid-cols-12 items-center px-4 py-3 hover:bg-[#06060F]/60">
                 <div className="col-span-5 flex items-center gap-2 text-white text-sm">
                   <FileText size={14} className="text-[#7B5CFC]" />
                   {d.name}
@@ -227,9 +234,7 @@ function DocumentsPage() {
                 <div className="col-span-2">
                   <span
                     className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                      d.status === "Ready"
-                        ? "bg-[#22C55E]/12 text-[#22C55E]"
-                        : "bg-amber-500/12 text-amber-400"
+                      d.status === "Ready" ? "bg-[#22C55E]/12 text-[#22C55E]" : "bg-amber-500/12 text-amber-400"
                     }`}
                   >
                     {d.status === "Ready" ? (
@@ -253,57 +258,48 @@ function DocumentsPage() {
         )}
       </div>
 
-      <input
-        ref={fileRef}
-        type="file"
-        multiple
-        className="hidden"
-        onChange={(e) => handleFiles(e.target.files)}
-      />
-
       {showUpload && (
-        <Modal title="Upload Documents" onClose={() => setShowUpload(false)}>
-          <div
-            onClick={() => fileRef.current?.click()}
-            className="border-2 border-dashed border-[#1C1C34] hover:border-[#7B5CFC]/40 rounded-xl py-12 flex flex-col items-center justify-center cursor-pointer"
-          >
-            <Upload size={32} className="text-[#7B5CFC] mb-3" />
-            <div className="text-white font-semibold text-sm">Drop files here or click to browse</div>
-            <div className="text-[#4A4A6A] text-xs mt-1">PDF, DOCX, TXT, MD up to 20MB</div>
-          </div>
-          <div className="text-[#4A4A6A] text-xs mt-3">Files will be parsed and added to your knowledge base.</div>
-        </Modal>
+        <UploadModal
+          onClose={() => setShowUpload(false)}
+          onUpload={(files) => {
+            const newDocs: Doc[] = files.map((f, i) => ({
+              id: `${Date.now()}-${i}`,
+              name: f.name,
+              size: fmtSize(f.size),
+              project: projects[0]?.name ?? "Default",
+              status: "Processing",
+            }));
+            addDocs(newDocs);
+            setShowUpload(false);
+          }}
+        />
       )}
 
       {showScrape && (
-        <Modal title="Scrape URL" onClose={() => setShowScrape(false)}>
-          <ScrapeForm
-            onSubmit={(url) => {
-              setDocs((d) => [
-                {
-                  id: `${Date.now()}`,
-                  name: url.replace(/^https?:\/\//, "").slice(0, 60),
-                  size: "—",
-                  project: projects[0]?.name ?? "Default",
-                  status: "Processing",
-                },
-                ...d,
-              ]);
-              setShowScrape(false);
-            }}
-          />
-        </Modal>
+        <ScrapeModal
+          onClose={() => setShowScrape(false)}
+          onDone={(url) => {
+            const doc: Doc = {
+              id: `${Date.now()}`,
+              name: url.replace(/^https?:\/\//, "").slice(0, 60),
+              size: "—",
+              project: projects[0]?.name ?? "Default",
+              status: "Processing",
+            };
+            addDocs([doc]);
+            setShowScrape(false);
+          }}
+        />
       )}
 
       {showNewProject && (
-        <Modal title="New Project" onClose={() => setShowNewProject(false)}>
-          <NewProjectForm
-            onCreate={(name) => {
-              setProjects((p) => [...p, { id: `${Date.now()}`, name }]);
-              setShowNewProject(false);
-            }}
-          />
-        </Modal>
+        <NewProjectModal
+          onClose={() => setShowNewProject(false)}
+          onCreate={(p) => {
+            setProjects((all) => [...all, { id: `${Date.now()}`, docs: 0, ...p }]);
+            setShowNewProject(false);
+          }}
+        />
       )}
     </div>
   );
@@ -311,8 +307,8 @@ function DocumentsPage() {
 
 function Modal({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-2xl w-full max-w-[480px] overflow-hidden">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-2xl w-full max-w-[520px] overflow-hidden" onClick={(e) => e.stopPropagation()}>
         <div className="px-5 py-4 border-b border-[#1C1C34] flex items-center justify-between">
           <div className="text-white font-semibold">{title}</div>
           <button onClick={onClose} className="w-8 h-8 rounded-lg text-[#8B8FA8] hover:text-white flex items-center justify-center">
@@ -325,50 +321,202 @@ function Modal({ title, children, onClose }: { title: string; children: React.Re
   );
 }
 
-function ScrapeForm({ onSubmit }: { onSubmit: (url: string) => void }) {
-  const [url, setUrl] = useState("");
+function UploadModal({ onClose, onUpload }: { onClose: () => void; onUpload: (files: File[]) => void }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [files, setFiles] = useState<File[]>([]);
+
+  const addFiles = (list: FileList | null) => {
+    if (!list) return;
+    setFiles((f) => [...f, ...Array.from(list)]);
+  };
+
   return (
-    <div className="space-y-4">
-      <div>
-        <div className="text-[#8B8FA8] text-xs uppercase mb-1.5">Website URL</div>
-        <input
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://example.com/page"
-          className="w-full bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/60"
-        />
-      </div>
-      <button
-        disabled={!url.trim()}
-        onClick={() => onSubmit(url)}
-        className="w-full h-10 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] disabled:bg-[#1C1C34] disabled:text-[#4A4A6A] text-white text-sm font-semibold flex items-center justify-center gap-2"
+    <Modal title="Upload Documents" onClose={onClose}>
+      <div
+        onClick={() => fileRef.current?.click()}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => {
+          e.preventDefault();
+          addFiles(e.dataTransfer.files);
+        }}
+        className="border-2 border-dashed border-[#1C1C34] hover:border-[#7B5CFC]/40 rounded-xl p-10 text-center cursor-pointer"
       >
-        <Globe size={14} /> Scrape
-      </button>
-    </div>
+        <UploadCloud size={32} className="text-[#7B5CFC] mx-auto mb-3" />
+        <div className="text-white font-semibold text-sm">Drag files here or click to browse</div>
+      </div>
+      <input
+        ref={fileRef}
+        type="file"
+        accept=".pdf,.docx,.txt,.mp3,.mp4"
+        multiple
+        className="hidden"
+        onChange={(e) => addFiles(e.target.files)}
+      />
+      <div className="text-[#4A4A6A] text-[11px] mt-2">PDF, DOCX, TXT, MP3, MP4 · Max 50MB per file</div>
+
+      {files.length > 0 && (
+        <div className="mt-4 space-y-2 max-h-48 overflow-y-auto">
+          {files.map((f, i) => (
+            <div key={i} className="flex items-center gap-2 bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2">
+              <FileText size={14} className="text-[#7B5CFC]" />
+              <div className="flex-1 text-white text-xs truncate">{f.name}</div>
+              <div className="text-[#4A4A6A] text-[11px]">{fmtSize(f.size)}</div>
+              <button onClick={() => setFiles((all) => all.filter((_, j) => j !== i))} className="text-[#4A4A6A] hover:text-[#FF4D6D]">
+                <X size={12} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="flex gap-2 mt-5">
+        <button onClick={onClose} className="flex-1 h-10 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm">
+          Cancel
+        </button>
+        <button
+          disabled={files.length === 0}
+          onClick={() => onUpload(files)}
+          className="flex-1 h-10 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] disabled:bg-[#1C1C34] disabled:text-[#4A4A6A] text-white text-sm font-semibold"
+        >
+          Upload {files.length > 0 && `(${files.length})`}
+        </button>
+      </div>
+    </Modal>
   );
 }
 
-function NewProjectForm({ onCreate }: { onCreate: (name: string) => void }) {
-  const [name, setName] = useState("");
+function ScrapeModal({ onClose, onDone }: { onClose: () => void; onDone: (url: string) => void }) {
+  const [url, setUrl] = useState("");
+  const [extractType, setExtractType] = useState("All Content");
+  const [scraping, setScraping] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const start = () => {
+    setScraping(true);
+    setTimeout(() => {
+      setScraping(false);
+      setDone(true);
+      setTimeout(() => onDone(url), 800);
+    }, 2500);
+  };
+
   return (
-    <div className="space-y-4">
-      <div>
-        <div className="text-[#8B8FA8] text-xs uppercase mb-1.5">Project Name</div>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. Dental Services"
-          className="w-full bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/60"
-        />
+    <Modal title="Scrape URL" onClose={onClose}>
+      <div className="space-y-4">
+        <div>
+          <div className="text-[#8B8FA8] text-xs uppercase mb-1.5">Website URL</div>
+          <input
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://yourclinic.com"
+            className="w-full bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/60"
+          />
+        </div>
+        <div>
+          <div className="text-[#8B8FA8] text-xs uppercase mb-1.5">Content to extract</div>
+          <select
+            value={extractType}
+            onChange={(e) => setExtractType(e.target.value)}
+            className="w-full bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/60"
+          >
+            <option>All Content</option>
+            <option>FAQ Only</option>
+            <option>Services & Pricing</option>
+            <option>Blog Posts</option>
+          </select>
+        </div>
+
+        {scraping && (
+          <div>
+            <div className="text-[#8B8FA8] text-xs mb-2">Scraping in progress…</div>
+            <div className="h-1.5 bg-[#1C1C34] rounded-full overflow-hidden relative">
+              <div className="absolute inset-y-0 w-1/3 bg-[#7B5CFC] rounded-full" style={{ animation: "indet 1.2s ease-in-out infinite" }} />
+            </div>
+            <style>{`@keyframes indet { 0% { left: -33%; } 100% { left: 100%; } }`}</style>
+          </div>
+        )}
+        {done && (
+          <div className="text-[#22C55E] text-sm bg-[#22C55E]/10 border border-[#22C55E]/20 rounded-lg p-3">
+            ✓ Successfully scraped 14 pages — 5,820 words indexed
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <button onClick={onClose} className="flex-1 h-10 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm">
+            Cancel
+          </button>
+          <button
+            disabled={!url.trim() || scraping}
+            onClick={start}
+            className="flex-1 h-10 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] disabled:bg-[#1C1C34] disabled:text-[#4A4A6A] text-white text-sm font-semibold flex items-center justify-center gap-2"
+          >
+            <Globe size={14} /> Start Scraping
+          </button>
+        </div>
       </div>
-      <button
-        disabled={!name.trim()}
-        onClick={() => onCreate(name.trim())}
-        className="w-full h-10 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] disabled:bg-[#1C1C34] disabled:text-[#4A4A6A] text-white text-sm font-semibold"
-      >
-        Create Project
-      </button>
-    </div>
+    </Modal>
+  );
+}
+
+function NewProjectModal({
+  onClose,
+  onCreate,
+}: {
+  onClose: () => void;
+  onCreate: (p: { name: string; description: string; category: string }) => void;
+}) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("Products & Services");
+
+  return (
+    <Modal title="New Project" onClose={onClose}>
+      <div className="space-y-4">
+        <div>
+          <div className="text-[#8B8FA8] text-xs uppercase mb-1.5">Project Name *</div>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g. Dental Services"
+            className="w-full bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/60"
+          />
+        </div>
+        <div>
+          <div className="text-[#8B8FA8] text-xs uppercase mb-1.5">Description</div>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={3}
+            placeholder="Optional description"
+            className="w-full bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/60 resize-none"
+          />
+        </div>
+        <div>
+          <div className="text-[#8B8FA8] text-xs uppercase mb-1.5">Category</div>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/60"
+          >
+            <option>Products & Services</option>
+            <option>FAQ & Policies</option>
+            <option>Training Materials</option>
+            <option>Custom</option>
+          </select>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={onClose} className="flex-1 h-10 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm">
+            Cancel
+          </button>
+          <button
+            disabled={!name.trim()}
+            onClick={() => onCreate({ name: name.trim(), description, category })}
+            className="flex-1 h-10 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] disabled:bg-[#1C1C34] disabled:text-[#4A4A6A] text-white text-sm font-semibold"
+          >
+            Create Project
+          </button>
+        </div>
+      </div>
+    </Modal>
   );
 }
