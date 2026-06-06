@@ -172,12 +172,12 @@ function AgentHubPage() {
             Agents auto-respond using their knowledge base & FAQs
           </span>
           <div className="ml-auto flex gap-2">
-            <button className="h-8 px-3 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-xs">
+            <Link to="/agents/knowledge" className="h-8 px-3 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-xs flex items-center">
               Knowledge
-            </button>
-            <button className="h-8 px-3 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-xs">
+            </Link>
+            <Link to="/agents/documents" className="h-8 px-3 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-xs flex items-center">
               Documents
-            </button>
+            </Link>
           </div>
         </div>
       </div>
