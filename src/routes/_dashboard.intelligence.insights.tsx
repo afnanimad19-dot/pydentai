@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   AlertTriangle,
   BarChart,
@@ -7,6 +9,7 @@ import {
   Filter,
   Heart,
   Lightbulb,
+  Loader2,
   MessageSquare,
   Shield,
   Sparkles,
@@ -82,7 +85,31 @@ const CHANNELS = [
   { name: "Email", value: 12, color: "#3B82F6" },
 ];
 
+const INSIGHTS = [
+  { sev: "red", title: "Conversion dropped 3.2% week over week", desc: "Most of the loss is concentrated in WhatsApp leads stuck at qualification stage." },
+  { sev: "amber", title: "Voice answer rate weakest Fri 3–5pm", desc: "Reroute outbound batches to Tue/Wed mornings to recover ~12% pickup." },
+  { sev: "green", title: "Email engagement up 6.3%", desc: "Subject-line variant B is outperforming control by 18%. Promote to default." },
+  { sev: "amber", title: "3 enterprise accounts at churn risk", desc: "Engagement scores fell >40% in the last 14 days. Launch retention play." },
+  { sev: "green", title: "AI auto-qualify saving ~9.4h/week", desc: "Reps now spend 38% more time on qualified leads." },
+];
+
+const SEV_COLOR: Record<string, string> = { red: "#FF4D6D", amber: "#F59E0B", green: "#22C55E" };
+
 function InsightsPage() {
+  const [loading, setLoading] = useState(false);
+  const [reportShown, setReportShown] = useState(false);
+
+  const generate = () => {
+    if (loading) return;
+    setLoading(true);
+    setReportShown(false);
+    setTimeout(() => {
+      setLoading(false);
+      setReportShown(true);
+      toast.success("Intelligence report generated");
+    }, 3000);
+  };
+
   return (
     <div className="font-sans">
       <div className="flex items-center justify-between px-6 pt-6 pb-4">
@@ -93,12 +120,8 @@ function InsightsPage() {
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <div className="text-white font-bold text-[22px] tracking-[-0.03em]">
-                  AI Insights Dashboard
-                </div>
-                <span className="bg-blue-500/12 text-blue-400 text-xs px-2 py-0.5 rounded-full">
-                  Intelligence Engine
-                </span>
+                <div className="text-white font-bold text-[22px] tracking-[-0.03em]">AI Insights Dashboard</div>
+                <span className="bg-blue-500/12 text-blue-400 text-xs px-2 py-0.5 rounded-full">Intelligence Engine</span>
               </div>
               <div className="text-[#4A4A6A] text-sm">
                 Conversion drivers · Funnel diagnostics · Predictive intelligence · Risk alerts · Channel analytics
@@ -107,25 +130,27 @@ function InsightsPage() {
           </div>
           <div className="flex items-center gap-2 mt-3 text-sm">
             <span className="text-[#4A4A6A]">Engine</span>
-            <span className="text-amber-400 font-medium">Standby</span>
-            <div className="w-px h-4 bg-[#1C1C34] mx-2" />
-            <span className="bg-[#22C55E]/12 text-[#22C55E] text-xs px-2 py-0.5 rounded-full">
-              Live Data
+            <span className={reportShown ? "text-[#22C55E] font-medium" : "text-amber-400 font-medium"}>
+              {reportShown ? "Active" : "Standby"}
             </span>
+            <div className="w-px h-4 bg-[#1C1C34] mx-2" />
+            <span className="bg-[#22C55E]/12 text-[#22C55E] text-xs px-2 py-0.5 rounded-full">Live Data</span>
           </div>
         </div>
-        <button className="h-10 px-4 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold flex items-center gap-2 transition-colors">
-          <Sparkles size={14} /> Generate AI Report
+        <button
+          onClick={generate}
+          disabled={loading}
+          className="h-10 px-4 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] disabled:opacity-70 text-white text-sm font-semibold flex items-center gap-2 transition-colors"
+        >
+          {loading ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
+          {loading ? "Generating..." : "Generate AI Report"}
         </button>
       </div>
 
       <div className="px-6 mb-5 overflow-x-auto">
         <div className="flex gap-3 min-w-max">
           {METRICS.map((m) => (
-            <div
-              key={m.l}
-              className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-4 py-3 flex-shrink-0 min-w-[140px]"
-            >
+            <div key={m.l} className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-4 py-3 flex-shrink-0 min-w-[140px]">
               <div className="text-[#4A4A6A] text-[10px] uppercase tracking-wider">{m.l}</div>
               <div className="text-white font-bold text-lg mt-1">{m.v}</div>
               <div className="text-[11px] mt-0.5" style={{ color: m.c }}>{m.d}</div>
@@ -135,38 +160,70 @@ function InsightsPage() {
       </div>
 
       <div className="px-6 pb-8 grid grid-cols-12 gap-5">
-        <div className="col-span-7">
-          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-6">
-            <div className="flex flex-col items-center text-center py-6">
-              <BrainCircuit size={56} className="text-[#7B5CFC]/40 mb-4" />
-              <div className="text-white font-bold text-xl tracking-[-0.02em] mb-2">
-                AI-Powered Business Intelligence
-              </div>
-              <div className="text-[#4A4A6A] text-sm max-w-md leading-relaxed mb-6">
-                Generate a comprehensive AI report analyzing your conversion drivers, funnel bottlenecks, top-performing messages, predictive trends, and risk alerts — all powered by advanced analytics.
-              </div>
-              <div className="grid grid-cols-2 gap-3 w-full mb-6">
-                {MODULES.map((m) => {
-                  const I = m.icon;
-                  return (
-                    <div
-                      key={m.name}
-                      className="bg-[#06060F] border border-[#1C1C34] rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:border-[#7B5CFC]/30 transition-all"
-                    >
-                      <I size={14} className={m.color} />
-                      <div className="text-left">
-                        <div className="text-white text-xs font-semibold">{m.name}</div>
-                        <div className="text-[#4A4A6A] text-[10px]">{m.desc}</div>
+        <div className="col-span-7 flex flex-col gap-4">
+          {!reportShown && (
+            <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-6">
+              <div className="flex flex-col items-center text-center py-6">
+                {loading ? (
+                  <Loader2 size={56} className="text-[#7B5CFC] animate-spin mb-4" />
+                ) : (
+                  <BrainCircuit size={56} className="text-[#7B5CFC]/40 mb-4" />
+                )}
+                <div className="text-white font-bold text-xl tracking-[-0.02em] mb-2">
+                  AI-Powered Business Intelligence
+                </div>
+                <div className="text-[#4A4A6A] text-sm max-w-md leading-relaxed mb-6">
+                  Generate a comprehensive AI report analyzing your conversion drivers, funnel bottlenecks, top-performing messages, predictive trends, and risk alerts.
+                </div>
+                <div className="grid grid-cols-2 gap-3 w-full mb-6">
+                  {MODULES.map((m) => {
+                    const I = m.icon;
+                    return (
+                      <div key={m.name} className="bg-[#06060F] border border-[#1C1C34] rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:border-[#7B5CFC]/30 transition-all">
+                        <I size={14} className={m.color} />
+                        <div className="text-left">
+                          <div className="text-white text-xs font-semibold">{m.name}</div>
+                          <div className="text-[#4A4A6A] text-[10px]">{m.desc}</div>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+                <button
+                  onClick={generate}
+                  disabled={loading}
+                  className="w-full h-11 bg-[#7B5CFC] hover:bg-[#6047DB] disabled:opacity-70 text-white text-sm font-semibold flex items-center justify-center gap-2 rounded-lg transition-colors"
+                >
+                  {loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+                  {loading ? "Generating..." : "Generate Intelligence Report"}
+                </button>
               </div>
-              <button className="w-full h-11 bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold flex items-center justify-center gap-2 rounded-lg transition-colors">
-                <Sparkles size={16} /> Generate Intelligence Report
-              </button>
             </div>
-          </div>
+          )}
+
+          {reportShown && (
+            <div className="space-y-3">
+              {INSIGHTS.map((ins, i) => (
+                <div
+                  key={i}
+                  className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5 flex items-start gap-4 animate-in fade-in slide-in-from-bottom-2"
+                  style={{ animationDelay: `${i * 100}ms`, animationFillMode: "both" }}
+                >
+                  <span className="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: SEV_COLOR[ins.sev] }} />
+                  <div className="flex-1">
+                    <div className="text-white font-semibold text-sm">{ins.title}</div>
+                    <div className="text-[#4A4A6A] text-xs mt-1 leading-relaxed">{ins.desc}</div>
+                  </div>
+                  <button
+                    onClick={() => toast.success("Action queued")}
+                    className="text-[#9B84FF] hover:text-white text-xs font-semibold whitespace-nowrap"
+                  >
+                    Take Action →
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="col-span-5 flex flex-col gap-4">
