@@ -47,6 +47,7 @@ import { Route as DashboardIntelligenceAutopilotRouteImport } from './routes/_da
 import { Route as DashboardInstagramTrendsRouteImport } from './routes/_dashboard.instagram.trends'
 import { Route as DashboardInstagramCreateContentRouteImport } from './routes/_dashboard.instagram.create-content'
 import { Route as DashboardInstagramContentPlannerRouteImport } from './routes/_dashboard.instagram.content-planner'
+import { Route as DashboardEngageUpcomingCallsRouteImport } from './routes/_dashboard.engage.upcoming-calls'
 import { Route as DashboardEngageLiveMonitoringRouteImport } from './routes/_dashboard.engage.live-monitoring'
 import { Route as DashboardEngageLeadsRouteImport } from './routes/_dashboard.engage.leads'
 import { Route as DashboardEngageCallStatusRouteImport } from './routes/_dashboard.engage.call-status'
@@ -283,6 +284,12 @@ const DashboardInstagramContentPlannerRoute =
     path: '/instagram/content-planner',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardEngageUpcomingCallsRoute =
+  DashboardEngageUpcomingCallsRouteImport.update({
+    id: '/engage/upcoming-calls',
+    path: '/engage/upcoming-calls',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardEngageLiveMonitoringRoute =
   DashboardEngageLiveMonitoringRouteImport.update({
     id: '/engage/live-monitoring',
@@ -470,6 +477,7 @@ export interface FileRoutesByFullPath {
   '/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/engage/leads': typeof DashboardEngageLeadsRoute
   '/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
+  '/engage/upcoming-calls': typeof DashboardEngageUpcomingCallsRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
   '/instagram/trends': typeof DashboardInstagramTrendsRoute
@@ -537,6 +545,7 @@ export interface FileRoutesByTo {
   '/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/engage/leads': typeof DashboardEngageLeadsRoute
   '/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
+  '/engage/upcoming-calls': typeof DashboardEngageUpcomingCallsRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
   '/instagram/trends': typeof DashboardInstagramTrendsRoute
@@ -606,6 +615,7 @@ export interface FileRoutesById {
   '/_dashboard/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/_dashboard/engage/leads': typeof DashboardEngageLeadsRoute
   '/_dashboard/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
+  '/_dashboard/engage/upcoming-calls': typeof DashboardEngageUpcomingCallsRoute
   '/_dashboard/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/_dashboard/instagram/create-content': typeof DashboardInstagramCreateContentRoute
   '/_dashboard/instagram/trends': typeof DashboardInstagramTrendsRoute
@@ -675,6 +685,7 @@ export interface FileRouteTypes {
     | '/engage/call-status'
     | '/engage/leads'
     | '/engage/live-monitoring'
+    | '/engage/upcoming-calls'
     | '/instagram/content-planner'
     | '/instagram/create-content'
     | '/instagram/trends'
@@ -742,6 +753,7 @@ export interface FileRouteTypes {
     | '/engage/call-status'
     | '/engage/leads'
     | '/engage/live-monitoring'
+    | '/engage/upcoming-calls'
     | '/instagram/content-planner'
     | '/instagram/create-content'
     | '/instagram/trends'
@@ -810,6 +822,7 @@ export interface FileRouteTypes {
     | '/_dashboard/engage/call-status'
     | '/_dashboard/engage/leads'
     | '/_dashboard/engage/live-monitoring'
+    | '/_dashboard/engage/upcoming-calls'
     | '/_dashboard/instagram/content-planner'
     | '/_dashboard/instagram/create-content'
     | '/_dashboard/instagram/trends'
@@ -1125,6 +1138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardInstagramContentPlannerRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/engage/upcoming-calls': {
+      id: '/_dashboard/engage/upcoming-calls'
+      path: '/engage/upcoming-calls'
+      fullPath: '/engage/upcoming-calls'
+      preLoaderRoute: typeof DashboardEngageUpcomingCallsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/engage/live-monitoring': {
       id: '/_dashboard/engage/live-monitoring'
       path: '/engage/live-monitoring'
@@ -1362,6 +1382,7 @@ interface DashboardRouteChildren {
   DashboardEngageCallStatusRoute: typeof DashboardEngageCallStatusRoute
   DashboardEngageLeadsRoute: typeof DashboardEngageLeadsRoute
   DashboardEngageLiveMonitoringRoute: typeof DashboardEngageLiveMonitoringRoute
+  DashboardEngageUpcomingCallsRoute: typeof DashboardEngageUpcomingCallsRoute
   DashboardInstagramContentPlannerRoute: typeof DashboardInstagramContentPlannerRoute
   DashboardInstagramCreateContentRoute: typeof DashboardInstagramCreateContentRoute
   DashboardInstagramTrendsRoute: typeof DashboardInstagramTrendsRoute
@@ -1423,6 +1444,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardEngageCallStatusRoute: DashboardEngageCallStatusRoute,
   DashboardEngageLeadsRoute: DashboardEngageLeadsRoute,
   DashboardEngageLiveMonitoringRoute: DashboardEngageLiveMonitoringRoute,
+  DashboardEngageUpcomingCallsRoute: DashboardEngageUpcomingCallsRoute,
   DashboardInstagramContentPlannerRoute: DashboardInstagramContentPlannerRoute,
   DashboardInstagramCreateContentRoute: DashboardInstagramCreateContentRoute,
   DashboardInstagramTrendsRoute: DashboardInstagramTrendsRoute,
