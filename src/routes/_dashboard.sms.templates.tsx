@@ -73,7 +73,7 @@ function SmsTemplates() {
           <FileText size={48} className="text-[#1C1C34] mb-4" />
           <div className="text-white text-lg font-semibold mb-2">No templates found</div>
           <div className="text-[#4A4A6A] text-sm mb-8">Create your first template or try a different filter</div>
-          <button className="h-10 px-5 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">+ Create Template</button>
+          <button onClick={() => setTplOpen(true)} className="h-10 px-5 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">+ Create Template</button>
         </div>
       </div>
 
