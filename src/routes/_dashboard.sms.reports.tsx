@@ -1,5 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { BarChart, BarChart3, RefreshCw, Smartphone } from "lucide-react";
+import { SMSCampaignModal } from "@/components/sms/SmsModals";
 
 export const Route = createFileRoute("/_dashboard/sms/reports")({ component: SmsReports });
 
@@ -10,6 +12,8 @@ const STEPS = [
 ] as const;
 
 function SmsReports() {
+  const navigate = useNavigate();
+  const [campOpen, setCampOpen] = useState(false);
   return (
     <div className="font-sans">
       <div className="px-6 pt-6 pb-4 flex justify-between items-center">
@@ -49,11 +53,12 @@ function SmsReports() {
           </div>
 
           <div className="flex gap-3 justify-center mt-6">
-            <button className="h-10 px-5 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">Configure Provider</button>
-            <button className="h-10 px-5 rounded-lg border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white">Create Campaign</button>
+            <button onClick={() => navigate({ to: "/sms/setup" })} className="h-10 px-5 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">Configure Provider</button>
+            <button onClick={() => setCampOpen(true)} className="h-10 px-5 rounded-lg border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white">Create Campaign</button>
           </div>
         </div>
       </div>
+      <SMSCampaignModal open={campOpen} onClose={() => setCampOpen(false)} />
     </div>
   );
 }

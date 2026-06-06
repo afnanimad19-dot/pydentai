@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { CheckCircle, Clock, FileText, Search, Users, Zap } from "lucide-react";
+import { SMSCampaignModal, SMSTemplateModal } from "@/components/sms/SmsModals";
 
 export const Route = createFileRoute("/_dashboard/sms/templates")({ component: SmsTemplates });
 
@@ -20,6 +22,10 @@ const STARTERS = [
 ];
 
 function SmsTemplates() {
+  const [tplOpen, setTplOpen] = useState(false);
+  const [campOpen, setCampOpen] = useState(false);
+  const [prefill, setPrefill] = useState("");
+  const useStarter = (msg: string) => { setPrefill(msg); setCampOpen(true); };
   return (
     <div className="font-sans">
       <div className="px-6 pt-6 pb-4 flex justify-between items-center">
@@ -32,7 +38,7 @@ function SmsTemplates() {
             <p className="text-[#4A4A6A] text-sm">0 templates · 0 categories</p>
           </div>
         </div>
-        <button className="h-9 px-4 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-semibold">+ New Template</button>
+        <button onClick={() => setTplOpen(true)} className="h-9 px-4 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-semibold">+ New Template</button>
       </div>
 
       <div className="px-6 mb-5 overflow-x-auto flex gap-3">
@@ -67,7 +73,7 @@ function SmsTemplates() {
           <FileText size={48} className="text-[#1C1C34] mb-4" />
           <div className="text-white text-lg font-semibold mb-2">No templates found</div>
           <div className="text-[#4A4A6A] text-sm mb-8">Create your first template or try a different filter</div>
-          <button className="h-10 px-5 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">+ Create Template</button>
+          <button onClick={() => setTplOpen(true)} className="h-10 px-5 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">+ Create Template</button>
         </div>
       </div>
 
@@ -84,11 +90,13 @@ function SmsTemplates() {
               </div>
               <div className="text-white text-sm font-semibold mb-2">{s.name}</div>
               <p className="text-[#4A4A6A] text-xs leading-relaxed line-clamp-3 font-mono mb-4">{s.msg}</p>
-              <button className="w-full h-8 text-xs border border-[#1C1C34] hover:border-[#3B82F6]/40 text-[#8B8FA8] rounded-lg">Use Template</button>
+              <button onClick={() => useStarter(s.msg)} className="w-full h-8 text-xs border border-[#1C1C34] hover:border-[#3B82F6]/40 text-[#8B8FA8] rounded-lg">Use Template</button>
             </div>
           ))}
         </div>
       </div>
+      <SMSTemplateModal open={tplOpen} onClose={() => setTplOpen(false)} />
+      <SMSCampaignModal open={campOpen} onClose={() => setCampOpen(false)} initialMessage={prefill} />
     </div>
   );
 }

@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   AlertTriangle, BarChart, CalendarDays, CheckCircle, Clock, FileText, Globe,
   Megaphone, MessageSquare, MousePointer, RefreshCw, Reply, Send, Shield,
@@ -7,6 +8,7 @@ import {
 import {
   CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
+import { BuyCreditsModal, SMSCampaignModal } from "@/components/sms/SmsModals";
 
 export const Route = createFileRoute("/_dashboard/sms/")({ component: SmsDashboard });
 
@@ -31,6 +33,17 @@ const QUICK = [
 ];
 
 function SmsDashboard() {
+  const navigate = useNavigate();
+  const [campOpen, setCampOpen] = useState(false);
+  const [creditsOpen, setCreditsOpen] = useState(false);
+  const quickHandlers: Record<string, () => void> = {
+    "New Campaign": () => setCampOpen(true),
+    "Create Template": () => navigate({ to: "/sms/templates" }),
+    "Import Contacts": () => navigate({ to: "/sms/contacts" }),
+    "View Analytics": () => navigate({ to: "/sms/reports" }),
+    "Manage Contacts": () => navigate({ to: "/sms/contacts" }),
+    "Schedule Message": () => setCampOpen(true),
+  };
   return (
     <div className="font-sans">
       <div className="px-6 pt-6 pb-4 flex justify-between items-center">
@@ -49,8 +62,8 @@ function SmsDashboard() {
         <div className="flex gap-2">
           <button className="h-9 w-9 rounded-lg bg-[#0B0B1A] border border-[#1C1C34] flex items-center justify-center text-[#8B8FA8] hover:text-white"><RefreshCw size={14} /></button>
           <button className="h-9 px-3 rounded-lg bg-[#0B0B1A] border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white">Export</button>
-          <button className="h-9 px-3 rounded-lg bg-[#0B0B1A] border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white">Setup</button>
-          <button className="h-9 px-4 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-semibold">+ New Campaign</button>
+          <button onClick={() => navigate({ to: "/sms/setup" })} className="h-9 px-3 rounded-lg bg-[#0B0B1A] border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white">Setup</button>
+          <button onClick={() => setCampOpen(true)} className="h-9 px-4 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-semibold">+ New Campaign</button>
         </div>
       </div>
 
@@ -102,20 +115,20 @@ function SmsDashboard() {
               <Megaphone size={40} className="text-[#1C1C34] mx-auto mb-3" />
               <div className="text-[#4A4A6A] text-sm">No campaigns yet</div>
               <div className="text-[#4A4A6A] text-xs">Create your first campaign to see performance</div>
-              <button className="h-8 px-3 rounded-lg bg-[#3B82F6] text-white text-xs font-semibold mt-4">+ Create Campaign</button>
+              <button onClick={() => setCampOpen(true)} className="h-8 px-3 rounded-lg bg-[#3B82F6] text-white text-xs font-semibold mt-4">+ Create Campaign</button>
             </div>
           </div>
 
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
             <div className="flex items-center mb-3">
               <span className="text-white font-semibold text-sm">Recent Campaigns</span>
-              <button className="ml-auto text-[#8B8FA8] text-xs hover:text-white">+ New</button>
+              <button onClick={() => setCampOpen(true)} className="ml-auto text-[#8B8FA8] text-xs hover:text-white">+ New</button>
             </div>
             <div className="py-10 text-center">
               <Megaphone size={32} className="text-[#1C1C34] mx-auto mb-3" />
               <div className="text-[#4A4A6A] text-sm">No campaigns yet</div>
               <div className="text-[#4A4A6A] text-xs">Create your first SMS campaign</div>
-              <button className="h-8 px-3 rounded-lg bg-[#3B82F6] text-white text-xs font-semibold mt-4">+ Create Campaign</button>
+              <button onClick={() => setCampOpen(true)} className="h-8 px-3 rounded-lg bg-[#3B82F6] text-white text-xs font-semibold mt-4">+ Create Campaign</button>
             </div>
           </div>
         </div>
@@ -161,14 +174,14 @@ function SmsDashboard() {
                 <div className="text-[#4A4A6A] text-[10px]">Scheduled</div>
               </div>
             </div>
-            <button className="w-full mt-3 h-9 border border-[#3B82F6]/30 text-[#3B82F6] text-sm rounded-xl hover:bg-[#3B82F6]/[0.06]">Buy More Credits</button>
+            <button onClick={() => setCreditsOpen(true)} className="w-full mt-3 h-9 border border-[#3B82F6]/30 text-[#3B82F6] text-sm rounded-xl hover:bg-[#3B82F6]/[0.06]">Buy More Credits</button>
           </div>
 
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
             <div className="text-white font-semibold text-sm mb-4">Quick Actions</div>
             <div className="grid grid-cols-3 gap-2">
               {QUICK.map((q) => (
-                <button key={q.label} className="bg-[#06060F] border border-[#1C1C34] rounded-lg p-3 flex flex-col items-center gap-1.5 hover:border-[#3B82F6]/30 transition-all">
+                <button key={q.label} onClick={quickHandlers[q.label]} className="bg-[#06060F] border border-[#1C1C34] rounded-lg p-3 flex flex-col items-center gap-1.5 hover:border-[#3B82F6]/30 transition-all">
                   <q.icon size={18} className={q.color} />
                   <span className="text-[10px] text-[#8B8FA8] text-center">{q.label}</span>
                 </button>
@@ -189,7 +202,7 @@ function SmsDashboard() {
                 </div>
                 <span className="bg-[#F59E0B]/12 text-[#F59E0B] text-[10px] px-2 py-0.5 rounded-full">Setup Required</span>
               </div>
-              <button className="w-full h-9 mt-3 border border-[#1C1C34] text-[#8B8FA8] rounded-xl text-sm hover:text-white">Configure Provider</button>
+              <button onClick={() => navigate({ to: "/sms/setup" })} className="w-full h-9 mt-3 border border-[#1C1C34] text-[#8B8FA8] rounded-xl text-sm hover:text-white">Configure Provider</button>
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div className="bg-[#06060F] rounded-lg p-3">
@@ -210,6 +223,8 @@ function SmsDashboard() {
           </div>
         </div>
       </div>
+      <SMSCampaignModal open={campOpen} onClose={() => setCampOpen(false)} />
+      <BuyCreditsModal open={creditsOpen} onClose={() => setCreditsOpen(false)} />
     </div>
   );
 }
