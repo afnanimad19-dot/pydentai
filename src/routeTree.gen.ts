@@ -18,6 +18,7 @@ import { Route as DashboardRouteImport } from './routes/_dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard.dashboard'
 import { Route as DashboardWhatsappIndexRouteImport } from './routes/_dashboard.whatsapp.index'
+import { Route as DashboardWebsiteChatIndexRouteImport } from './routes/_dashboard.website-chat.index'
 import { Route as DashboardSmsIndexRouteImport } from './routes/_dashboard.sms.index'
 import { Route as DashboardEmailIndexRouteImport } from './routes/_dashboard.email.index'
 import { Route as DashboardWhatsappTagsRouteImport } from './routes/_dashboard.whatsapp.tags'
@@ -39,6 +40,7 @@ import { Route as DashboardIntelligenceDealCloserRouteImport } from './routes/_d
 import { Route as DashboardIntelligenceConversationRouteImport } from './routes/_dashboard.intelligence.conversation'
 import { Route as DashboardIntelligenceBrainRouteImport } from './routes/_dashboard.intelligence.brain'
 import { Route as DashboardIntelligenceAutopilotRouteImport } from './routes/_dashboard.intelligence.autopilot'
+import { Route as DashboardInstagramTrendsRouteImport } from './routes/_dashboard.instagram.trends'
 import { Route as DashboardInstagramCreateContentRouteImport } from './routes/_dashboard.instagram.create-content'
 import { Route as DashboardInstagramContentPlannerRouteImport } from './routes/_dashboard.instagram.content-planner'
 import { Route as DashboardEmailTestRouteImport } from './routes/_dashboard.email.test'
@@ -111,6 +113,12 @@ const DashboardWhatsappIndexRoute = DashboardWhatsappIndexRouteImport.update({
   path: '/whatsapp/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardWebsiteChatIndexRoute =
+  DashboardWebsiteChatIndexRouteImport.update({
+    id: '/website-chat/',
+    path: '/website-chat/',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardSmsIndexRoute = DashboardSmsIndexRouteImport.update({
   id: '/sms/',
   path: '/sms/',
@@ -224,6 +232,12 @@ const DashboardIntelligenceAutopilotRoute =
   DashboardIntelligenceAutopilotRouteImport.update({
     id: '/intelligence/autopilot',
     path: '/intelligence/autopilot',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardInstagramTrendsRoute =
+  DashboardInstagramTrendsRouteImport.update({
+    id: '/instagram/trends',
+    path: '/instagram/trends',
     getParentRoute: () => DashboardRoute,
   } as any)
 const DashboardInstagramCreateContentRoute =
@@ -407,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/email/test': typeof DashboardEmailTestRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
+  '/instagram/trends': typeof DashboardInstagramTrendsRoute
   '/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
   '/intelligence/brain': typeof DashboardIntelligenceBrainRoute
   '/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
@@ -428,6 +443,7 @@ export interface FileRoutesByFullPath {
   '/whatsapp/tags': typeof DashboardWhatsappTagsRoute
   '/email/': typeof DashboardEmailIndexRoute
   '/sms/': typeof DashboardSmsIndexRoute
+  '/website-chat/': typeof DashboardWebsiteChatIndexRoute
   '/whatsapp/': typeof DashboardWhatsappIndexRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
@@ -465,6 +481,7 @@ export interface FileRoutesByTo {
   '/email/test': typeof DashboardEmailTestRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
+  '/instagram/trends': typeof DashboardInstagramTrendsRoute
   '/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
   '/intelligence/brain': typeof DashboardIntelligenceBrainRoute
   '/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
@@ -486,6 +503,7 @@ export interface FileRoutesByTo {
   '/whatsapp/tags': typeof DashboardWhatsappTagsRoute
   '/email': typeof DashboardEmailIndexRoute
   '/sms': typeof DashboardSmsIndexRoute
+  '/website-chat': typeof DashboardWebsiteChatIndexRoute
   '/whatsapp': typeof DashboardWhatsappIndexRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
@@ -525,6 +543,7 @@ export interface FileRoutesById {
   '/_dashboard/email/test': typeof DashboardEmailTestRoute
   '/_dashboard/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/_dashboard/instagram/create-content': typeof DashboardInstagramCreateContentRoute
+  '/_dashboard/instagram/trends': typeof DashboardInstagramTrendsRoute
   '/_dashboard/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
   '/_dashboard/intelligence/brain': typeof DashboardIntelligenceBrainRoute
   '/_dashboard/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
@@ -546,6 +565,7 @@ export interface FileRoutesById {
   '/_dashboard/whatsapp/tags': typeof DashboardWhatsappTagsRoute
   '/_dashboard/email/': typeof DashboardEmailIndexRoute
   '/_dashboard/sms/': typeof DashboardSmsIndexRoute
+  '/_dashboard/website-chat/': typeof DashboardWebsiteChatIndexRoute
   '/_dashboard/whatsapp/': typeof DashboardWhatsappIndexRoute
   '/_dashboard/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
   '/_dashboard/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
@@ -585,6 +605,7 @@ export interface FileRouteTypes {
     | '/email/test'
     | '/instagram/content-planner'
     | '/instagram/create-content'
+    | '/instagram/trends'
     | '/intelligence/autopilot'
     | '/intelligence/brain'
     | '/intelligence/conversation'
@@ -606,6 +627,7 @@ export interface FileRouteTypes {
     | '/whatsapp/tags'
     | '/email/'
     | '/sms/'
+    | '/website-chat/'
     | '/whatsapp/'
     | '/agents/studio/$id'
     | '/whatsapp/campaigns/new'
@@ -643,6 +665,7 @@ export interface FileRouteTypes {
     | '/email/test'
     | '/instagram/content-planner'
     | '/instagram/create-content'
+    | '/instagram/trends'
     | '/intelligence/autopilot'
     | '/intelligence/brain'
     | '/intelligence/conversation'
@@ -664,6 +687,7 @@ export interface FileRouteTypes {
     | '/whatsapp/tags'
     | '/email'
     | '/sms'
+    | '/website-chat'
     | '/whatsapp'
     | '/agents/studio/$id'
     | '/whatsapp/campaigns/new'
@@ -702,6 +726,7 @@ export interface FileRouteTypes {
     | '/_dashboard/email/test'
     | '/_dashboard/instagram/content-planner'
     | '/_dashboard/instagram/create-content'
+    | '/_dashboard/instagram/trends'
     | '/_dashboard/intelligence/autopilot'
     | '/_dashboard/intelligence/brain'
     | '/_dashboard/intelligence/conversation'
@@ -723,6 +748,7 @@ export interface FileRouteTypes {
     | '/_dashboard/whatsapp/tags'
     | '/_dashboard/email/'
     | '/_dashboard/sms/'
+    | '/_dashboard/website-chat/'
     | '/_dashboard/whatsapp/'
     | '/_dashboard/agents/studio/$id'
     | '/_dashboard/whatsapp/campaigns/new'
@@ -804,6 +830,13 @@ declare module '@tanstack/react-router' {
       path: '/whatsapp'
       fullPath: '/whatsapp/'
       preLoaderRoute: typeof DashboardWhatsappIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/website-chat/': {
+      id: '/_dashboard/website-chat/'
+      path: '/website-chat'
+      fullPath: '/website-chat/'
+      preLoaderRoute: typeof DashboardWebsiteChatIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/sms/': {
@@ -951,6 +984,13 @@ declare module '@tanstack/react-router' {
       path: '/intelligence/autopilot'
       fullPath: '/intelligence/autopilot'
       preLoaderRoute: typeof DashboardIntelligenceAutopilotRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/instagram/trends': {
+      id: '/_dashboard/instagram/trends'
+      path: '/instagram/trends'
+      fullPath: '/instagram/trends'
+      preLoaderRoute: typeof DashboardInstagramTrendsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/instagram/create-content': {
@@ -1182,6 +1222,7 @@ interface DashboardRouteChildren {
   DashboardEmailTestRoute: typeof DashboardEmailTestRoute
   DashboardInstagramContentPlannerRoute: typeof DashboardInstagramContentPlannerRoute
   DashboardInstagramCreateContentRoute: typeof DashboardInstagramCreateContentRoute
+  DashboardInstagramTrendsRoute: typeof DashboardInstagramTrendsRoute
   DashboardIntelligenceAutopilotRoute: typeof DashboardIntelligenceAutopilotRoute
   DashboardIntelligenceBrainRoute: typeof DashboardIntelligenceBrainRoute
   DashboardIntelligenceConversationRoute: typeof DashboardIntelligenceConversationRoute
@@ -1203,6 +1244,7 @@ interface DashboardRouteChildren {
   DashboardWhatsappTagsRoute: typeof DashboardWhatsappTagsRoute
   DashboardEmailIndexRoute: typeof DashboardEmailIndexRoute
   DashboardSmsIndexRoute: typeof DashboardSmsIndexRoute
+  DashboardWebsiteChatIndexRoute: typeof DashboardWebsiteChatIndexRoute
   DashboardWhatsappIndexRoute: typeof DashboardWhatsappIndexRoute
   DashboardWhatsappCampaignsNewRoute: typeof DashboardWhatsappCampaignsNewRoute
   DashboardWhatsappTemplatesNewRoute: typeof DashboardWhatsappTemplatesNewRoute
@@ -1234,6 +1276,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardEmailTestRoute: DashboardEmailTestRoute,
   DashboardInstagramContentPlannerRoute: DashboardInstagramContentPlannerRoute,
   DashboardInstagramCreateContentRoute: DashboardInstagramCreateContentRoute,
+  DashboardInstagramTrendsRoute: DashboardInstagramTrendsRoute,
   DashboardIntelligenceAutopilotRoute: DashboardIntelligenceAutopilotRoute,
   DashboardIntelligenceBrainRoute: DashboardIntelligenceBrainRoute,
   DashboardIntelligenceConversationRoute:
@@ -1256,6 +1299,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardWhatsappTagsRoute: DashboardWhatsappTagsRoute,
   DashboardEmailIndexRoute: DashboardEmailIndexRoute,
   DashboardSmsIndexRoute: DashboardSmsIndexRoute,
+  DashboardWebsiteChatIndexRoute: DashboardWebsiteChatIndexRoute,
   DashboardWhatsappIndexRoute: DashboardWhatsappIndexRoute,
   DashboardWhatsappCampaignsNewRoute: DashboardWhatsappCampaignsNewRoute,
   DashboardWhatsappTemplatesNewRoute: DashboardWhatsappTemplatesNewRoute,
@@ -1279,3 +1323,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
