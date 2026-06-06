@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { X } from "lucide-react";
 import {
   Activity,
   AlertCircle,
@@ -48,8 +49,22 @@ const TABS = [
   "Health",
 ];
 
+const QUICK_TO_TAB: Record<string, string> = {
+  "Test Lab": "Test Lab",
+  "Schedule Meeting": "Schedule",
+  "Browse Avatars": "Avatars",
+  "Health Check": "Health",
+};
+
 function AvatarManagePage() {
   const [tab, setTab] = useState("Overview");
+  const [meetingOpen, setMeetingOpen] = useState(false);
+  const [meetingForm, setMeetingForm] = useState({
+    customer: "",
+    email: "",
+    agent: "Dental Assistant",
+    when: "",
+  });
 
   return (
     <div className="font-sans">
@@ -82,7 +97,10 @@ function AvatarManagePage() {
               {b}
             </button>
           ))}
-          <button className="h-9 px-4 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold">
+          <button
+            onClick={() => setMeetingOpen(true)}
+            className="h-9 px-4 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold"
+          >
             + New Meeting
           </button>
         </div>
@@ -116,9 +134,10 @@ function AvatarManagePage() {
             desc: "API & webhooks",
           },
         ].map(({ icon: Icon, tone, name, desc }) => (
-          <div
+          <button
             key={name}
-            className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-5 py-4 flex items-center justify-between cursor-pointer hover:border-[#7B5CFC]/30 transition-all"
+            onClick={() => setTab(QUICK_TO_TAB[name] ?? "Overview")}
+            className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-5 py-4 flex items-center justify-between cursor-pointer hover:border-[#7B5CFC]/30 transition-all text-left"
           >
             <div className="flex items-center gap-3">
               <Icon size={20} className={tone} />
@@ -128,7 +147,7 @@ function AvatarManagePage() {
               </div>
             </div>
             <ChevronRight size={16} className="text-[#4A4A6A]" />
-          </div>
+          </button>
         ))}
       </div>
 
@@ -298,6 +317,98 @@ function AvatarManagePage() {
       {tab !== "Overview" && (
         <div className="px-6 py-16 text-center text-[#4A4A6A] text-sm">
           {tab} coming soon.
+        </div>
+      )}
+
+      {meetingOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center"
+          onClick={() => setMeetingOpen(false)}
+        >
+          <div
+            className="bg-[#0B0B1A] border border-[#1C1C34] rounded-2xl w-[460px] p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <div className="text-white font-semibold text-lg">New Meeting</div>
+                <div className="text-[#4A4A6A] text-xs mt-0.5">
+                  Schedule an avatar-led session
+                </div>
+              </div>
+              <button
+                onClick={() => setMeetingOpen(false)}
+                className="text-[#4A4A6A] hover:text-white"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="space-y-3">
+              {[
+                { k: "customer", l: "Customer name", t: "text", p: "Jane Doe" },
+                { k: "email", l: "Email", t: "email", p: "jane@example.com" },
+              ].map((f) => (
+                <div key={f.k}>
+                  <label className="text-[#8B8FA8] text-xs">{f.l}</label>
+                  <input
+                    type={f.t}
+                    placeholder={f.p}
+                    value={meetingForm[f.k as keyof typeof meetingForm]}
+                    onChange={(e) =>
+                      setMeetingForm({ ...meetingForm, [f.k]: e.target.value })
+                    }
+                    className="mt-1 w-full h-10 bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/40"
+                  />
+                </div>
+              ))}
+              <div>
+                <label className="text-[#8B8FA8] text-xs">Agent</label>
+                <select
+                  value={meetingForm.agent}
+                  onChange={(e) =>
+                    setMeetingForm({ ...meetingForm, agent: e.target.value })
+                  }
+                  className="mt-1 w-full h-10 bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 text-white text-sm"
+                >
+                  <option>Dental Assistant</option>
+                  <option>Sarah</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[#8B8FA8] text-xs">When</label>
+                <input
+                  type="datetime-local"
+                  value={meetingForm.when}
+                  onChange={(e) =>
+                    setMeetingForm({ ...meetingForm, when: e.target.value })
+                  }
+                  className="mt-1 w-full h-10 bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 text-white text-sm"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 mt-5">
+              <button
+                onClick={() => setMeetingOpen(false)}
+                className="flex-1 h-10 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setMeetingOpen(false);
+                  setMeetingForm({
+                    customer: "",
+                    email: "",
+                    agent: "Dental Assistant",
+                    when: "",
+                  });
+                }}
+                className="flex-1 h-10 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold"
+              >
+                Create meeting
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
