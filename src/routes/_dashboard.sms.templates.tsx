@@ -38,7 +38,7 @@ function SmsTemplates() {
             <p className="text-[#4A4A6A] text-sm">0 templates · 0 categories</p>
           </div>
         </div>
-        <button className="h-9 px-4 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-semibold">+ New Template</button>
+        <button onClick={() => setTplOpen(true)} className="h-9 px-4 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-semibold">+ New Template</button>
       </div>
 
       <div className="px-6 mb-5 overflow-x-auto flex gap-3">
