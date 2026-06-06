@@ -18,6 +18,7 @@ import { Route as DashboardRouteImport } from './routes/_dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard.dashboard'
 import { Route as DashboardWhatsappIndexRouteImport } from './routes/_dashboard.whatsapp.index'
+import { Route as DashboardWebsiteChatIndexRouteImport } from './routes/_dashboard.website-chat.index'
 import { Route as DashboardSmsIndexRouteImport } from './routes/_dashboard.sms.index'
 import { Route as DashboardEmailIndexRouteImport } from './routes/_dashboard.email.index'
 import { Route as DashboardWhatsappTagsRouteImport } from './routes/_dashboard.whatsapp.tags'
@@ -27,6 +28,10 @@ import { Route as DashboardWhatsappLiveAgentRouteImport } from './routes/_dashbo
 import { Route as DashboardWhatsappInboxRouteImport } from './routes/_dashboard.whatsapp.inbox'
 import { Route as DashboardWhatsappContactsRouteImport } from './routes/_dashboard.whatsapp.contacts'
 import { Route as DashboardWhatsappChatbotRouteImport } from './routes/_dashboard.whatsapp.chatbot'
+import { Route as DashboardWebsiteChatWidgetsRouteImport } from './routes/_dashboard.website-chat.widgets'
+import { Route as DashboardWebsiteChatVisitorsRouteImport } from './routes/_dashboard.website-chat.visitors'
+import { Route as DashboardWebsiteChatReportsRouteImport } from './routes/_dashboard.website-chat.reports'
+import { Route as DashboardWebsiteChatConversationsRouteImport } from './routes/_dashboard.website-chat.conversations'
 import { Route as DashboardSmsTemplatesRouteImport } from './routes/_dashboard.sms.templates'
 import { Route as DashboardSmsSetupRouteImport } from './routes/_dashboard.sms.setup'
 import { Route as DashboardSmsReportsRouteImport } from './routes/_dashboard.sms.reports'
@@ -39,6 +44,18 @@ import { Route as DashboardIntelligenceDealCloserRouteImport } from './routes/_d
 import { Route as DashboardIntelligenceConversationRouteImport } from './routes/_dashboard.intelligence.conversation'
 import { Route as DashboardIntelligenceBrainRouteImport } from './routes/_dashboard.intelligence.brain'
 import { Route as DashboardIntelligenceAutopilotRouteImport } from './routes/_dashboard.intelligence.autopilot'
+import { Route as DashboardInstagramTrendsRouteImport } from './routes/_dashboard.instagram.trends'
+import { Route as DashboardInstagramCreateContentRouteImport } from './routes/_dashboard.instagram.create-content'
+import { Route as DashboardInstagramContentPlannerRouteImport } from './routes/_dashboard.instagram.content-planner'
+import { Route as DashboardEngageUpcomingCallsRouteImport } from './routes/_dashboard.engage.upcoming-calls'
+import { Route as DashboardEngageTeamRouteImport } from './routes/_dashboard.engage.team'
+import { Route as DashboardEngageRemindersRouteImport } from './routes/_dashboard.engage.reminders'
+import { Route as DashboardEngageLiveMonitoringRouteImport } from './routes/_dashboard.engage.live-monitoring'
+import { Route as DashboardEngageLeadsRouteImport } from './routes/_dashboard.engage.leads'
+import { Route as DashboardEngageCallStatusRouteImport } from './routes/_dashboard.engage.call-status'
+import { Route as DashboardEngageCallScriptsRouteImport } from './routes/_dashboard.engage.call-scripts'
+import { Route as DashboardEngageCallHistoryRouteImport } from './routes/_dashboard.engage.call-history'
+import { Route as DashboardEngageAdvancedAnalyticsRouteImport } from './routes/_dashboard.engage.advanced-analytics'
 import { Route as DashboardEmailTestRouteImport } from './routes/_dashboard.email.test'
 import { Route as DashboardEmailTemplatesRouteImport } from './routes/_dashboard.email.templates'
 import { Route as DashboardEmailSetupRouteImport } from './routes/_dashboard.email.setup'
@@ -109,6 +126,12 @@ const DashboardWhatsappIndexRoute = DashboardWhatsappIndexRouteImport.update({
   path: '/whatsapp/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardWebsiteChatIndexRoute =
+  DashboardWebsiteChatIndexRouteImport.update({
+    id: '/website-chat/',
+    path: '/website-chat/',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardSmsIndexRoute = DashboardSmsIndexRouteImport.update({
   id: '/sms/',
   path: '/sms/',
@@ -156,6 +179,30 @@ const DashboardWhatsappChatbotRoute =
   DashboardWhatsappChatbotRouteImport.update({
     id: '/whatsapp/chatbot',
     path: '/whatsapp/chatbot',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardWebsiteChatWidgetsRoute =
+  DashboardWebsiteChatWidgetsRouteImport.update({
+    id: '/website-chat/widgets',
+    path: '/website-chat/widgets',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardWebsiteChatVisitorsRoute =
+  DashboardWebsiteChatVisitorsRouteImport.update({
+    id: '/website-chat/visitors',
+    path: '/website-chat/visitors',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardWebsiteChatReportsRoute =
+  DashboardWebsiteChatReportsRouteImport.update({
+    id: '/website-chat/reports',
+    path: '/website-chat/reports',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardWebsiteChatConversationsRoute =
+  DashboardWebsiteChatConversationsRouteImport.update({
+    id: '/website-chat/conversations',
+    path: '/website-chat/conversations',
     getParentRoute: () => DashboardRoute,
   } as any)
 const DashboardSmsTemplatesRoute = DashboardSmsTemplatesRouteImport.update({
@@ -222,6 +269,76 @@ const DashboardIntelligenceAutopilotRoute =
   DashboardIntelligenceAutopilotRouteImport.update({
     id: '/intelligence/autopilot',
     path: '/intelligence/autopilot',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardInstagramTrendsRoute =
+  DashboardInstagramTrendsRouteImport.update({
+    id: '/instagram/trends',
+    path: '/instagram/trends',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardInstagramCreateContentRoute =
+  DashboardInstagramCreateContentRouteImport.update({
+    id: '/instagram/create-content',
+    path: '/instagram/create-content',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardInstagramContentPlannerRoute =
+  DashboardInstagramContentPlannerRouteImport.update({
+    id: '/instagram/content-planner',
+    path: '/instagram/content-planner',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEngageUpcomingCallsRoute =
+  DashboardEngageUpcomingCallsRouteImport.update({
+    id: '/engage/upcoming-calls',
+    path: '/engage/upcoming-calls',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEngageTeamRoute = DashboardEngageTeamRouteImport.update({
+  id: '/engage/team',
+  path: '/engage/team',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEngageRemindersRoute =
+  DashboardEngageRemindersRouteImport.update({
+    id: '/engage/reminders',
+    path: '/engage/reminders',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEngageLiveMonitoringRoute =
+  DashboardEngageLiveMonitoringRouteImport.update({
+    id: '/engage/live-monitoring',
+    path: '/engage/live-monitoring',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEngageLeadsRoute = DashboardEngageLeadsRouteImport.update({
+  id: '/engage/leads',
+  path: '/engage/leads',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEngageCallStatusRoute =
+  DashboardEngageCallStatusRouteImport.update({
+    id: '/engage/call-status',
+    path: '/engage/call-status',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEngageCallScriptsRoute =
+  DashboardEngageCallScriptsRouteImport.update({
+    id: '/engage/call-scripts',
+    path: '/engage/call-scripts',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEngageCallHistoryRoute =
+  DashboardEngageCallHistoryRouteImport.update({
+    id: '/engage/call-history',
+    path: '/engage/call-history',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEngageAdvancedAnalyticsRoute =
+  DashboardEngageAdvancedAnalyticsRouteImport.update({
+    id: '/engage/advanced-analytics',
+    path: '/engage/advanced-analytics',
     getParentRoute: () => DashboardRoute,
   } as any)
 const DashboardEmailTestRoute = DashboardEmailTestRouteImport.update({
@@ -391,6 +508,18 @@ export interface FileRoutesByFullPath {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/engage/advanced-analytics': typeof DashboardEngageAdvancedAnalyticsRoute
+  '/engage/call-history': typeof DashboardEngageCallHistoryRoute
+  '/engage/call-scripts': typeof DashboardEngageCallScriptsRoute
+  '/engage/call-status': typeof DashboardEngageCallStatusRoute
+  '/engage/leads': typeof DashboardEngageLeadsRoute
+  '/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
+  '/engage/reminders': typeof DashboardEngageRemindersRoute
+  '/engage/team': typeof DashboardEngageTeamRoute
+  '/engage/upcoming-calls': typeof DashboardEngageUpcomingCallsRoute
+  '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
+  '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
+  '/instagram/trends': typeof DashboardInstagramTrendsRoute
   '/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
   '/intelligence/brain': typeof DashboardIntelligenceBrainRoute
   '/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
@@ -403,6 +532,10 @@ export interface FileRoutesByFullPath {
   '/sms/reports': typeof DashboardSmsReportsRoute
   '/sms/setup': typeof DashboardSmsSetupRoute
   '/sms/templates': typeof DashboardSmsTemplatesRoute
+  '/website-chat/conversations': typeof DashboardWebsiteChatConversationsRoute
+  '/website-chat/reports': typeof DashboardWebsiteChatReportsRoute
+  '/website-chat/visitors': typeof DashboardWebsiteChatVisitorsRoute
+  '/website-chat/widgets': typeof DashboardWebsiteChatWidgetsRoute
   '/whatsapp/chatbot': typeof DashboardWhatsappChatbotRoute
   '/whatsapp/contacts': typeof DashboardWhatsappContactsRoute
   '/whatsapp/inbox': typeof DashboardWhatsappInboxRoute
@@ -412,6 +545,7 @@ export interface FileRoutesByFullPath {
   '/whatsapp/tags': typeof DashboardWhatsappTagsRoute
   '/email/': typeof DashboardEmailIndexRoute
   '/sms/': typeof DashboardSmsIndexRoute
+  '/website-chat/': typeof DashboardWebsiteChatIndexRoute
   '/whatsapp/': typeof DashboardWhatsappIndexRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
@@ -447,6 +581,18 @@ export interface FileRoutesByTo {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/engage/advanced-analytics': typeof DashboardEngageAdvancedAnalyticsRoute
+  '/engage/call-history': typeof DashboardEngageCallHistoryRoute
+  '/engage/call-scripts': typeof DashboardEngageCallScriptsRoute
+  '/engage/call-status': typeof DashboardEngageCallStatusRoute
+  '/engage/leads': typeof DashboardEngageLeadsRoute
+  '/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
+  '/engage/reminders': typeof DashboardEngageRemindersRoute
+  '/engage/team': typeof DashboardEngageTeamRoute
+  '/engage/upcoming-calls': typeof DashboardEngageUpcomingCallsRoute
+  '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
+  '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
+  '/instagram/trends': typeof DashboardInstagramTrendsRoute
   '/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
   '/intelligence/brain': typeof DashboardIntelligenceBrainRoute
   '/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
@@ -459,6 +605,10 @@ export interface FileRoutesByTo {
   '/sms/reports': typeof DashboardSmsReportsRoute
   '/sms/setup': typeof DashboardSmsSetupRoute
   '/sms/templates': typeof DashboardSmsTemplatesRoute
+  '/website-chat/conversations': typeof DashboardWebsiteChatConversationsRoute
+  '/website-chat/reports': typeof DashboardWebsiteChatReportsRoute
+  '/website-chat/visitors': typeof DashboardWebsiteChatVisitorsRoute
+  '/website-chat/widgets': typeof DashboardWebsiteChatWidgetsRoute
   '/whatsapp/chatbot': typeof DashboardWhatsappChatbotRoute
   '/whatsapp/contacts': typeof DashboardWhatsappContactsRoute
   '/whatsapp/inbox': typeof DashboardWhatsappInboxRoute
@@ -468,6 +618,7 @@ export interface FileRoutesByTo {
   '/whatsapp/tags': typeof DashboardWhatsappTagsRoute
   '/email': typeof DashboardEmailIndexRoute
   '/sms': typeof DashboardSmsIndexRoute
+  '/website-chat': typeof DashboardWebsiteChatIndexRoute
   '/whatsapp': typeof DashboardWhatsappIndexRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
@@ -505,6 +656,18 @@ export interface FileRoutesById {
   '/_dashboard/email/setup': typeof DashboardEmailSetupRoute
   '/_dashboard/email/templates': typeof DashboardEmailTemplatesRoute
   '/_dashboard/email/test': typeof DashboardEmailTestRoute
+  '/_dashboard/engage/advanced-analytics': typeof DashboardEngageAdvancedAnalyticsRoute
+  '/_dashboard/engage/call-history': typeof DashboardEngageCallHistoryRoute
+  '/_dashboard/engage/call-scripts': typeof DashboardEngageCallScriptsRoute
+  '/_dashboard/engage/call-status': typeof DashboardEngageCallStatusRoute
+  '/_dashboard/engage/leads': typeof DashboardEngageLeadsRoute
+  '/_dashboard/engage/live-monitoring': typeof DashboardEngageLiveMonitoringRoute
+  '/_dashboard/engage/reminders': typeof DashboardEngageRemindersRoute
+  '/_dashboard/engage/team': typeof DashboardEngageTeamRoute
+  '/_dashboard/engage/upcoming-calls': typeof DashboardEngageUpcomingCallsRoute
+  '/_dashboard/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
+  '/_dashboard/instagram/create-content': typeof DashboardInstagramCreateContentRoute
+  '/_dashboard/instagram/trends': typeof DashboardInstagramTrendsRoute
   '/_dashboard/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
   '/_dashboard/intelligence/brain': typeof DashboardIntelligenceBrainRoute
   '/_dashboard/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
@@ -517,6 +680,10 @@ export interface FileRoutesById {
   '/_dashboard/sms/reports': typeof DashboardSmsReportsRoute
   '/_dashboard/sms/setup': typeof DashboardSmsSetupRoute
   '/_dashboard/sms/templates': typeof DashboardSmsTemplatesRoute
+  '/_dashboard/website-chat/conversations': typeof DashboardWebsiteChatConversationsRoute
+  '/_dashboard/website-chat/reports': typeof DashboardWebsiteChatReportsRoute
+  '/_dashboard/website-chat/visitors': typeof DashboardWebsiteChatVisitorsRoute
+  '/_dashboard/website-chat/widgets': typeof DashboardWebsiteChatWidgetsRoute
   '/_dashboard/whatsapp/chatbot': typeof DashboardWhatsappChatbotRoute
   '/_dashboard/whatsapp/contacts': typeof DashboardWhatsappContactsRoute
   '/_dashboard/whatsapp/inbox': typeof DashboardWhatsappInboxRoute
@@ -526,6 +693,7 @@ export interface FileRoutesById {
   '/_dashboard/whatsapp/tags': typeof DashboardWhatsappTagsRoute
   '/_dashboard/email/': typeof DashboardEmailIndexRoute
   '/_dashboard/sms/': typeof DashboardSmsIndexRoute
+  '/_dashboard/website-chat/': typeof DashboardWebsiteChatIndexRoute
   '/_dashboard/whatsapp/': typeof DashboardWhatsappIndexRoute
   '/_dashboard/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
   '/_dashboard/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
@@ -563,6 +731,18 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/engage/advanced-analytics'
+    | '/engage/call-history'
+    | '/engage/call-scripts'
+    | '/engage/call-status'
+    | '/engage/leads'
+    | '/engage/live-monitoring'
+    | '/engage/reminders'
+    | '/engage/team'
+    | '/engage/upcoming-calls'
+    | '/instagram/content-planner'
+    | '/instagram/create-content'
+    | '/instagram/trends'
     | '/intelligence/autopilot'
     | '/intelligence/brain'
     | '/intelligence/conversation'
@@ -575,6 +755,10 @@ export interface FileRouteTypes {
     | '/sms/reports'
     | '/sms/setup'
     | '/sms/templates'
+    | '/website-chat/conversations'
+    | '/website-chat/reports'
+    | '/website-chat/visitors'
+    | '/website-chat/widgets'
     | '/whatsapp/chatbot'
     | '/whatsapp/contacts'
     | '/whatsapp/inbox'
@@ -584,6 +768,7 @@ export interface FileRouteTypes {
     | '/whatsapp/tags'
     | '/email/'
     | '/sms/'
+    | '/website-chat/'
     | '/whatsapp/'
     | '/agents/studio/$id'
     | '/whatsapp/campaigns/new'
@@ -619,6 +804,18 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/engage/advanced-analytics'
+    | '/engage/call-history'
+    | '/engage/call-scripts'
+    | '/engage/call-status'
+    | '/engage/leads'
+    | '/engage/live-monitoring'
+    | '/engage/reminders'
+    | '/engage/team'
+    | '/engage/upcoming-calls'
+    | '/instagram/content-planner'
+    | '/instagram/create-content'
+    | '/instagram/trends'
     | '/intelligence/autopilot'
     | '/intelligence/brain'
     | '/intelligence/conversation'
@@ -631,6 +828,10 @@ export interface FileRouteTypes {
     | '/sms/reports'
     | '/sms/setup'
     | '/sms/templates'
+    | '/website-chat/conversations'
+    | '/website-chat/reports'
+    | '/website-chat/visitors'
+    | '/website-chat/widgets'
     | '/whatsapp/chatbot'
     | '/whatsapp/contacts'
     | '/whatsapp/inbox'
@@ -640,6 +841,7 @@ export interface FileRouteTypes {
     | '/whatsapp/tags'
     | '/email'
     | '/sms'
+    | '/website-chat'
     | '/whatsapp'
     | '/agents/studio/$id'
     | '/whatsapp/campaigns/new'
@@ -676,6 +878,18 @@ export interface FileRouteTypes {
     | '/_dashboard/email/setup'
     | '/_dashboard/email/templates'
     | '/_dashboard/email/test'
+    | '/_dashboard/engage/advanced-analytics'
+    | '/_dashboard/engage/call-history'
+    | '/_dashboard/engage/call-scripts'
+    | '/_dashboard/engage/call-status'
+    | '/_dashboard/engage/leads'
+    | '/_dashboard/engage/live-monitoring'
+    | '/_dashboard/engage/reminders'
+    | '/_dashboard/engage/team'
+    | '/_dashboard/engage/upcoming-calls'
+    | '/_dashboard/instagram/content-planner'
+    | '/_dashboard/instagram/create-content'
+    | '/_dashboard/instagram/trends'
     | '/_dashboard/intelligence/autopilot'
     | '/_dashboard/intelligence/brain'
     | '/_dashboard/intelligence/conversation'
@@ -688,6 +902,10 @@ export interface FileRouteTypes {
     | '/_dashboard/sms/reports'
     | '/_dashboard/sms/setup'
     | '/_dashboard/sms/templates'
+    | '/_dashboard/website-chat/conversations'
+    | '/_dashboard/website-chat/reports'
+    | '/_dashboard/website-chat/visitors'
+    | '/_dashboard/website-chat/widgets'
     | '/_dashboard/whatsapp/chatbot'
     | '/_dashboard/whatsapp/contacts'
     | '/_dashboard/whatsapp/inbox'
@@ -697,6 +915,7 @@ export interface FileRouteTypes {
     | '/_dashboard/whatsapp/tags'
     | '/_dashboard/email/'
     | '/_dashboard/sms/'
+    | '/_dashboard/website-chat/'
     | '/_dashboard/whatsapp/'
     | '/_dashboard/agents/studio/$id'
     | '/_dashboard/whatsapp/campaigns/new'
@@ -780,6 +999,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardWhatsappIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/website-chat/': {
+      id: '/_dashboard/website-chat/'
+      path: '/website-chat'
+      fullPath: '/website-chat/'
+      preLoaderRoute: typeof DashboardWebsiteChatIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/sms/': {
       id: '/_dashboard/sms/'
       path: '/sms'
@@ -841,6 +1067,34 @@ declare module '@tanstack/react-router' {
       path: '/whatsapp/chatbot'
       fullPath: '/whatsapp/chatbot'
       preLoaderRoute: typeof DashboardWhatsappChatbotRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/website-chat/widgets': {
+      id: '/_dashboard/website-chat/widgets'
+      path: '/website-chat/widgets'
+      fullPath: '/website-chat/widgets'
+      preLoaderRoute: typeof DashboardWebsiteChatWidgetsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/website-chat/visitors': {
+      id: '/_dashboard/website-chat/visitors'
+      path: '/website-chat/visitors'
+      fullPath: '/website-chat/visitors'
+      preLoaderRoute: typeof DashboardWebsiteChatVisitorsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/website-chat/reports': {
+      id: '/_dashboard/website-chat/reports'
+      path: '/website-chat/reports'
+      fullPath: '/website-chat/reports'
+      preLoaderRoute: typeof DashboardWebsiteChatReportsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/website-chat/conversations': {
+      id: '/_dashboard/website-chat/conversations'
+      path: '/website-chat/conversations'
+      fullPath: '/website-chat/conversations'
+      preLoaderRoute: typeof DashboardWebsiteChatConversationsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/sms/templates': {
@@ -925,6 +1179,90 @@ declare module '@tanstack/react-router' {
       path: '/intelligence/autopilot'
       fullPath: '/intelligence/autopilot'
       preLoaderRoute: typeof DashboardIntelligenceAutopilotRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/instagram/trends': {
+      id: '/_dashboard/instagram/trends'
+      path: '/instagram/trends'
+      fullPath: '/instagram/trends'
+      preLoaderRoute: typeof DashboardInstagramTrendsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/instagram/create-content': {
+      id: '/_dashboard/instagram/create-content'
+      path: '/instagram/create-content'
+      fullPath: '/instagram/create-content'
+      preLoaderRoute: typeof DashboardInstagramCreateContentRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/instagram/content-planner': {
+      id: '/_dashboard/instagram/content-planner'
+      path: '/instagram/content-planner'
+      fullPath: '/instagram/content-planner'
+      preLoaderRoute: typeof DashboardInstagramContentPlannerRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/upcoming-calls': {
+      id: '/_dashboard/engage/upcoming-calls'
+      path: '/engage/upcoming-calls'
+      fullPath: '/engage/upcoming-calls'
+      preLoaderRoute: typeof DashboardEngageUpcomingCallsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/team': {
+      id: '/_dashboard/engage/team'
+      path: '/engage/team'
+      fullPath: '/engage/team'
+      preLoaderRoute: typeof DashboardEngageTeamRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/reminders': {
+      id: '/_dashboard/engage/reminders'
+      path: '/engage/reminders'
+      fullPath: '/engage/reminders'
+      preLoaderRoute: typeof DashboardEngageRemindersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/live-monitoring': {
+      id: '/_dashboard/engage/live-monitoring'
+      path: '/engage/live-monitoring'
+      fullPath: '/engage/live-monitoring'
+      preLoaderRoute: typeof DashboardEngageLiveMonitoringRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/leads': {
+      id: '/_dashboard/engage/leads'
+      path: '/engage/leads'
+      fullPath: '/engage/leads'
+      preLoaderRoute: typeof DashboardEngageLeadsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/call-status': {
+      id: '/_dashboard/engage/call-status'
+      path: '/engage/call-status'
+      fullPath: '/engage/call-status'
+      preLoaderRoute: typeof DashboardEngageCallStatusRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/call-scripts': {
+      id: '/_dashboard/engage/call-scripts'
+      path: '/engage/call-scripts'
+      fullPath: '/engage/call-scripts'
+      preLoaderRoute: typeof DashboardEngageCallScriptsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/call-history': {
+      id: '/_dashboard/engage/call-history'
+      path: '/engage/call-history'
+      fullPath: '/engage/call-history'
+      preLoaderRoute: typeof DashboardEngageCallHistoryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/engage/advanced-analytics': {
+      id: '/_dashboard/engage/advanced-analytics'
+      path: '/engage/advanced-analytics'
+      fullPath: '/engage/advanced-analytics'
+      preLoaderRoute: typeof DashboardEngageAdvancedAnalyticsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/email/test': {
@@ -1140,6 +1478,18 @@ interface DashboardRouteChildren {
   DashboardEmailSetupRoute: typeof DashboardEmailSetupRoute
   DashboardEmailTemplatesRoute: typeof DashboardEmailTemplatesRoute
   DashboardEmailTestRoute: typeof DashboardEmailTestRoute
+  DashboardEngageAdvancedAnalyticsRoute: typeof DashboardEngageAdvancedAnalyticsRoute
+  DashboardEngageCallHistoryRoute: typeof DashboardEngageCallHistoryRoute
+  DashboardEngageCallScriptsRoute: typeof DashboardEngageCallScriptsRoute
+  DashboardEngageCallStatusRoute: typeof DashboardEngageCallStatusRoute
+  DashboardEngageLeadsRoute: typeof DashboardEngageLeadsRoute
+  DashboardEngageLiveMonitoringRoute: typeof DashboardEngageLiveMonitoringRoute
+  DashboardEngageRemindersRoute: typeof DashboardEngageRemindersRoute
+  DashboardEngageTeamRoute: typeof DashboardEngageTeamRoute
+  DashboardEngageUpcomingCallsRoute: typeof DashboardEngageUpcomingCallsRoute
+  DashboardInstagramContentPlannerRoute: typeof DashboardInstagramContentPlannerRoute
+  DashboardInstagramCreateContentRoute: typeof DashboardInstagramCreateContentRoute
+  DashboardInstagramTrendsRoute: typeof DashboardInstagramTrendsRoute
   DashboardIntelligenceAutopilotRoute: typeof DashboardIntelligenceAutopilotRoute
   DashboardIntelligenceBrainRoute: typeof DashboardIntelligenceBrainRoute
   DashboardIntelligenceConversationRoute: typeof DashboardIntelligenceConversationRoute
@@ -1152,6 +1502,10 @@ interface DashboardRouteChildren {
   DashboardSmsReportsRoute: typeof DashboardSmsReportsRoute
   DashboardSmsSetupRoute: typeof DashboardSmsSetupRoute
   DashboardSmsTemplatesRoute: typeof DashboardSmsTemplatesRoute
+  DashboardWebsiteChatConversationsRoute: typeof DashboardWebsiteChatConversationsRoute
+  DashboardWebsiteChatReportsRoute: typeof DashboardWebsiteChatReportsRoute
+  DashboardWebsiteChatVisitorsRoute: typeof DashboardWebsiteChatVisitorsRoute
+  DashboardWebsiteChatWidgetsRoute: typeof DashboardWebsiteChatWidgetsRoute
   DashboardWhatsappChatbotRoute: typeof DashboardWhatsappChatbotRoute
   DashboardWhatsappContactsRoute: typeof DashboardWhatsappContactsRoute
   DashboardWhatsappInboxRoute: typeof DashboardWhatsappInboxRoute
@@ -1161,6 +1515,7 @@ interface DashboardRouteChildren {
   DashboardWhatsappTagsRoute: typeof DashboardWhatsappTagsRoute
   DashboardEmailIndexRoute: typeof DashboardEmailIndexRoute
   DashboardSmsIndexRoute: typeof DashboardSmsIndexRoute
+  DashboardWebsiteChatIndexRoute: typeof DashboardWebsiteChatIndexRoute
   DashboardWhatsappIndexRoute: typeof DashboardWhatsappIndexRoute
   DashboardWhatsappCampaignsNewRoute: typeof DashboardWhatsappCampaignsNewRoute
   DashboardWhatsappTemplatesNewRoute: typeof DashboardWhatsappTemplatesNewRoute
@@ -1190,6 +1545,18 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardEmailSetupRoute: DashboardEmailSetupRoute,
   DashboardEmailTemplatesRoute: DashboardEmailTemplatesRoute,
   DashboardEmailTestRoute: DashboardEmailTestRoute,
+  DashboardEngageAdvancedAnalyticsRoute: DashboardEngageAdvancedAnalyticsRoute,
+  DashboardEngageCallHistoryRoute: DashboardEngageCallHistoryRoute,
+  DashboardEngageCallScriptsRoute: DashboardEngageCallScriptsRoute,
+  DashboardEngageCallStatusRoute: DashboardEngageCallStatusRoute,
+  DashboardEngageLeadsRoute: DashboardEngageLeadsRoute,
+  DashboardEngageLiveMonitoringRoute: DashboardEngageLiveMonitoringRoute,
+  DashboardEngageRemindersRoute: DashboardEngageRemindersRoute,
+  DashboardEngageTeamRoute: DashboardEngageTeamRoute,
+  DashboardEngageUpcomingCallsRoute: DashboardEngageUpcomingCallsRoute,
+  DashboardInstagramContentPlannerRoute: DashboardInstagramContentPlannerRoute,
+  DashboardInstagramCreateContentRoute: DashboardInstagramCreateContentRoute,
+  DashboardInstagramTrendsRoute: DashboardInstagramTrendsRoute,
   DashboardIntelligenceAutopilotRoute: DashboardIntelligenceAutopilotRoute,
   DashboardIntelligenceBrainRoute: DashboardIntelligenceBrainRoute,
   DashboardIntelligenceConversationRoute:
@@ -1203,6 +1570,11 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardSmsReportsRoute: DashboardSmsReportsRoute,
   DashboardSmsSetupRoute: DashboardSmsSetupRoute,
   DashboardSmsTemplatesRoute: DashboardSmsTemplatesRoute,
+  DashboardWebsiteChatConversationsRoute:
+    DashboardWebsiteChatConversationsRoute,
+  DashboardWebsiteChatReportsRoute: DashboardWebsiteChatReportsRoute,
+  DashboardWebsiteChatVisitorsRoute: DashboardWebsiteChatVisitorsRoute,
+  DashboardWebsiteChatWidgetsRoute: DashboardWebsiteChatWidgetsRoute,
   DashboardWhatsappChatbotRoute: DashboardWhatsappChatbotRoute,
   DashboardWhatsappContactsRoute: DashboardWhatsappContactsRoute,
   DashboardWhatsappInboxRoute: DashboardWhatsappInboxRoute,
@@ -1212,6 +1584,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardWhatsappTagsRoute: DashboardWhatsappTagsRoute,
   DashboardEmailIndexRoute: DashboardEmailIndexRoute,
   DashboardSmsIndexRoute: DashboardSmsIndexRoute,
+  DashboardWebsiteChatIndexRoute: DashboardWebsiteChatIndexRoute,
   DashboardWhatsappIndexRoute: DashboardWhatsappIndexRoute,
   DashboardWhatsappCampaignsNewRoute: DashboardWhatsappCampaignsNewRoute,
   DashboardWhatsappTemplatesNewRoute: DashboardWhatsappTemplatesNewRoute,
