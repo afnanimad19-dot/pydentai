@@ -62,13 +62,37 @@ function SmsSetup() {
 
       <div className="px-6 mb-5">
         <div className="flex gap-1 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg p-1 w-fit">
-          {[["ai", "AI Agent"], ["provider", "Provider"], ["settings", "Settings"]].map(([k, l]) => (
-            <button key={k} onClick={() => setTab(k as typeof tab)} className={`px-4 py-2 rounded-md text-sm font-medium ${tab === k ? "bg-[#1C1C34] text-white" : "text-[#8B8FA8] hover:text-white"}`}>{l}</button>
+          {[["provider", "Provider Settings"], ["ai", "AI Agent"], ["templates", "Templates"], ["compliance", "Compliance"]].map(([k, l]) => (
+            <button key={k} onClick={() => setSmsSetupTab(k as typeof smsSetupTab)} className={`px-4 py-2 rounded-md text-sm font-medium ${smsSetupTab === k ? "bg-[#1C1C34] text-white" : "text-[#8B8FA8] hover:text-white"}`}>{l}</button>
           ))}
         </div>
       </div>
 
-      {tab === "ai" && (
+      {smsSetupTab === "provider" && (
+        <div className="px-6">
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5 space-y-4">
+            <div className="flex items-center gap-2"><Link2 size={14} className="text-[#3B82F6]" /><span className="text-white font-semibold text-sm">Twilio Provider</span></div>
+            <div>
+              <label className="text-[#8B8FA8] text-xs uppercase mb-1.5 block">Account SID</label>
+              <input placeholder="AC..." className="w-full h-10 bg-[#06060F] border border-[#1C1C34] rounded-xl px-3 text-white text-sm" />
+            </div>
+            <div>
+              <label className="text-[#8B8FA8] text-xs uppercase mb-1.5 block">Auth Token</label>
+              <input type="password" className="w-full h-10 bg-[#06060F] border border-[#1C1C34] rounded-xl px-3 text-white text-sm" />
+            </div>
+            <div>
+              <label className="text-[#8B8FA8] text-xs uppercase mb-1.5 block">Phone Number</label>
+              <select className="w-full h-10 bg-[#06060F] border border-[#1C1C34] rounded-xl px-3 text-white text-sm"><option>Select a number…</option></select>
+            </div>
+            <div className="flex gap-2 pt-2">
+              <button onClick={() => toast.success("✓ Settings saved")} className="h-9 px-4 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">Save Settings</button>
+              <button onClick={() => toast("Testing connection…")} className="h-9 px-4 rounded-lg border border-[#1C1C34] text-[#8B8FA8] text-sm hover:text-white">Test Connection</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {smsSetupTab === "ai" && (
         <div className="px-6 space-y-4">
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
             <div className="flex items-center gap-3 mb-2">
@@ -82,13 +106,14 @@ function SmsSetup() {
                 <div className="text-white text-sm font-medium">Enable AI Responses</div>
                 <div className="text-[#4A4A6A] text-xs mt-1 max-w-lg">When enabled, your AI agent will automatically respond to incoming SMS messages</div>
               </div>
-              <div className="bg-[#1C1C34] w-10 h-5 rounded-full relative"><div className="absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-[#4A4A6A]" /></div>
+              <button onClick={() => setAiEnabled(!aiEnabled)} className={`w-10 h-5 rounded-full relative transition-colors ${aiEnabled ? "bg-[#3B82F6]" : "bg-[#1C1C34]"}`}>
+                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${aiEnabled ? "left-[22px]" : "left-0.5"}`} />
+              </button>
             </div>
 
             <div className="mt-5 mb-4">
-              <div className="text-[#8B8FA8] text-xs uppercase mb-2">Select AI Agent</div>
-              <select className="bg-[#06060F] border border-[#1C1C34] rounded-xl px-4 py-2.5 w-full text-[#4A4A6A] text-sm"><option>No agent assigned</option></select>
-              <div className="text-[#4A4A6A] text-[11px] mt-1.5">The selected agent will use its knowledge base to respond to messages</div>
+              <div className="text-[#8B8FA8] text-xs uppercase mb-2">System Prompt</div>
+              <textarea placeholder="You are a friendly SMS assistant…" className="w-full min-h-[100px] bg-[#06060F] border border-[#1C1C34] rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#3B82F6]/40" />
             </div>
 
             <div className="flex justify-between items-start py-5 border-t border-[#1C1C34]">
@@ -96,12 +121,13 @@ function SmsSetup() {
                 <div className="text-white text-sm font-medium">Auto-respond to Incoming Messages</div>
                 <div className="text-[#4A4A6A] text-xs mt-1">Automatically send AI responses when new SMS messages are received</div>
               </div>
-              <div className="bg-[#1C1C34] w-10 h-5 rounded-full relative"><div className="absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-[#4A4A6A]" /></div>
+              <button onClick={() => setAutoRespond(!autoRespond)} className={`w-10 h-5 rounded-full relative transition-colors ${autoRespond ? "bg-[#3B82F6]" : "bg-[#1C1C34]"}`}>
+                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${autoRespond ? "left-[22px]" : "left-0.5"}`} />
+              </button>
             </div>
 
             <div className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-4 mt-4">
               <div className="flex items-center gap-2 mb-3"><Info size={14} className="text-[#3B82F6]" /><span className="text-white text-sm font-medium">How it works</span></div>
-              <div className="text-[#8B8FA8] text-sm mb-2">When someone replies to your SMS campaign or sends a message to your number:</div>
               <div className="space-y-1.5 mt-2">
                 {BULLETS.map((b) => (
                   <div key={b} className="flex items-start gap-2">
@@ -111,6 +137,7 @@ function SmsSetup() {
                 ))}
               </div>
             </div>
+            <button onClick={() => toast.success("✓ AI settings saved")} className="mt-4 h-9 px-4 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">Save</button>
           </div>
 
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
@@ -119,25 +146,54 @@ function SmsSetup() {
               <div>
                 <div className="text-[#8B8FA8] text-xs uppercase mb-2">Response Delay (seconds)</div>
                 <input defaultValue="2" className="w-full h-10 bg-[#06060F] border border-[#1C1C34] rounded-xl px-3 text-white text-sm" />
-                <div className="text-[#4A4A6A] text-[11px] mt-1.5">Add a natural delay before sending AI response</div>
               </div>
               <div>
                 <div className="text-[#8B8FA8] text-xs uppercase mb-2">Max Response Length (chars)</div>
                 <input defaultValue="320" className="w-full h-10 bg-[#06060F] border border-[#1C1C34] rounded-xl px-3 text-white text-sm" />
-                <div className="text-[#4A4A6A] text-[11px] mt-1.5">Limit response length (160 = 1 SMS segment)</div>
               </div>
             </div>
-            <button className="mt-4 h-9 px-4 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">Save Settings</button>
+            <button onClick={() => toast.success("✓ Settings saved")} className="mt-4 h-9 px-4 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">Save Settings</button>
           </div>
         </div>
       )}
 
-      {tab !== "ai" && (
+      {smsSetupTab === "templates" && (
         <div className="px-6">
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl py-16 flex flex-col items-center text-center">
             <Settings size={40} className="text-[#1C1C34] mb-3" />
-            <div className="text-white text-lg font-semibold mb-1">{tab === "provider" ? "Provider Configuration" : "Settings"}</div>
-            <div className="text-[#4A4A6A] text-sm max-w-sm">{tab === "provider" ? "Connect Twilio, Vonage, or another SMS provider to start sending messages." : "Advanced sending limits, opt-out rules, and webhooks."}</div>
+            <div className="text-white text-lg font-semibold mb-1">Saved Templates</div>
+            <div className="text-[#4A4A6A] text-sm max-w-sm mb-4">Manage SMS templates in the Templates tab.</div>
+            <button onClick={() => navigate({ to: "/sms/templates" })} className="h-9 px-4 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">Go to Templates</button>
+          </div>
+        </div>
+      )}
+
+      {smsSetupTab === "compliance" && (
+        <div className="px-6">
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5 space-y-4">
+            <div className="flex justify-between items-start py-3 border-b border-[#1C1C34]">
+              <div>
+                <div className="text-white text-sm font-medium">STOP Keyword Handling</div>
+                <div className="text-[#4A4A6A] text-xs mt-1">Automatically opt-out users who reply STOP</div>
+              </div>
+              <button onClick={() => setStopKw(!stopKw)} className={`w-10 h-5 rounded-full relative transition-colors ${stopKw ? "bg-[#3B82F6]" : "bg-[#1C1C34]"}`}>
+                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${stopKw ? "left-[22px]" : "left-0.5"}`} />
+              </button>
+            </div>
+            <div>
+              <label className="text-[#8B8FA8] text-xs uppercase mb-1.5 block">Opt-out Auto-reply</label>
+              <textarea defaultValue="You have been unsubscribed. Reply START to opt back in." className="w-full min-h-[80px] bg-[#06060F] border border-[#1C1C34] rounded-xl p-3 text-white text-sm" />
+            </div>
+            <div className="flex justify-between items-start py-3 border-t border-[#1C1C34]">
+              <div>
+                <div className="text-white text-sm font-medium">TCPA Notice</div>
+                <div className="text-[#4A4A6A] text-xs mt-1">Append TCPA-compliant footer to first-touch messages</div>
+              </div>
+              <button onClick={() => setTcpa(!tcpa)} className={`w-10 h-5 rounded-full relative transition-colors ${tcpa ? "bg-[#3B82F6]" : "bg-[#1C1C34]"}`}>
+                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${tcpa ? "left-[22px]" : "left-0.5"}`} />
+              </button>
+            </div>
+            <button onClick={() => toast.success("✓ Compliance saved")} className="h-9 px-4 rounded-lg bg-[#3B82F6] text-white text-sm font-semibold">Save</button>
           </div>
         </div>
       )}
