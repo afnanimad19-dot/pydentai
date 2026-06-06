@@ -53,6 +53,7 @@ import { Route as DashboardEngageLiveMonitoringRouteImport } from './routes/_das
 import { Route as DashboardEngageLeadsRouteImport } from './routes/_dashboard.engage.leads'
 import { Route as DashboardEngageCallStatusRouteImport } from './routes/_dashboard.engage.call-status'
 import { Route as DashboardEngageCallScriptsRouteImport } from './routes/_dashboard.engage.call-scripts'
+import { Route as DashboardEngageCallHistoryRouteImport } from './routes/_dashboard.engage.call-history'
 import { Route as DashboardEmailTestRouteImport } from './routes/_dashboard.email.test'
 import { Route as DashboardEmailTemplatesRouteImport } from './routes/_dashboard.email.templates'
 import { Route as DashboardEmailSetupRouteImport } from './routes/_dashboard.email.setup'
@@ -321,6 +322,12 @@ const DashboardEngageCallScriptsRoute =
     path: '/engage/call-scripts',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardEngageCallHistoryRoute =
+  DashboardEngageCallHistoryRouteImport.update({
+    id: '/engage/call-history',
+    path: '/engage/call-history',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardEmailTestRoute = DashboardEmailTestRouteImport.update({
   id: '/email/test',
   path: '/email/test',
@@ -488,6 +495,7 @@ export interface FileRoutesByFullPath {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/engage/call-history': typeof DashboardEngageCallHistoryRoute
   '/engage/call-scripts': typeof DashboardEngageCallScriptsRoute
   '/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/engage/leads': typeof DashboardEngageLeadsRoute
@@ -558,6 +566,7 @@ export interface FileRoutesByTo {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/engage/call-history': typeof DashboardEngageCallHistoryRoute
   '/engage/call-scripts': typeof DashboardEngageCallScriptsRoute
   '/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/engage/leads': typeof DashboardEngageLeadsRoute
@@ -630,6 +639,7 @@ export interface FileRoutesById {
   '/_dashboard/email/setup': typeof DashboardEmailSetupRoute
   '/_dashboard/email/templates': typeof DashboardEmailTemplatesRoute
   '/_dashboard/email/test': typeof DashboardEmailTestRoute
+  '/_dashboard/engage/call-history': typeof DashboardEngageCallHistoryRoute
   '/_dashboard/engage/call-scripts': typeof DashboardEngageCallScriptsRoute
   '/_dashboard/engage/call-status': typeof DashboardEngageCallStatusRoute
   '/_dashboard/engage/leads': typeof DashboardEngageLeadsRoute
@@ -702,6 +712,7 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/engage/call-history'
     | '/engage/call-scripts'
     | '/engage/call-status'
     | '/engage/leads'
@@ -772,6 +783,7 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/engage/call-history'
     | '/engage/call-scripts'
     | '/engage/call-status'
     | '/engage/leads'
@@ -843,6 +855,7 @@ export interface FileRouteTypes {
     | '/_dashboard/email/setup'
     | '/_dashboard/email/templates'
     | '/_dashboard/email/test'
+    | '/_dashboard/engage/call-history'
     | '/_dashboard/engage/call-scripts'
     | '/_dashboard/engage/call-status'
     | '/_dashboard/engage/leads'
@@ -1206,6 +1219,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEngageCallScriptsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/engage/call-history': {
+      id: '/_dashboard/engage/call-history'
+      path: '/engage/call-history'
+      fullPath: '/engage/call-history'
+      preLoaderRoute: typeof DashboardEngageCallHistoryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/email/test': {
       id: '/_dashboard/email/test'
       path: '/email/test'
@@ -1419,6 +1439,7 @@ interface DashboardRouteChildren {
   DashboardEmailSetupRoute: typeof DashboardEmailSetupRoute
   DashboardEmailTemplatesRoute: typeof DashboardEmailTemplatesRoute
   DashboardEmailTestRoute: typeof DashboardEmailTestRoute
+  DashboardEngageCallHistoryRoute: typeof DashboardEngageCallHistoryRoute
   DashboardEngageCallScriptsRoute: typeof DashboardEngageCallScriptsRoute
   DashboardEngageCallStatusRoute: typeof DashboardEngageCallStatusRoute
   DashboardEngageLeadsRoute: typeof DashboardEngageLeadsRoute
@@ -1483,6 +1504,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardEmailSetupRoute: DashboardEmailSetupRoute,
   DashboardEmailTemplatesRoute: DashboardEmailTemplatesRoute,
   DashboardEmailTestRoute: DashboardEmailTestRoute,
+  DashboardEngageCallHistoryRoute: DashboardEngageCallHistoryRoute,
   DashboardEngageCallScriptsRoute: DashboardEngageCallScriptsRoute,
   DashboardEngageCallStatusRoute: DashboardEngageCallStatusRoute,
   DashboardEngageLeadsRoute: DashboardEngageLeadsRoute,
