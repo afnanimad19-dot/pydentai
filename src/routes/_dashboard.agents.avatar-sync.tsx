@@ -209,6 +209,8 @@ function AvatarSyncPage() {
     </div>
   );
 }
+
+function ProviderCard({ name, swatch }: { name: string; swatch: string }) {
   return (
     <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl overflow-hidden">
       <div className="px-5 py-4 flex items-center gap-3 border-b border-[#1C1C34]">
