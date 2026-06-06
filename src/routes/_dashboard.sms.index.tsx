@@ -181,7 +181,7 @@ function SmsDashboard() {
             <div className="text-white font-semibold text-sm mb-4">Quick Actions</div>
             <div className="grid grid-cols-3 gap-2">
               {QUICK.map((q) => (
-                <button key={q.label} className="bg-[#06060F] border border-[#1C1C34] rounded-lg p-3 flex flex-col items-center gap-1.5 hover:border-[#3B82F6]/30 transition-all">
+                <button key={q.label} onClick={quickHandlers[q.label]} className="bg-[#06060F] border border-[#1C1C34] rounded-lg p-3 flex flex-col items-center gap-1.5 hover:border-[#3B82F6]/30 transition-all">
                   <q.icon size={18} className={q.color} />
                   <span className="text-[10px] text-[#8B8FA8] text-center">{q.label}</span>
                 </button>
