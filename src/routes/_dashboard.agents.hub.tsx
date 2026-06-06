@@ -265,9 +265,9 @@ function ChannelCard({
         >
           {channel.statusText}
         </span>
-        <button className="text-[#7B5CFC] hover:text-[#9B84FF] text-xs">
+        <Link to="/agents/studio" className="text-[#7B5CFC] hover:text-[#9B84FF] text-xs">
           Configure →
-        </button>
+        </Link>
       </div>
     </div>
   );
