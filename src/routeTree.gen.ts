@@ -39,6 +39,7 @@ import { Route as DashboardIntelligenceDealCloserRouteImport } from './routes/_d
 import { Route as DashboardIntelligenceConversationRouteImport } from './routes/_dashboard.intelligence.conversation'
 import { Route as DashboardIntelligenceBrainRouteImport } from './routes/_dashboard.intelligence.brain'
 import { Route as DashboardIntelligenceAutopilotRouteImport } from './routes/_dashboard.intelligence.autopilot'
+import { Route as DashboardInstagramContentPlannerRouteImport } from './routes/_dashboard.instagram.content-planner'
 import { Route as DashboardEmailTestRouteImport } from './routes/_dashboard.email.test'
 import { Route as DashboardEmailTemplatesRouteImport } from './routes/_dashboard.email.templates'
 import { Route as DashboardEmailSetupRouteImport } from './routes/_dashboard.email.setup'
@@ -224,6 +225,12 @@ const DashboardIntelligenceAutopilotRoute =
     path: '/intelligence/autopilot',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardInstagramContentPlannerRoute =
+  DashboardInstagramContentPlannerRouteImport.update({
+    id: '/instagram/content-planner',
+    path: '/instagram/content-planner',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardEmailTestRoute = DashboardEmailTestRouteImport.update({
   id: '/email/test',
   path: '/email/test',
@@ -391,6 +398,7 @@ export interface FileRoutesByFullPath {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
   '/intelligence/brain': typeof DashboardIntelligenceBrainRoute
   '/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
@@ -447,6 +455,7 @@ export interface FileRoutesByTo {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
   '/intelligence/brain': typeof DashboardIntelligenceBrainRoute
   '/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
@@ -505,6 +514,7 @@ export interface FileRoutesById {
   '/_dashboard/email/setup': typeof DashboardEmailSetupRoute
   '/_dashboard/email/templates': typeof DashboardEmailTemplatesRoute
   '/_dashboard/email/test': typeof DashboardEmailTestRoute
+  '/_dashboard/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/_dashboard/intelligence/autopilot': typeof DashboardIntelligenceAutopilotRoute
   '/_dashboard/intelligence/brain': typeof DashboardIntelligenceBrainRoute
   '/_dashboard/intelligence/conversation': typeof DashboardIntelligenceConversationRoute
@@ -563,6 +573,7 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/instagram/content-planner'
     | '/intelligence/autopilot'
     | '/intelligence/brain'
     | '/intelligence/conversation'
@@ -619,6 +630,7 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/instagram/content-planner'
     | '/intelligence/autopilot'
     | '/intelligence/brain'
     | '/intelligence/conversation'
@@ -676,6 +688,7 @@ export interface FileRouteTypes {
     | '/_dashboard/email/setup'
     | '/_dashboard/email/templates'
     | '/_dashboard/email/test'
+    | '/_dashboard/instagram/content-planner'
     | '/_dashboard/intelligence/autopilot'
     | '/_dashboard/intelligence/brain'
     | '/_dashboard/intelligence/conversation'
@@ -927,6 +940,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIntelligenceAutopilotRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/instagram/content-planner': {
+      id: '/_dashboard/instagram/content-planner'
+      path: '/instagram/content-planner'
+      fullPath: '/instagram/content-planner'
+      preLoaderRoute: typeof DashboardInstagramContentPlannerRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/email/test': {
       id: '/_dashboard/email/test'
       path: '/email/test'
@@ -1140,6 +1160,7 @@ interface DashboardRouteChildren {
   DashboardEmailSetupRoute: typeof DashboardEmailSetupRoute
   DashboardEmailTemplatesRoute: typeof DashboardEmailTemplatesRoute
   DashboardEmailTestRoute: typeof DashboardEmailTestRoute
+  DashboardInstagramContentPlannerRoute: typeof DashboardInstagramContentPlannerRoute
   DashboardIntelligenceAutopilotRoute: typeof DashboardIntelligenceAutopilotRoute
   DashboardIntelligenceBrainRoute: typeof DashboardIntelligenceBrainRoute
   DashboardIntelligenceConversationRoute: typeof DashboardIntelligenceConversationRoute
@@ -1190,6 +1211,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardEmailSetupRoute: DashboardEmailSetupRoute,
   DashboardEmailTemplatesRoute: DashboardEmailTemplatesRoute,
   DashboardEmailTestRoute: DashboardEmailTestRoute,
+  DashboardInstagramContentPlannerRoute: DashboardInstagramContentPlannerRoute,
   DashboardIntelligenceAutopilotRoute: DashboardIntelligenceAutopilotRoute,
   DashboardIntelligenceBrainRoute: DashboardIntelligenceBrainRoute,
   DashboardIntelligenceConversationRoute:
