@@ -97,7 +97,10 @@ function AvatarManagePage() {
               {b}
             </button>
           ))}
-          <button className="h-9 px-4 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold">
+          <button
+            onClick={() => setMeetingOpen(true)}
+            className="h-9 px-4 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold"
+          >
             + New Meeting
           </button>
         </div>
@@ -131,9 +134,10 @@ function AvatarManagePage() {
             desc: "API & webhooks",
           },
         ].map(({ icon: Icon, tone, name, desc }) => (
-          <div
+          <button
             key={name}
-            className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-5 py-4 flex items-center justify-between cursor-pointer hover:border-[#7B5CFC]/30 transition-all"
+            onClick={() => setTab(QUICK_TO_TAB[name] ?? "Overview")}
+            className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-5 py-4 flex items-center justify-between cursor-pointer hover:border-[#7B5CFC]/30 transition-all text-left"
           >
             <div className="flex items-center gap-3">
               <Icon size={20} className={tone} />
@@ -143,7 +147,7 @@ function AvatarManagePage() {
               </div>
             </div>
             <ChevronRight size={16} className="text-[#4A4A6A]" />
-          </div>
+          </button>
         ))}
       </div>
 
