@@ -174,7 +174,7 @@ function SmsDashboard() {
                 <div className="text-[#4A4A6A] text-[10px]">Scheduled</div>
               </div>
             </div>
-            <button className="w-full mt-3 h-9 border border-[#3B82F6]/30 text-[#3B82F6] text-sm rounded-xl hover:bg-[#3B82F6]/[0.06]">Buy More Credits</button>
+            <button onClick={() => setCreditsOpen(true)} className="w-full mt-3 h-9 border border-[#3B82F6]/30 text-[#3B82F6] text-sm rounded-xl hover:bg-[#3B82F6]/[0.06]">Buy More Credits</button>
           </div>
 
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl p-5">
