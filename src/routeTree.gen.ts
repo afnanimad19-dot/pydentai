@@ -47,6 +47,7 @@ import { Route as DashboardIntelligenceAutopilotRouteImport } from './routes/_da
 import { Route as DashboardInstagramTrendsRouteImport } from './routes/_dashboard.instagram.trends'
 import { Route as DashboardInstagramCreateContentRouteImport } from './routes/_dashboard.instagram.create-content'
 import { Route as DashboardInstagramContentPlannerRouteImport } from './routes/_dashboard.instagram.content-planner'
+import { Route as DashboardEngageLeadsRouteImport } from './routes/_dashboard.engage.leads'
 import { Route as DashboardEmailTestRouteImport } from './routes/_dashboard.email.test'
 import { Route as DashboardEmailTemplatesRouteImport } from './routes/_dashboard.email.templates'
 import { Route as DashboardEmailSetupRouteImport } from './routes/_dashboard.email.setup'
@@ -280,6 +281,11 @@ const DashboardInstagramContentPlannerRoute =
     path: '/instagram/content-planner',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardEngageLeadsRoute = DashboardEngageLeadsRouteImport.update({
+  id: '/engage/leads',
+  path: '/engage/leads',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardEmailTestRoute = DashboardEmailTestRouteImport.update({
   id: '/email/test',
   path: '/email/test',
@@ -447,6 +453,7 @@ export interface FileRoutesByFullPath {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/engage/leads': typeof DashboardEngageLeadsRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
   '/instagram/trends': typeof DashboardInstagramTrendsRoute
@@ -511,6 +518,7 @@ export interface FileRoutesByTo {
   '/email/setup': typeof DashboardEmailSetupRoute
   '/email/templates': typeof DashboardEmailTemplatesRoute
   '/email/test': typeof DashboardEmailTestRoute
+  '/engage/leads': typeof DashboardEngageLeadsRoute
   '/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/instagram/create-content': typeof DashboardInstagramCreateContentRoute
   '/instagram/trends': typeof DashboardInstagramTrendsRoute
@@ -577,6 +585,7 @@ export interface FileRoutesById {
   '/_dashboard/email/setup': typeof DashboardEmailSetupRoute
   '/_dashboard/email/templates': typeof DashboardEmailTemplatesRoute
   '/_dashboard/email/test': typeof DashboardEmailTestRoute
+  '/_dashboard/engage/leads': typeof DashboardEngageLeadsRoute
   '/_dashboard/instagram/content-planner': typeof DashboardInstagramContentPlannerRoute
   '/_dashboard/instagram/create-content': typeof DashboardInstagramCreateContentRoute
   '/_dashboard/instagram/trends': typeof DashboardInstagramTrendsRoute
@@ -643,6 +652,7 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/engage/leads'
     | '/instagram/content-planner'
     | '/instagram/create-content'
     | '/instagram/trends'
@@ -707,6 +717,7 @@ export interface FileRouteTypes {
     | '/email/setup'
     | '/email/templates'
     | '/email/test'
+    | '/engage/leads'
     | '/instagram/content-planner'
     | '/instagram/create-content'
     | '/instagram/trends'
@@ -772,6 +783,7 @@ export interface FileRouteTypes {
     | '/_dashboard/email/setup'
     | '/_dashboard/email/templates'
     | '/_dashboard/email/test'
+    | '/_dashboard/engage/leads'
     | '/_dashboard/instagram/content-planner'
     | '/_dashboard/instagram/create-content'
     | '/_dashboard/instagram/trends'
@@ -1087,6 +1099,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardInstagramContentPlannerRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/engage/leads': {
+      id: '/_dashboard/engage/leads'
+      path: '/engage/leads'
+      fullPath: '/engage/leads'
+      preLoaderRoute: typeof DashboardEngageLeadsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/email/test': {
       id: '/_dashboard/email/test'
       path: '/email/test'
@@ -1300,6 +1319,7 @@ interface DashboardRouteChildren {
   DashboardEmailSetupRoute: typeof DashboardEmailSetupRoute
   DashboardEmailTemplatesRoute: typeof DashboardEmailTemplatesRoute
   DashboardEmailTestRoute: typeof DashboardEmailTestRoute
+  DashboardEngageLeadsRoute: typeof DashboardEngageLeadsRoute
   DashboardInstagramContentPlannerRoute: typeof DashboardInstagramContentPlannerRoute
   DashboardInstagramCreateContentRoute: typeof DashboardInstagramCreateContentRoute
   DashboardInstagramTrendsRoute: typeof DashboardInstagramTrendsRoute
@@ -1358,6 +1378,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardEmailSetupRoute: DashboardEmailSetupRoute,
   DashboardEmailTemplatesRoute: DashboardEmailTemplatesRoute,
   DashboardEmailTestRoute: DashboardEmailTestRoute,
+  DashboardEngageLeadsRoute: DashboardEngageLeadsRoute,
   DashboardInstagramContentPlannerRoute: DashboardInstagramContentPlannerRoute,
   DashboardInstagramCreateContentRoute: DashboardInstagramCreateContentRoute,
   DashboardInstagramTrendsRoute: DashboardInstagramTrendsRoute,
