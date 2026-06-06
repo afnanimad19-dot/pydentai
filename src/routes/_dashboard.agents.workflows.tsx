@@ -181,6 +181,16 @@ function NewWorkflowModal({ onClose }: { onClose: () => void }) {
     "Blank",
   ];
   const [tpl, setTpl] = useState("Blank");
+  const [name, setName] = useState("Untitled Workflow");
+  const navigate = useNavigate();
+
+  const create = () => {
+    navigate({
+      to: "/agents/workflows/canvas",
+      search: { name: name || "Untitled Workflow", template: tpl },
+    });
+  };
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-2xl w-full max-w-[480px] overflow-hidden">
@@ -199,6 +209,8 @@ function NewWorkflowModal({ onClose }: { onClose: () => void }) {
               Name
             </div>
             <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Untitled Workflow"
               className="w-full bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/60"
             />
@@ -240,7 +252,10 @@ function NewWorkflowModal({ onClose }: { onClose: () => void }) {
           >
             Cancel
           </button>
-          <button className="h-9 px-5 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold flex items-center gap-1">
+          <button
+            onClick={create}
+            className="h-9 px-5 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold flex items-center gap-1"
+          >
             <Play size={12} />
             Create
           </button>
