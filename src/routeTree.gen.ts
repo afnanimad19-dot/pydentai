@@ -24,6 +24,7 @@ import { Route as DashboardWhatsappIndexRouteImport } from './routes/_dashboard.
 import { Route as DashboardWebsiteChatIndexRouteImport } from './routes/_dashboard.website-chat.index'
 import { Route as DashboardSmsIndexRouteImport } from './routes/_dashboard.sms.index'
 import { Route as DashboardEmailIndexRouteImport } from './routes/_dashboard.email.index'
+import { Route as ApiPublicSetPasswordRouteImport } from './routes/api/public/set-password'
 import { Route as DashboardWhatsappTagsRouteImport } from './routes/_dashboard.whatsapp.tags'
 import { Route as DashboardWhatsappSetupRouteImport } from './routes/_dashboard.whatsapp.setup'
 import { Route as DashboardWhatsappReportsRouteImport } from './routes/_dashboard.whatsapp.reports'
@@ -161,6 +162,11 @@ const DashboardEmailIndexRoute = DashboardEmailIndexRouteImport.update({
   id: '/email/',
   path: '/email/',
   getParentRoute: () => DashboardRoute,
+} as any)
+const ApiPublicSetPasswordRoute = ApiPublicSetPasswordRouteImport.update({
+  id: '/api/public/set-password',
+  path: '/api/public/set-password',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardWhatsappTagsRoute = DashboardWhatsappTagsRouteImport.update({
   id: '/whatsapp/tags',
@@ -578,6 +584,7 @@ export interface FileRoutesByFullPath {
   '/whatsapp/reports': typeof DashboardWhatsappReportsRoute
   '/whatsapp/setup': typeof DashboardWhatsappSetupRoute
   '/whatsapp/tags': typeof DashboardWhatsappTagsRoute
+  '/api/public/set-password': typeof ApiPublicSetPasswordRoute
   '/email/': typeof DashboardEmailIndexRoute
   '/sms/': typeof DashboardSmsIndexRoute
   '/website-chat/': typeof DashboardWebsiteChatIndexRoute
@@ -656,6 +663,7 @@ export interface FileRoutesByTo {
   '/whatsapp/reports': typeof DashboardWhatsappReportsRoute
   '/whatsapp/setup': typeof DashboardWhatsappSetupRoute
   '/whatsapp/tags': typeof DashboardWhatsappTagsRoute
+  '/api/public/set-password': typeof ApiPublicSetPasswordRoute
   '/email': typeof DashboardEmailIndexRoute
   '/sms': typeof DashboardSmsIndexRoute
   '/website-chat': typeof DashboardWebsiteChatIndexRoute
@@ -736,6 +744,7 @@ export interface FileRoutesById {
   '/_dashboard/whatsapp/reports': typeof DashboardWhatsappReportsRoute
   '/_dashboard/whatsapp/setup': typeof DashboardWhatsappSetupRoute
   '/_dashboard/whatsapp/tags': typeof DashboardWhatsappTagsRoute
+  '/api/public/set-password': typeof ApiPublicSetPasswordRoute
   '/_dashboard/email/': typeof DashboardEmailIndexRoute
   '/_dashboard/sms/': typeof DashboardSmsIndexRoute
   '/_dashboard/website-chat/': typeof DashboardWebsiteChatIndexRoute
@@ -816,6 +825,7 @@ export interface FileRouteTypes {
     | '/whatsapp/reports'
     | '/whatsapp/setup'
     | '/whatsapp/tags'
+    | '/api/public/set-password'
     | '/email/'
     | '/sms/'
     | '/website-chat/'
@@ -894,6 +904,7 @@ export interface FileRouteTypes {
     | '/whatsapp/reports'
     | '/whatsapp/setup'
     | '/whatsapp/tags'
+    | '/api/public/set-password'
     | '/email'
     | '/sms'
     | '/website-chat'
@@ -973,6 +984,7 @@ export interface FileRouteTypes {
     | '/_dashboard/whatsapp/reports'
     | '/_dashboard/whatsapp/setup'
     | '/_dashboard/whatsapp/tags'
+    | '/api/public/set-password'
     | '/_dashboard/email/'
     | '/_dashboard/sms/'
     | '/_dashboard/website-chat/'
@@ -994,6 +1006,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
+  ApiPublicSetPasswordRoute: typeof ApiPublicSetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1102,6 +1115,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/email/'
       preLoaderRoute: typeof DashboardEmailIndexRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/api/public/set-password': {
+      id: '/api/public/set-password'
+      path: '/api/public/set-password'
+      fullPath: '/api/public/set-password'
+      preLoaderRoute: typeof ApiPublicSetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_dashboard/whatsapp/tags': {
       id: '/_dashboard/whatsapp/tags'
@@ -1735,17 +1755,8 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
+  ApiPublicSetPasswordRoute: ApiPublicSetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
