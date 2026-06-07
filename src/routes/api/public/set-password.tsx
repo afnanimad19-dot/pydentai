@@ -7,6 +7,20 @@ export const Route = createFileRoute('/api/public/set-password')({
         const { email, password } = await request.json()
         const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
         
+        const { data: listData } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
+        const existingUser = listData?.users?.find((u: any) => u.email === email)
+        
+        if (existingUser) {
+          const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+            existingUser.id,
+            { password }
+          )
+          if (updateError) {
+            return new Response(JSON.stringify({ error: updateError.message }), { status: 400 })
+          }
+          return new Response(JSON.stringify({ success: true, action: 'password_updated' }), { status: 200 })
+        }
+        
         const { data, error } = await supabaseAdmin.auth.admin.createUser({
           email,
           password,
@@ -14,22 +28,6 @@ export const Route = createFileRoute('/api/public/set-password')({
         })
         
         if (error) {
-          if (error.message?.includes('already been registered')) {
-            // User exists, update password
-            const { data: userData } = await supabaseAdmin.auth.admin.listUsers({
-              filters: { email: email }
-            })
-            if (userData?.users?.[0]?.id) {
-              const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
-                userData.users[0].id,
-                { password }
-              )
-              if (updateError) {
-                return new Response(JSON.stringify({ error: updateError.message }), { status: 400 })
-              }
-              return new Response(JSON.stringify({ success: true, action: 'password_updated' }), { status: 200 })
-            }
-          }
           return new Response(JSON.stringify({ error: error.message }), { status: 400 })
         }
         
@@ -38,3 +36,4 @@ export const Route = createFileRoute('/api/public/set-password')({
     }
   }
 })
+
