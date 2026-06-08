@@ -14,13 +14,677 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_agents: {
+        Row: {
+          channels: string[] | null
+          config: Json | null
+          created_at: string | null
+          id: string
+          model: string
+          name: string
+          readiness_score: number | null
+          status: string
+          system_prompt: string | null
+          type: string
+          updated_at: string | null
+          voice_provider: string | null
+          voice_provider_agent_id: string | null
+          workspace_id: string
+        }
+        Insert: {
+          channels?: string[] | null
+          config?: Json | null
+          created_at?: string | null
+          id?: string
+          model?: string
+          name: string
+          readiness_score?: number | null
+          status?: string
+          system_prompt?: string | null
+          type: string
+          updated_at?: string | null
+          voice_provider?: string | null
+          voice_provider_agent_id?: string | null
+          workspace_id: string
+        }
+        Update: {
+          channels?: string[] | null
+          config?: Json | null
+          created_at?: string | null
+          id?: string
+          model?: string
+          name?: string
+          readiness_score?: number | null
+          status?: string
+          system_prompt?: string | null
+          type?: string
+          updated_at?: string | null
+          voice_provider?: string | null
+          voice_provider_agent_id?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_agents_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      call_logs: {
+        Row: {
+          agent_id: string | null
+          contact_id: string | null
+          created_at: string | null
+          direction: string
+          duration_seconds: number
+          id: string
+          outcome: string | null
+          provider_call_id: string | null
+          recording_url: string | null
+          sentiment_score: number | null
+          status: string
+          transcript: string | null
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          direction: string
+          duration_seconds?: number
+          id?: string
+          outcome?: string | null
+          provider_call_id?: string | null
+          recording_url?: string | null
+          sentiment_score?: number | null
+          status: string
+          transcript?: string | null
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          direction?: string
+          duration_seconds?: number
+          id?: string
+          outcome?: string | null
+          provider_call_id?: string | null
+          recording_url?: string | null
+          sentiment_score?: number | null
+          status?: string
+          transcript?: string | null
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_logs_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ai_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_logs_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaigns: {
+        Row: {
+          audience_filter: Json | null
+          audience_type: string | null
+          channel: string
+          created_at: string | null
+          custom_content: Json | null
+          delivered_count: number
+          failed_count: number
+          id: string
+          name: string
+          scheduled_at: string | null
+          sent_count: number
+          status: string
+          template_id: string | null
+          type: string | null
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          audience_filter?: Json | null
+          audience_type?: string | null
+          channel: string
+          created_at?: string | null
+          custom_content?: Json | null
+          delivered_count?: number
+          failed_count?: number
+          id?: string
+          name: string
+          scheduled_at?: string | null
+          sent_count?: number
+          status?: string
+          template_id?: string | null
+          type?: string | null
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          audience_filter?: Json | null
+          audience_type?: string | null
+          channel?: string
+          created_at?: string | null
+          custom_content?: Json | null
+          delivered_count?: number
+          failed_count?: number
+          id?: string
+          name?: string
+          scheduled_at?: string | null
+          sent_count?: number
+          status?: string
+          template_id?: string | null
+          type?: string | null
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channel_configs: {
+        Row: {
+          channel: string
+          connected_at: string | null
+          created_at: string | null
+          credentials: Json | null
+          id: string
+          is_active: boolean
+          provider: string | null
+          settings: Json | null
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          channel: string
+          connected_at?: string | null
+          created_at?: string | null
+          credentials?: Json | null
+          id?: string
+          is_active?: boolean
+          provider?: string | null
+          settings?: Json | null
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          channel?: string
+          connected_at?: string | null
+          created_at?: string | null
+          credentials?: Json | null
+          id?: string
+          is_active?: boolean
+          provider?: string | null
+          settings?: Json | null
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_configs_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contacts: {
+        Row: {
+          assigned_agent_id: string | null
+          created_at: string | null
+          deleted_at: string | null
+          email: string | null
+          id: string
+          last_contacted_at: string | null
+          lead_score: number | null
+          metadata: Json | null
+          name: string | null
+          phone: string | null
+          source_channel: string | null
+          status: string
+          tags: string[] | null
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          assigned_agent_id?: string | null
+          created_at?: string | null
+          deleted_at?: string | null
+          email?: string | null
+          id?: string
+          last_contacted_at?: string | null
+          lead_score?: number | null
+          metadata?: Json | null
+          name?: string | null
+          phone?: string | null
+          source_channel?: string | null
+          status?: string
+          tags?: string[] | null
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          assigned_agent_id?: string | null
+          created_at?: string | null
+          deleted_at?: string | null
+          email?: string | null
+          id?: string
+          last_contacted_at?: string | null
+          lead_score?: number | null
+          metadata?: Json | null
+          name?: string | null
+          phone?: string | null
+          source_channel?: string | null
+          status?: string
+          tags?: string[] | null
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contacts_assigned_agent_id_fkey"
+            columns: ["assigned_agent_id"]
+            isOneToOne: false
+            referencedRelation: "ai_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contacts_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          agent_id: string | null
+          assigned_human_id: string | null
+          channel: string
+          contact_id: string
+          created_at: string | null
+          external_id: string | null
+          id: string
+          metadata: Json | null
+          resolved_at: string | null
+          status: string
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          assigned_human_id?: string | null
+          channel: string
+          contact_id: string
+          created_at?: string | null
+          external_id?: string | null
+          id?: string
+          metadata?: Json | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          assigned_human_id?: string | null
+          channel?: string
+          contact_id?: string
+          created_at?: string | null
+          external_id?: string | null
+          id?: string
+          metadata?: Json | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ai_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_chunks: {
+        Row: {
+          agent_id: string | null
+          chunk_index: number
+          content: string
+          created_at: string | null
+          embedding: string | null
+          id: string
+          metadata: Json | null
+          source_name: string
+          workspace_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          chunk_index: number
+          content: string
+          created_at?: string | null
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+          source_name: string
+          workspace_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          chunk_index?: number
+          content?: string
+          created_at?: string | null
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+          source_name?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_chunks_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ai_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_chunks_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: Json
+          content_type: string
+          conversation_id: string
+          created_at: string | null
+          direction: string
+          external_id: string | null
+          id: string
+          sender_type: string
+          status: string | null
+          workspace_id: string
+        }
+        Insert: {
+          content: Json
+          content_type: string
+          conversation_id: string
+          created_at?: string | null
+          direction: string
+          external_id?: string | null
+          id?: string
+          sender_type: string
+          status?: string | null
+          workspace_id: string
+        }
+        Update: {
+          content?: Json
+          content_type?: string
+          conversation_id?: string
+          created_at?: string | null
+          direction?: string
+          external_id?: string | null
+          id?: string
+          sender_type?: string
+          status?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      templates: {
+        Row: {
+          category: string | null
+          channel: string
+          content: Json
+          created_at: string | null
+          external_id: string | null
+          id: string
+          language: string
+          name: string
+          status: string | null
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          category?: string | null
+          channel: string
+          content: Json
+          created_at?: string | null
+          external_id?: string | null
+          id?: string
+          language?: string
+          name: string
+          status?: string | null
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          category?: string | null
+          channel?: string
+          content?: Json
+          created_at?: string | null
+          external_id?: string | null
+          id?: string
+          language?: string
+          name?: string
+          status?: string | null
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "templates_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflows: {
+        Row: {
+          agent_id: string
+          created_at: string | null
+          edges: Json
+          id: string
+          name: string
+          nodes: Json
+          published_at: string | null
+          status: string
+          updated_at: string | null
+          version: number
+          workspace_id: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string | null
+          edges?: Json
+          id?: string
+          name: string
+          nodes?: Json
+          published_at?: string | null
+          status?: string
+          updated_at?: string | null
+          version?: number
+          workspace_id: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string | null
+          edges?: Json
+          id?: string
+          name?: string
+          nodes?: Json
+          published_at?: string | null
+          status?: string
+          updated_at?: string | null
+          version?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflows_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ai_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workflows_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspace_members: {
+        Row: {
+          id: string
+          invited_by: string | null
+          joined_at: string | null
+          role: string
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          id?: string
+          invited_by?: string | null
+          joined_at?: string | null
+          role?: string
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          id?: string
+          invited_by?: string | null
+          joined_at?: string | null
+          role?: string
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_members_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspaces: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          owner_id: string | null
+          plan: string
+          settings: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          owner_id?: string | null
+          plan?: string
+          settings?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          owner_id?: string | null
+          plan?: string
+          settings?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_workspace_id: { Args: never; Returns: string }
+      user_has_role: { Args: { roles: string[] }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
