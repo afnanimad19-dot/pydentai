@@ -44,6 +44,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useDashboardMetrics } from "@/hooks/useDashboardMetrics";
 
 export const Route = createFileRoute("/_dashboard/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — pydent.ai" }] }),
@@ -78,11 +79,11 @@ type PrimaryCard = {
   to: string;
 };
 
-const primaryCards: PrimaryCard[] = [
+const primaryCardsBase: PrimaryCard[] = [
   { icon: Users, color: "#7B5CFC", trend: "↑ 12.4%", trendUp: true, value: "1,284", label: "Total Leads", prev: "1,147", to: "/engage/leads" },
   { icon: MessageCircle, color: "#00D4AA", trend: "↑ 3%", trendUp: true, value: "14", label: "Active Conversations", prev: "13", to: "/whatsapp/inbox" },
-  { icon: TrendingUp, color: "#22C55E", trend: "↑ 2.1%", trendUp: true, value: "87%", label: "Campaigns Sent", prev: "84%", to: "/whatsapp/campaigns" },
-  { icon: Zap, color: "#F59E0B", trend: "↑ 5%", trendUp: true, value: "99.8%", label: "AI Agent Uptime", prev: "99.6%", to: "/agents" },
+  { icon: MessageSquare, color: "#22C55E", trend: "↑ 2.1%", trendUp: true, value: "0", label: "Messages Today", prev: "0", to: "/whatsapp/inbox" },
+  { icon: Bot, color: "#F59E0B", trend: "↑ 5%", trendUp: true, value: "0", label: "Active Agents", prev: "0", to: "/agents" },
 ];
 
 const channelHealth = [
@@ -272,12 +273,23 @@ function CallDetailModal({ call, onClose, onHistory }: { call: CallRow; onClose:
 
 export function DashboardOverview() {
   const navigate = useNavigate();
+  const { metrics, loading: metricsLoading } = useDashboardMetrics();
   const [dashTab, setDashTab] = useState<"overview" | "channels" | "agents" | "activity">("overview");
   const [showImport, setShowImport] = useState(false);
   const [autopilot, setAutopilot] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [openCall, setOpenCall] = useState<CallRow | null>(null);
   const [actFilter, setActFilter] = useState<"all" | "message" | "call" | "campaign" | "workflow">("all");
+
+  const liveValues = [
+    metricsLoading ? "…" : (metrics?.totalContacts ?? 0).toLocaleString(),
+    metricsLoading ? "…" : String(metrics?.activeConversations ?? 0),
+    metricsLoading ? "…" : (metrics?.messagesToday ?? 0).toLocaleString(),
+    metricsLoading ? "…" : String(metrics?.activeAgents ?? 0),
+  ];
+  const primaryCards: PrimaryCard[] = primaryCardsBase.map((c, i) => ({ ...c, value: liveValues[i] }));
+  const liveChartData = metrics?.weeklyChart ?? chartData;
+  const liveSourceData = metrics?.sourceChart ?? sourceData;
 
   const handleAutopilotClick = () => {
     if (!autopilot) {
@@ -409,7 +421,7 @@ export function DashboardOverview() {
                 </div>
                 <div style={{ width: "100%", height: 260 }}>
                   <ResponsiveContainer>
-                    <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+                    <AreaChart data={liveChartData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
                       <defs>
                         <linearGradient id="purpleArea" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0%" stopColor="#7B5CFC" stopOpacity={0.3} />
@@ -501,8 +513,8 @@ export function DashboardOverview() {
                 <div className="relative flex justify-center" style={{ width: "100%", height: 160 }}>
                   <ResponsiveContainer width={200} height={160}>
                     <PieChart>
-                      <Pie data={sourceData} innerRadius={50} outerRadius={72} paddingAngle={3} startAngle={90} endAngle={-270} dataKey="value" stroke="none" isAnimationActive={false}>
-                        {sourceData.map((d) => (<Cell key={d.name} fill={d.fill} />))}
+                      <Pie data={liveSourceData} innerRadius={50} outerRadius={72} paddingAngle={3} startAngle={90} endAngle={-270} dataKey="value" stroke="none" isAnimationActive={false}>
+                        {liveSourceData.map((d) => (<Cell key={d.name} fill={d.fill} />))}
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
@@ -512,7 +524,7 @@ export function DashboardOverview() {
                   </div>
                 </div>
                 <div className="space-y-2 mt-4">
-                  {sourceData.map((d) => (
+                  {liveSourceData.map((d) => (
                     <div key={d.name} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full" style={{ background: d.fill }} />
