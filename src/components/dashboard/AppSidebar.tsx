@@ -1,5 +1,7 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useWorkspace } from "@/hooks/useWorkspace";
 import {
   Bell,
   Bot,
@@ -204,11 +206,31 @@ const SECTIONS: Section[] = [
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { collapsed, setCollapsed } = useSidebar();
+  const { user, signOut } = useAuth();
+  const ws = useWorkspace();
+  const navigate = useNavigate();
   const [open, setOpen] = useState<Record<string, boolean>>({
     "AI & Agents": true,
   });
 
   const toggle = (k: string) => setOpen((o) => ({ ...o, [k]: !o[k] }));
+
+  const firstName = (user?.user_metadata?.first_name as string | undefined) ?? "";
+  const lastName = (user?.user_metadata?.last_name as string | undefined) ?? "";
+  const emailName = user?.email?.split("@")[0] ?? "User";
+  const displayName = (firstName || lastName)
+    ? `${firstName} ${lastName}`.trim()
+    : emailName;
+  const initials = (
+    (firstName?.[0] ?? "") + (lastName?.[0] ?? "")
+  ).toUpperCase() || (user?.email?.[0]?.toUpperCase() ?? "U");
+  const roleLabel = ws.role ? ws.role.charAt(0).toUpperCase() + ws.role.slice(1) : "";
+  const workspaceName = ws.workspace?.name ?? "";
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate({ to: "/login" });
+  };
 
   return (
     <aside
@@ -429,24 +451,28 @@ export function AppSidebar() {
         }`}
       >
         <div className="w-[30px] h-[30px] rounded-full bg-gradient-to-br from-[#7B5CFC]/40 to-[#00D4AA]/30 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
-          AK
+          {initials}
         </div>
         {!collapsed && (
           <>
             <div className="flex-1 min-w-0">
               <div className="text-white text-xs font-medium truncate">
-                Ahmad K.
+                {displayName}
               </div>
-              <div className="text-[#4A4A6A] text-[10px]">Owner</div>
+              <div className="text-[#4A4A6A] text-[10px] truncate">
+                {roleLabel}{roleLabel && workspaceName ? " · " : ""}{workspaceName}
+              </div>
             </div>
             <Bell
               size={15}
               className="text-[#4A4A6A] hover:text-white cursor-pointer"
             />
-            <LogOut
-              size={15}
-              className="text-[#4A4A6A] hover:text-[#FF4D6D] cursor-pointer"
-            />
+            <button onClick={handleSignOut} aria-label="Sign out">
+              <LogOut
+                size={15}
+                className="text-[#4A4A6A] hover:text-[#FF4D6D] cursor-pointer"
+              />
+            </button>
           </>
         )}
       </div>
