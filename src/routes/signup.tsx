@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Check,
   Eye,
@@ -28,6 +28,12 @@ function SignupPage() {
   const [pwd, setPwd] = useState("");
   const [channel, setChannel] = useState<string | null>("whatsapp");
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) navigate({ to: "/dashboard" });
+    });
+  }, [navigate]);
 
   const pwdStrength = (() => {
     let s = 0;
@@ -321,6 +327,39 @@ function StepAccount({
 const selectCls = inputCls + " appearance-none cursor-pointer";
 
 function StepClinic({ onBack, onNext }: { onBack: () => void; onNext: () => void }) {
+  const [clinicName, setClinicName] = useState("");
+  const [clinicType, setClinicType] = useState("Single Location Clinic");
+  const [country, setCountry] = useState("UAE");
+  const [city, setCity] = useState("");
+  const [teamSize, setTeamSize] = useState("1–5 staff");
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    const { data: userData, error: userErr } = await supabase.auth.getUser();
+    if (userErr || !userData.user) {
+      setLoading(false);
+      setError("You must be signed in. Please complete step 1 first.");
+      return;
+    }
+    const { error: insertErr } = await supabase.from("workspaces").insert({
+      name: clinicName,
+      owner_id: userData.user.id,
+      plan: "starter",
+      settings: { clinicType, country, city, teamSize, phone },
+    });
+    setLoading(false);
+    if (insertErr) {
+      setError(insertErr.message);
+      return;
+    }
+    onNext();
+  };
+
   return (
     <>
       <h2 className="text-[20px] font-bold tracking-[-0.02em] text-white mb-1">
@@ -329,20 +368,14 @@ function StepClinic({ onBack, onNext }: { onBack: () => void; onNext: () => void
       <p className="text-[#4A4A6A] text-sm mb-6">
         Helps us configure your AI for dental workflows
       </p>
-      <form
-        className="space-y-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onNext();
-        }}
-      >
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <div>
           <label className={labelCls}>Clinic Name</label>
-          <input className={inputCls} placeholder="Dubai Smile Clinic" />
+          <input className={inputCls} placeholder="Dubai Smile Clinic" value={clinicName} onChange={(e) => setClinicName(e.target.value)} required />
         </div>
         <div>
           <label className={labelCls}>Clinic Type</label>
-          <select className={selectCls}>
+          <select className={selectCls} value={clinicType} onChange={(e) => setClinicType(e.target.value)}>
             <option>Single Location Clinic</option>
             <option>Multi-Location Group</option>
             <option>Polyclinic</option>
@@ -353,7 +386,7 @@ function StepClinic({ onBack, onNext }: { onBack: () => void; onNext: () => void
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className={labelCls}>Country</label>
-            <select className={selectCls} defaultValue="UAE">
+            <select className={selectCls} value={country} onChange={(e) => setCountry(e.target.value)}>
               <option>UAE</option>
               <option>KSA</option>
               <option>Kuwait</option>
@@ -365,12 +398,12 @@ function StepClinic({ onBack, onNext }: { onBack: () => void; onNext: () => void
           </div>
           <div>
             <label className={labelCls}>City</label>
-            <input className={inputCls} placeholder="Dubai" />
+            <input className={inputCls} placeholder="Dubai" value={city} onChange={(e) => setCity(e.target.value)} />
           </div>
         </div>
         <div>
           <label className={labelCls}>Team Size</label>
-          <select className={selectCls}>
+          <select className={selectCls} value={teamSize} onChange={(e) => setTeamSize(e.target.value)}>
             <option>1–5 staff</option>
             <option>6–15 staff</option>
             <option>16–30 staff</option>
@@ -383,9 +416,15 @@ function StepClinic({ onBack, onNext }: { onBack: () => void; onNext: () => void
             <div className="bg-[#06060F] border border-[#1C1C34] rounded-xl h-11 px-4 flex items-center text-white text-sm">
               +971
             </div>
-            <input className={inputCls} placeholder="50 123 4567" />
+            <input className={inputCls} placeholder="50 123 4567" value={phone} onChange={(e) => setPhone(e.target.value)} />
           </div>
         </div>
+
+        {error && (
+          <div className="text-[#FF4D6D] text-xs bg-[#FF4D6D]/[0.08] border border-[#FF4D6D]/20 rounded-lg px-3 py-2">
+            {error}
+          </div>
+        )}
 
         <div className="flex justify-between gap-3 mt-4">
           <button
@@ -397,9 +436,11 @@ function StepClinic({ onBack, onNext }: { onBack: () => void; onNext: () => void
           </button>
           <button
             type="submit"
-            className="flex-1 h-11 rounded-xl bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold"
+            disabled={loading}
+            className="flex-1 h-11 rounded-xl bg-[#7B5CFC] hover:bg-[#6047DB] disabled:opacity-60 text-white text-sm font-semibold flex items-center justify-center gap-2"
           >
-            Continue
+            {loading && <Loader2 size={14} className="animate-spin" />}
+            {loading ? "Saving..." : "Continue"}
           </button>
         </div>
       </form>
