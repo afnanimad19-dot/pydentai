@@ -77,12 +77,13 @@ function Inbox() {
 
   useEffect(() => {
     if (!selectedId) return;
+    const convId = selectedId;
     let cancelled = false;
     async function loadMessages() {
       const { data, error } = await supabase
         .from("messages")
         .select("id, direction, content, created_at, sender_type")
-        .eq("conversation_id", selectedId)
+        .eq("conversation_id", convId)
         .order("created_at", { ascending: true })
         .limit(100);
 
@@ -93,11 +94,11 @@ function Inbox() {
         text: extractText(m.content),
         time: new Date(m.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
       }));
-      setThreads((t) => ({ ...t, [selectedId!]: msgs }));
+      setThreads((t) => ({ ...t, [convId]: msgs }));
       if (msgs.length > 0) {
         setContacts((prev) =>
           prev.map((c) =>
-            c.id === selectedId
+            c.id === convId
               ? { ...c, preview: msgs[msgs.length - 1].text.slice(0, 50) }
               : c
           )
