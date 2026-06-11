@@ -30,7 +30,7 @@ const TYPES = [
 const GROUPS = ["New Leads", "Qualified", "VIP", "Re-engagement"];
 const VARS = ["{{name}}", "{{clinic}}", "{{date}}", "{{time}}"];
 
-type Campaign = { id: string; name: string; type: string; status: string; created: string };
+type Campaign = { id: string; name: string; type: string; status: string; created: string; body?: string; audience?: string; scheduleAt?: string; sent?: number; delivered?: number; failed?: number; openRate?: number };
 
 function Campaigns() {
   const search = useSearch({ from: Route.id });
@@ -38,6 +38,8 @@ function Campaigns() {
   const [step, setStep] = useState(1);
   const [filter, setFilter] = useState("All");
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
 
   // step 1
   const [name, setName] = useState("");
