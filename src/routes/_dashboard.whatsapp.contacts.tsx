@@ -140,7 +140,32 @@ function Contacts() {
                     <td className="px-4 py-3 text-white">{c.first} {c.last}</td>
                     <td className="px-4 py-3 text-[#8B8FA8]">{c.phone}</td>
                     <td className="px-4 py-3 text-[#8B8FA8]">{c.email}</td>
-                    <td className="px-4 py-3 text-[#8B8FA8]">{c.tags}</td>
+                    <td className="px-4 py-3 relative">
+                      <div className="flex items-center gap-1 flex-wrap">
+                        {contactTags(c.id).map((tid) => {
+                          const t = tags.find((x) => x.id === tid);
+                          if (!t) return null;
+                          return (
+                            <span key={tid} className="text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1" style={{ background: `${t.color}20`, color: t.color }}>
+                              {t.name}
+                              <button onClick={() => unassignTag(c.id, tid)} className="hover:opacity-70"><X size={10} /></button>
+                            </span>
+                          );
+                        })}
+                        <button onClick={() => setTagMenuFor(tagMenuFor === c.id ? null : c.id)} className="w-5 h-5 rounded-full border border-[#1C1C34] text-[#8B8FA8] hover:text-white flex items-center justify-center"><Plus size={10} /></button>
+                      </div>
+                      {tagMenuFor === c.id && (
+                        <div className="absolute z-10 top-full mt-1 left-0 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg shadow-xl min-w-[160px] py-1">
+                          {tags.length === 0 && <div className="px-3 py-2 text-[#4A4A6A] text-xs">No tags yet. Create some in the Tags tab.</div>}
+                          {tags.filter((t) => !contactTags(c.id).includes(t.id)).map((t) => (
+                            <button key={t.id} onClick={() => { assignTag(c.id, t.id); setTagMenuFor(null); }} className="w-full px-3 py-1.5 text-left text-xs text-white hover:bg-[#1C1C34] flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full" style={{ background: t.color }} />{t.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </td>
+
                     <td className="px-4 py-3"><span className="text-[#22C55E] text-xs">{c.status}</span></td>
                   </tr>
                 ))}
