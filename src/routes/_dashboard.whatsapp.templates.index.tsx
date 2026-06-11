@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { FileText, RefreshCw, Search, Megaphone, Bell, Shield, X, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_dashboard/whatsapp/templates/")({ component: Templates });
+
+type Template = { id: string; name: string; category: string; languages: string[]; status: "Draft" | "Pending" | "Approved" | "Rejected"; body: string; createdAt: string };
+
 
 const STATS = [
   { label: "Total", value: "0" }, { label: "Approved", value: "0" },
