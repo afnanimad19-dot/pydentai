@@ -114,33 +114,49 @@ function Templates() {
       <div className="px-6 mb-4 flex gap-3 items-center">
         <div className="relative flex-1 max-w-xs">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4A4A6A]" />
-          <input placeholder="Search templates..." className="w-full h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs pl-8 pr-3" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search templates..." className="w-full h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-white text-xs pl-8 pr-3 placeholder:text-[#4A4A6A]" />
         </div>
         <select className="h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs px-3"><option>All Categories</option></select>
         <select className="h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs px-3"><option>All Status</option></select>
-        <div className="ml-auto text-[#4A4A6A] text-sm">0 results</div>
+        <div className="ml-auto text-[#4A4A6A] text-sm">{filtered.length} results</div>
       </div>
 
       <div className="px-6 pb-6">
-        <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl py-20 flex flex-col items-center px-6">
-          <div className="w-[72px] h-[72px] bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-2xl flex items-center justify-center mb-6">
-            <FileText size={36} className="text-[#3B82F6]/50" />
+        {filtered.length === 0 ? (
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl py-20 flex flex-col items-center px-6">
+            <div className="w-[72px] h-[72px] bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-2xl flex items-center justify-center mb-6">
+              <FileText size={36} className="text-[#3B82F6]/50" />
+            </div>
+            <div className="text-white font-bold text-xl tracking-[-0.02em] mb-2">Create Your First Template</div>
+            <div className="text-[#4A4A6A] text-sm text-center max-w-sm mb-8">
+              Design Meta-approved message templates with rich headers, buttons, and dynamic variables for automated messaging.
+            </div>
+            <div className="flex gap-4 justify-center mb-8">
+              {TYPES.map((t) => (
+                <div key={t.label} className="bg-[#06060F] border border-[#1C1C34] rounded-xl px-4 py-3 flex flex-col items-center gap-2 w-28">
+                  <t.icon size={20} className={t.color} />
+                  <span className="text-[#8B8FA8] text-xs">{t.label}</span>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => setOpen(true)} className="h-10 px-5 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-sm font-semibold">+ Create Template</button>
           </div>
-          <div className="text-white font-bold text-xl tracking-[-0.02em] mb-2">Create Your First Template</div>
-          <div className="text-[#4A4A6A] text-sm text-center max-w-sm mb-8">
-            Design Meta-approved message templates with rich headers, buttons, and dynamic variables for automated messaging.
-          </div>
-          <div className="flex gap-4 justify-center mb-8">
-            {TYPES.map((t) => (
-              <div key={t.label} className="bg-[#06060F] border border-[#1C1C34] rounded-xl px-4 py-3 flex flex-col items-center gap-2 w-28">
-                <t.icon size={20} className={t.color} />
-                <span className="text-[#8B8FA8] text-xs">{t.label}</span>
+        ) : (
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl divide-y divide-[#1C1C34]">
+            {filtered.map((t) => (
+              <div key={t.id} className="px-5 py-3 flex items-center gap-3">
+                <FileText size={14} className="text-[#3B82F6]" />
+                <div className="flex-1">
+                  <div className="text-white text-sm font-semibold">{t.name}</div>
+                  <div className="text-[#4A4A6A] text-xs">{t.category} · {t.languages.join(", ")} · {t.createdAt}</div>
+                </div>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full ${t.status === "Approved" ? "bg-[#22C55E]/15 text-[#22C55E]" : t.status === "Pending" ? "bg-[#F59E0B]/15 text-[#F59E0B]" : t.status === "Rejected" ? "bg-[#FF4D6D]/15 text-[#FF4D6D]" : "bg-[#1C1C34] text-[#8B8FA8]"}`}>{t.status}</span>
               </div>
             ))}
           </div>
-          <button onClick={() => setOpen(true)} className="h-10 px-5 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-sm font-semibold">+ Create Template</button>
-        </div>
+        )}
       </div>
+
 
       {open && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setOpen(false)}>
