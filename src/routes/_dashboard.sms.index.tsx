@@ -8,7 +8,7 @@ import {
 import {
   CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
-import { BuyCreditsModal, SMSCampaignModal } from "@/components/sms/SmsModals";
+import { BuyCreditsModal, SMSCampaignModal, SMSTemplateModal } from "@/components/sms/SmsModals";
 
 export const Route = createFileRoute("/_dashboard/sms/")({ component: SmsDashboard });
 
