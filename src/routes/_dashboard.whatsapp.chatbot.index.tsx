@@ -402,31 +402,40 @@ function AgentModal({ workspaceId, existing, onClose, onSaved }: { workspaceId: 
   const [saving, setSaving] = useState(false);
 
   const save = async () => {
+    if (!workspaceId) {
+      toast.error("Workspace not ready. Please refresh and try again.");
+      return;
+    }
     if (!name.trim()) return toast.error("Name is required");
     setSaving(true);
-    const config = { ...(existing?.config ?? {}), greeting_message: greeting, language, channel: "whatsapp" };
-    if (existing) {
-      const { error } = await supabase.from("ai_agents")
-        .update({ name: name.trim(), system_prompt: persona, config })
-        .eq("id", existing.id);
+    try {
+      const config = { ...(existing?.config ?? {}), greeting_message: greeting, language, channel: "whatsapp" };
+      if (existing) {
+        const { error } = await supabase.from("ai_agents")
+          .update({ name: name.trim(), system_prompt: persona, config })
+          .eq("id", existing.id);
+        if (error) throw error;
+        toast.success("Agent updated");
+        onSaved(existing.id);
+      } else {
+        const { data, error } = await supabase.from("ai_agents").insert({
+          workspace_id: workspaceId,
+          name: name.trim(),
+          type: "chat",
+          status: "inactive",
+          system_prompt: persona || null,
+          channels: ["whatsapp"],
+          config,
+        }).select("id").single();
+        if (error) throw error;
+        if (!data) throw new Error("Agent was not created");
+        toast.success("Agent created");
+        onSaved(data.id);
+      }
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not save agent");
+    } finally {
       setSaving(false);
-      if (error) return toast.error(error.message);
-      toast.success("Agent updated");
-      onSaved(existing.id);
-    } else {
-      const { data, error } = await supabase.from("ai_agents").insert({
-        workspace_id: workspaceId,
-        name: name.trim(),
-        type: "whatsapp_chatbot",
-        status: "inactive",
-        system_prompt: persona,
-        channels: ["whatsapp"],
-        config,
-      }).select("id").single();
-      setSaving(false);
-      if (error || !data) return toast.error(error?.message ?? "Could not create agent");
-      toast.success("Agent created");
-      onSaved(data.id);
     }
   };
 
