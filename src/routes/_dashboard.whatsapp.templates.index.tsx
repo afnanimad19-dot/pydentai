@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { FileText, RefreshCw, Search, Megaphone, Bell, Shield, X, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_dashboard/whatsapp/templates/")({ component: Templates });
+
+type Template = { id: string; name: string; category: string; languages: string[]; status: "Draft" | "Pending" | "Approved" | "Rejected"; body: string; createdAt: string };
+
 
 const STATS = [
   { label: "Total", value: "0" }, { label: "Approved", value: "0" },
@@ -22,6 +25,8 @@ const LANGS = ["English", "Arabic (العربية)", "Hindi", "Tagalog", "Urdu",
 
 function Templates() {
   const [open, setOpen] = useState(false);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [search, setSearch] = useState("");
   const [tName, setTName] = useState("");
   const [category, setCategory] = useState("marketing");
   const [langs, setLangs] = useState<string[]>(["English"]);
@@ -35,6 +40,20 @@ function Templates() {
   const [ctaUrl, setCtaUrl] = useState({ label: "Book Now", url: "https://" });
   const [ctaPhone, setCtaPhone] = useState({ label: "Call Us", phone: "+9715" });
   const [quick, setQuick] = useState<string[]>(["Yes", "No"]);
+  const [nameError, setNameError] = useState("");
+
+  // CRITICAL: reset all fields whenever modal opens
+  useEffect(() => {
+    if (open) {
+      setTName(""); setCategory("marketing"); setLangs(["English"]);
+      setHeaderType("none"); setHeaderText("");
+      setTab("body");
+      setBody("Hi {{name}}, welcome to {{clinic}}! Reply YES to confirm.");
+      setFooter("Reply STOP to opt out"); setAutoOpt(true);
+      setBtnType("none"); setQuick(["Yes", "No"]);
+      setNameError("");
+    }
+  }, [open]);
 
   const preview = body
     .replace(/{{name}}/g, "Ahmed")
@@ -44,12 +63,19 @@ function Templates() {
 
   const insertVar = (v: string) => setBody((b) => b + " " + v);
 
-  const submit = () => {
-    if (!tName.trim()) { toast.error("Template name required"); return; }
-    toast.success("Template submitted for WhatsApp approval");
+  const persist = (status: Template["status"]) => {
+    if (!tName.trim()) { setNameError("Template name is required"); toast.error("Template name is required"); return false; }
+    const newTemplate: Template = { id: crypto.randomUUID(), name: tName, category, languages: langs, status, body, createdAt: "just now" };
+    setTemplates((prev) => [newTemplate, ...prev]);
     setOpen(false);
+    return true;
   };
-  const saveDraft = () => { toast.success("Draft saved"); setOpen(false); };
+
+  const saveDraft = () => { if (persist("Draft")) toast.success("Template saved as draft"); };
+  const submit = () => { if (persist("Pending")) toast.success("Submitted for WhatsApp approval — review takes 24-48 hours"); };
+
+  const filtered = templates.filter((t) => !search || t.name.toLowerCase().includes(search.toLowerCase()));
+
 
   return (
     <div className="font-sans">
@@ -88,33 +114,49 @@ function Templates() {
       <div className="px-6 mb-4 flex gap-3 items-center">
         <div className="relative flex-1 max-w-xs">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4A4A6A]" />
-          <input placeholder="Search templates..." className="w-full h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs pl-8 pr-3" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search templates..." className="w-full h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-white text-xs pl-8 pr-3 placeholder:text-[#4A4A6A]" />
         </div>
         <select className="h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs px-3"><option>All Categories</option></select>
         <select className="h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs px-3"><option>All Status</option></select>
-        <div className="ml-auto text-[#4A4A6A] text-sm">0 results</div>
+        <div className="ml-auto text-[#4A4A6A] text-sm">{filtered.length} results</div>
       </div>
 
       <div className="px-6 pb-6">
-        <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl py-20 flex flex-col items-center px-6">
-          <div className="w-[72px] h-[72px] bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-2xl flex items-center justify-center mb-6">
-            <FileText size={36} className="text-[#3B82F6]/50" />
+        {filtered.length === 0 ? (
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl py-20 flex flex-col items-center px-6">
+            <div className="w-[72px] h-[72px] bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-2xl flex items-center justify-center mb-6">
+              <FileText size={36} className="text-[#3B82F6]/50" />
+            </div>
+            <div className="text-white font-bold text-xl tracking-[-0.02em] mb-2">Create Your First Template</div>
+            <div className="text-[#4A4A6A] text-sm text-center max-w-sm mb-8">
+              Design Meta-approved message templates with rich headers, buttons, and dynamic variables for automated messaging.
+            </div>
+            <div className="flex gap-4 justify-center mb-8">
+              {TYPES.map((t) => (
+                <div key={t.label} className="bg-[#06060F] border border-[#1C1C34] rounded-xl px-4 py-3 flex flex-col items-center gap-2 w-28">
+                  <t.icon size={20} className={t.color} />
+                  <span className="text-[#8B8FA8] text-xs">{t.label}</span>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => setOpen(true)} className="h-10 px-5 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-sm font-semibold">+ Create Template</button>
           </div>
-          <div className="text-white font-bold text-xl tracking-[-0.02em] mb-2">Create Your First Template</div>
-          <div className="text-[#4A4A6A] text-sm text-center max-w-sm mb-8">
-            Design Meta-approved message templates with rich headers, buttons, and dynamic variables for automated messaging.
-          </div>
-          <div className="flex gap-4 justify-center mb-8">
-            {TYPES.map((t) => (
-              <div key={t.label} className="bg-[#06060F] border border-[#1C1C34] rounded-xl px-4 py-3 flex flex-col items-center gap-2 w-28">
-                <t.icon size={20} className={t.color} />
-                <span className="text-[#8B8FA8] text-xs">{t.label}</span>
+        ) : (
+          <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl divide-y divide-[#1C1C34]">
+            {filtered.map((t) => (
+              <div key={t.id} className="px-5 py-3 flex items-center gap-3">
+                <FileText size={14} className="text-[#3B82F6]" />
+                <div className="flex-1">
+                  <div className="text-white text-sm font-semibold">{t.name}</div>
+                  <div className="text-[#4A4A6A] text-xs">{t.category} · {t.languages.join(", ")} · {t.createdAt}</div>
+                </div>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full ${t.status === "Approved" ? "bg-[#22C55E]/15 text-[#22C55E]" : t.status === "Pending" ? "bg-[#F59E0B]/15 text-[#F59E0B]" : t.status === "Rejected" ? "bg-[#FF4D6D]/15 text-[#FF4D6D]" : "bg-[#1C1C34] text-[#8B8FA8]"}`}>{t.status}</span>
               </div>
             ))}
           </div>
-          <button onClick={() => setOpen(true)} className="h-10 px-5 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-sm font-semibold">+ Create Template</button>
-        </div>
+        )}
       </div>
+
 
       {open && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setOpen(false)}>
@@ -128,8 +170,10 @@ function Templates() {
               <div className="px-6 py-5 space-y-4 border-r border-[#1E1E2E]">
                 <div>
                   <label className="text-[#8B8FA8] text-xs uppercase mb-1.5 block">Template Name</label>
-                  <input value={tName} onChange={(e) => setTName(e.target.value)} className="w-full h-10 bg-[#0B0B1A] border border-[#1E1E2E] rounded-lg px-3 text-white text-sm focus:outline-none focus:border-[#22C55E]/40" placeholder="appointment_reminder_v1" />
+                  <input value={tName} onChange={(e) => { setTName(e.target.value); if (e.target.value.trim()) setNameError(""); }} className={`w-full h-10 bg-[#0B0B1A] border rounded-lg px-3 text-white text-sm focus:outline-none ${nameError ? "border-[#FF4D6D]" : "border-[#1E1E2E] focus:border-[#22C55E]/40"}`} placeholder="appointment_reminder_v1" />
+                  {nameError && <div className="text-[#FF4D6D] text-xs mt-1">{nameError}</div>}
                 </div>
+
 
                 <div>
                   <label className="text-[#8B8FA8] text-xs uppercase mb-2 block">Category</label>

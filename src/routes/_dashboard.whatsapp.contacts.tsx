@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
-  Users, RefreshCw, Search, UserPlus, MessageSquare, Star, Target, TrendingUp, Upload, X, Download,
+  Users, RefreshCw, Search, UserPlus, MessageSquare, Star, Target, TrendingUp, Upload, X, Download, Plus,
 } from "lucide-react";
+import { useWhatsappTags } from "@/hooks/useWhatsappTags";
 
 export const Route = createFileRoute("/_dashboard/whatsapp/contacts")({ component: Contacts });
 
@@ -18,12 +19,12 @@ const STATS = [
 
 const FILTERS = ["All", "New", "Contacted", "Qualified"];
 
-type Contact = { id: string; first: string; last: string; phone: string; email: string; tags: string; status: string };
+type Contact = { id: string; first: string; last: string; phone: string; email: string; status: string };
 
 const SEED: Contact[] = [
-  { id: "1", first: "Ahmed", last: "Al Mansouri", phone: "+971 50 123 4567", email: "ahmed@example.com", tags: "VIP", status: "Qualified" },
-  { id: "2", first: "Sara", last: "Hassan", phone: "+971 55 222 3344", email: "sara@example.com", tags: "Lead", status: "Contacted" },
-  { id: "3", first: "Mohamed", last: "K.", phone: "+971 52 988 1122", email: "m.k@example.com", tags: "Returning", status: "New" },
+  { id: "1", first: "Ahmed", last: "Al Mansouri", phone: "+971 50 123 4567", email: "ahmed@example.com", status: "Qualified" },
+  { id: "2", first: "Sara", last: "Hassan", phone: "+971 55 222 3344", email: "sara@example.com", status: "Contacted" },
+  { id: "3", first: "Mohamed", last: "K.", phone: "+971 52 988 1122", email: "m.k@example.com", status: "New" },
 ];
 
 function Contacts() {
@@ -32,14 +33,17 @@ function Contacts() {
   const [selected, setSelected] = useState<string[]>([]);
   const [showAdd, setShowAdd] = useState(false);
   const [showImport, setShowImport] = useState(false);
-  const [form, setForm] = useState({ first: "", last: "", phone: "", email: "", tags: "", status: "New" });
+  const [form, setForm] = useState({ first: "", last: "", phone: "", email: "", status: "New" });
+  const [tagMenuFor, setTagMenuFor] = useState<string | null>(null);
+  const { tags, contactTags, assignTag, unassignTag } = useWhatsappTags();
+
 
   const filtered = filter === "All" ? contacts : contacts.filter((c) => c.status === filter);
 
   const submit = () => {
     if (!form.first.trim() || !form.phone.trim()) { toast.error("First name & phone required"); return; }
     setContacts((c) => [{ id: String(Date.now()), ...form }, ...c]);
-    setForm({ first: "", last: "", phone: "", email: "", tags: "", status: "New" });
+    setForm({ first: "", last: "", phone: "", email: "", status: "New" });
     setShowAdd(false);
     toast.success("✓ Contact added");
   };
@@ -136,7 +140,32 @@ function Contacts() {
                     <td className="px-4 py-3 text-white">{c.first} {c.last}</td>
                     <td className="px-4 py-3 text-[#8B8FA8]">{c.phone}</td>
                     <td className="px-4 py-3 text-[#8B8FA8]">{c.email}</td>
-                    <td className="px-4 py-3 text-[#8B8FA8]">{c.tags}</td>
+                    <td className="px-4 py-3 relative">
+                      <div className="flex items-center gap-1 flex-wrap">
+                        {contactTags(c.id).map((tid) => {
+                          const t = tags.find((x) => x.id === tid);
+                          if (!t) return null;
+                          return (
+                            <span key={tid} className="text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1" style={{ background: `${t.color}20`, color: t.color }}>
+                              {t.name}
+                              <button onClick={() => unassignTag(c.id, tid)} className="hover:opacity-70"><X size={10} /></button>
+                            </span>
+                          );
+                        })}
+                        <button onClick={() => setTagMenuFor(tagMenuFor === c.id ? null : c.id)} className="w-5 h-5 rounded-full border border-[#1C1C34] text-[#8B8FA8] hover:text-white flex items-center justify-center"><Plus size={10} /></button>
+                      </div>
+                      {tagMenuFor === c.id && (
+                        <div className="absolute z-10 top-full mt-1 left-0 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg shadow-xl min-w-[160px] py-1">
+                          {tags.length === 0 && <div className="px-3 py-2 text-[#4A4A6A] text-xs">No tags yet. Create some in the Tags tab.</div>}
+                          {tags.filter((t) => !contactTags(c.id).includes(t.id)).map((t) => (
+                            <button key={t.id} onClick={() => { assignTag(c.id, t.id); setTagMenuFor(null); }} className="w-full px-3 py-1.5 text-left text-xs text-white hover:bg-[#1C1C34] flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full" style={{ background: t.color }} />{t.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </td>
+
                     <td className="px-4 py-3"><span className="text-[#22C55E] text-xs">{c.status}</span></td>
                   </tr>
                 ))}
