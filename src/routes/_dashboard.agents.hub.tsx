@@ -281,7 +281,7 @@ function ChannelCard({
               <Bot size={14} className="text-[#4A4A6A]" />
               <span className="text-sm text-[#4A4A6A]">No agent</span>
             </button>
-            {AGENTS.map((a) => (
+            {agents.map((a) => (
               <button
                 key={a.id}
                 onClick={() => { onSelect(a.id); setOpen(false); }}
