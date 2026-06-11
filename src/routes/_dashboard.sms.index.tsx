@@ -227,8 +227,9 @@ function SmsDashboard() {
           </div>
         </div>
       </div>
-      <SMSCampaignModal open={campOpen} onClose={() => setCampOpen(false)} />
+      <SMSCampaignModal open={campOpen} onClose={() => setCampOpen(false)} schedule={scheduleMode} />
       <BuyCreditsModal open={creditsOpen} onClose={() => setCreditsOpen(false)} />
+      <SMSTemplateModal open={tplOpen} onClose={() => setTplOpen(false)} />
     </div>
   );
 }
