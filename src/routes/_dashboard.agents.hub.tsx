@@ -73,16 +73,27 @@ function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
 
 function AgentHubPage() {
   const navigate = useNavigate();
+  const { workspaceId } = useWorkspace();
+  const [agents, setAgents] = useState<AgentOption[]>([]);
   const [channels, setChannels] = useState(INITIAL);
   const [assignments, setAssignments] = useState<Record<ChannelKey, string | null>>({
-    "ai-calling": null,
-    whatsapp: null,
-    instagram: null,
-    "website-chat": "sarah",
-    email: null,
-    sms: null,
+    "ai-calling": null, whatsapp: null, instagram: null, "website-chat": null, email: null, sms: null,
   });
   const [openAgentChannel, setOpenAgentChannel] = useState<Channel | null>(null);
+
+  useEffect(() => {
+    if (!workspaceId) return;
+    supabase.from("ai_agents").select("id,name,type,status,channels").eq("workspace_id", workspaceId).then(({ data }) => {
+      const list: AgentOption[] = (data ?? []).map((r: any) => ({
+        id: r.id,
+        name: r.name,
+        type: r.type === "voice" || r.type === "omnichannel" ? r.type : "chat",
+        status: r.status === "active" ? "active" : "inactive",
+        channels: r.channels ?? [],
+      }));
+      setAgents(list);
+    });
+  }, [workspaceId]);
 
   const toggle = (i: number) =>
     setChannels((cs) => cs.map((c, j) => (i === j ? { ...c, enabled: !c.enabled } : c)));
