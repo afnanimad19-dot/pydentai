@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useWorkspace } from "@/hooks/useWorkspace";
 import {
   Bot,
   Camera,
@@ -21,18 +23,13 @@ export const Route = createFileRoute("/_dashboard/agents/hub")({
   component: AgentHubPage,
 });
 
-// Shared agents list (mirrors Agent Studio seed data)
 type AgentOption = {
   id: string;
   name: string;
   type: "voice" | "chat" | "omnichannel";
   status: "active" | "inactive";
+  channels: string[];
 };
-
-const AGENTS: AgentOption[] = [
-  { id: "dental-assistant", name: "Dental Assistant", type: "omnichannel", status: "active" },
-  { id: "sarah", name: "Sarah", type: "chat", status: "active" },
-];
 
 type ChannelKey = "ai-calling" | "whatsapp" | "instagram" | "website-chat" | "email" | "sms";
 
@@ -76,16 +73,27 @@ function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
 
 function AgentHubPage() {
   const navigate = useNavigate();
+  const { workspaceId } = useWorkspace();
+  const [agents, setAgents] = useState<AgentOption[]>([]);
   const [channels, setChannels] = useState(INITIAL);
   const [assignments, setAssignments] = useState<Record<ChannelKey, string | null>>({
-    "ai-calling": null,
-    whatsapp: null,
-    instagram: null,
-    "website-chat": "sarah",
-    email: null,
-    sms: null,
+    "ai-calling": null, whatsapp: null, instagram: null, "website-chat": null, email: null, sms: null,
   });
   const [openAgentChannel, setOpenAgentChannel] = useState<Channel | null>(null);
+
+  useEffect(() => {
+    if (!workspaceId) return;
+    supabase.from("ai_agents").select("id,name,type,status,channels").eq("workspace_id", workspaceId).then(({ data }) => {
+      const list: AgentOption[] = (data ?? []).map((r: any) => ({
+        id: r.id,
+        name: r.name,
+        type: r.type === "voice" || r.type === "omnichannel" ? r.type : "chat",
+        status: r.status === "active" ? "active" : "inactive",
+        channels: r.channels ?? [],
+      }));
+      setAgents(list);
+    });
+  }, [workspaceId]);
 
   const toggle = (i: number) =>
     setChannels((cs) => cs.map((c, j) => (i === j ? { ...c, enabled: !c.enabled } : c)));
@@ -114,7 +122,7 @@ function AgentHubPage() {
         <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-6 py-4 flex items-center gap-4">
           <Bot size={22} className="text-[#7B5CFC]" />
           <div>
-            <div className="text-white font-bold text-xl leading-none">{AGENTS.length}</div>
+            <div className="text-white font-bold text-xl leading-none">{agents.length}</div>
             <div className="text-[#4A4A6A] text-[11px] uppercase tracking-[0.06em] mt-1.5">Total Agents</div>
           </div>
         </div>
@@ -142,6 +150,7 @@ function AgentHubPage() {
           <ChannelCard
             key={c.key}
             channel={c}
+            agents={agents}
             selectedId={assignments[c.key]}
             onSelect={(id) => setAssignments((a) => ({ ...a, [c.key]: id }))}
             onToggle={() => toggle(i)}
@@ -164,6 +173,7 @@ function AgentHubPage() {
       {openAgentChannel && (
         <AgentSlideOver
           channel={openAgentChannel}
+          agents={agents}
           selectedId={assignments[openAgentChannel.key]}
           onClose={() => setOpenAgentChannel(null)}
         />

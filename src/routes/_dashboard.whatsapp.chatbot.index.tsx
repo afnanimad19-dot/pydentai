@@ -50,10 +50,13 @@ function Chatbot() {
   const reload = useCallback(async () => {
     if (!workspaceId) return;
     setLoading(true);
-    const [{ data: a }, { data: e }] = await Promise.all([
-      supabase.from("ai_agents").select("*").eq("workspace_id", workspaceId).eq("type", "whatsapp_chatbot").order("created_at", { ascending: false }),
+    // All workspace agents with WhatsApp in their channels (regardless of type)
+    const [{ data: a, error: aErr }, { data: e, error: eErr }] = await Promise.all([
+      supabase.from("ai_agents").select("*").eq("workspace_id", workspaceId).contains("channels", ["whatsapp"]).order("created_at", { ascending: false }),
       supabase.from("knowledge_entries").select("*").eq("workspace_id", workspaceId).order("created_at", { ascending: false }),
     ]);
+    if (aErr) toast.error(aErr.message);
+    if (eErr) toast.error(eErr.message);
     setAgents((a ?? []) as Agent[]);
     setEntries((e ?? []) as Entry[]);
     setLoading(false);
@@ -125,7 +128,8 @@ function Chatbot() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setCreateOpen(true)} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-sm font-semibold">+ New Agent</button>
+          <a href="/agents/studio" className="h-9 px-3 rounded-lg border border-[#1C1C34] hover:border-[#7B5CFC]/40 text-[#8B8FA8] hover:text-white text-sm flex items-center">Open Agent Studio →</a>
+          <button onClick={() => { if (!workspaceId) return toast.error("Workspace not ready"); setCreateOpen(true); }} disabled={!workspaceId} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed">+ Quick Add</button>
         </div>
       </div>
 
@@ -187,9 +191,12 @@ function Chatbot() {
               <div className="w-14 h-14 bg-[#00D4AA]/10 border border-[#00D4AA]/20 rounded-2xl flex items-center justify-center mb-4">
                 <GitBranch size={26} className="text-[#00D4AA]/50" />
               </div>
-              <div className="text-white text-sm font-semibold mb-1">No agents yet</div>
-              <div className="text-[#4A4A6A] text-xs max-w-[220px] mb-4">Create a chatbot agent to start answering WhatsApp messages automatically.</div>
-              <button onClick={() => setCreateOpen(true)} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-xs font-semibold">+ New Agent</button>
+              <div className="text-white text-sm font-semibold mb-1">No WhatsApp agents yet</div>
+              <div className="text-[#4A4A6A] text-xs max-w-[240px] mb-4">Create an agent in Agent Studio and assign it to the WhatsApp channel, or quick-add one here.</div>
+              <div className="flex gap-2">
+                <a href="/agents/studio" className="h-9 px-3 rounded-lg border border-[#1C1C34] hover:border-[#7B5CFC]/40 text-[#8B8FA8] hover:text-white text-xs flex items-center">Open Studio</a>
+                <button onClick={() => { if (!workspaceId) return toast.error("Workspace not ready"); setCreateOpen(true); }} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-xs font-semibold">+ Quick Add</button>
+              </div>
             </div>
           ) : (
             <div className="flex flex-col gap-1">
@@ -399,31 +406,40 @@ function AgentModal({ workspaceId, existing, onClose, onSaved }: { workspaceId: 
   const [saving, setSaving] = useState(false);
 
   const save = async () => {
+    if (!workspaceId) {
+      toast.error("Workspace not ready. Please refresh and try again.");
+      return;
+    }
     if (!name.trim()) return toast.error("Name is required");
     setSaving(true);
-    const config = { ...(existing?.config ?? {}), greeting_message: greeting, language, channel: "whatsapp" };
-    if (existing) {
-      const { error } = await supabase.from("ai_agents")
-        .update({ name: name.trim(), system_prompt: persona, config })
-        .eq("id", existing.id);
+    try {
+      const config = { ...(existing?.config ?? {}), greeting_message: greeting, language, channel: "whatsapp" };
+      if (existing) {
+        const { error } = await supabase.from("ai_agents")
+          .update({ name: name.trim(), system_prompt: persona, config })
+          .eq("id", existing.id);
+        if (error) throw error;
+        toast.success("Agent updated");
+        onSaved(existing.id);
+      } else {
+        const { data, error } = await supabase.from("ai_agents").insert({
+          workspace_id: workspaceId,
+          name: name.trim(),
+          type: "chat",
+          status: "inactive",
+          system_prompt: persona || null,
+          channels: ["whatsapp"],
+          config,
+        }).select("id").single();
+        if (error) throw error;
+        if (!data) throw new Error("Agent was not created");
+        toast.success("Agent created");
+        onSaved(data.id);
+      }
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not save agent");
+    } finally {
       setSaving(false);
-      if (error) return toast.error(error.message);
-      toast.success("Agent updated");
-      onSaved(existing.id);
-    } else {
-      const { data, error } = await supabase.from("ai_agents").insert({
-        workspace_id: workspaceId,
-        name: name.trim(),
-        type: "whatsapp_chatbot",
-        status: "inactive",
-        system_prompt: persona,
-        channels: ["whatsapp"],
-        config,
-      }).select("id").single();
-      setSaving(false);
-      if (error || !data) return toast.error(error?.message ?? "Could not create agent");
-      toast.success("Agent created");
-      onSaved(data.id);
     }
   };
 
