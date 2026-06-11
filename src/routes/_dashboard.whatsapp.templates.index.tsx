@@ -170,8 +170,10 @@ function Templates() {
               <div className="px-6 py-5 space-y-4 border-r border-[#1E1E2E]">
                 <div>
                   <label className="text-[#8B8FA8] text-xs uppercase mb-1.5 block">Template Name</label>
-                  <input value={tName} onChange={(e) => setTName(e.target.value)} className="w-full h-10 bg-[#0B0B1A] border border-[#1E1E2E] rounded-lg px-3 text-white text-sm focus:outline-none focus:border-[#22C55E]/40" placeholder="appointment_reminder_v1" />
+                  <input value={tName} onChange={(e) => { setTName(e.target.value); if (e.target.value.trim()) setNameError(""); }} className={`w-full h-10 bg-[#0B0B1A] border rounded-lg px-3 text-white text-sm focus:outline-none ${nameError ? "border-[#FF4D6D]" : "border-[#1E1E2E] focus:border-[#22C55E]/40"}`} placeholder="appointment_reminder_v1" />
+                  {nameError && <div className="text-[#FF4D6D] text-xs mt-1">{nameError}</div>}
                 </div>
+
 
                 <div>
                   <label className="text-[#8B8FA8] text-xs uppercase mb-2 block">Category</label>
