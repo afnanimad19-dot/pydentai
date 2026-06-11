@@ -30,7 +30,6 @@ import { Route as DashboardWhatsappReportsRouteImport } from './routes/_dashboar
 import { Route as DashboardWhatsappLiveAgentRouteImport } from './routes/_dashboard.whatsapp.live-agent'
 import { Route as DashboardWhatsappInboxRouteImport } from './routes/_dashboard.whatsapp.inbox'
 import { Route as DashboardWhatsappContactsRouteImport } from './routes/_dashboard.whatsapp.contacts'
-import { Route as DashboardWhatsappChatbotRouteImport } from './routes/_dashboard.whatsapp.chatbot'
 import { Route as DashboardWebsiteChatWidgetsRouteImport } from './routes/_dashboard.website-chat.widgets'
 import { Route as DashboardWebsiteChatVisitorsRouteImport } from './routes/_dashboard.website-chat.visitors'
 import { Route as DashboardWebsiteChatReportsRouteImport } from './routes/_dashboard.website-chat.reports'
@@ -80,6 +79,7 @@ import { Route as DashboardAgentsAvatarSyncRouteImport } from './routes/_dashboa
 import { Route as DashboardAgentsAvatarStudioRouteImport } from './routes/_dashboard.agents.avatar-studio'
 import { Route as DashboardAgentsAvatarManageRouteImport } from './routes/_dashboard.agents.avatar-manage'
 import { Route as DashboardWhatsappTemplatesIndexRouteImport } from './routes/_dashboard.whatsapp.templates.index'
+import { Route as DashboardWhatsappChatbotIndexRouteImport } from './routes/_dashboard.whatsapp.chatbot.index'
 import { Route as DashboardWhatsappCampaignsIndexRouteImport } from './routes/_dashboard.whatsapp.campaigns.index'
 import { Route as DashboardWhatsappTemplatesNewRouteImport } from './routes/_dashboard.whatsapp.templates.new'
 import { Route as DashboardWhatsappCampaignsNewRouteImport } from './routes/_dashboard.whatsapp.campaigns.new'
@@ -193,12 +193,6 @@ const DashboardWhatsappContactsRoute =
   DashboardWhatsappContactsRouteImport.update({
     id: '/whatsapp/contacts',
     path: '/whatsapp/contacts',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardWhatsappChatbotRoute =
-  DashboardWhatsappChatbotRouteImport.update({
-    id: '/whatsapp/chatbot',
-    path: '/whatsapp/chatbot',
     getParentRoute: () => DashboardRoute,
   } as any)
 const DashboardWebsiteChatWidgetsRoute =
@@ -476,6 +470,12 @@ const DashboardWhatsappTemplatesIndexRoute =
     path: '/whatsapp/templates/',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardWhatsappChatbotIndexRoute =
+  DashboardWhatsappChatbotIndexRouteImport.update({
+    id: '/whatsapp/chatbot/',
+    path: '/whatsapp/chatbot/',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardWhatsappCampaignsIndexRoute =
   DashboardWhatsappCampaignsIndexRouteImport.update({
     id: '/whatsapp/campaigns/',
@@ -571,7 +571,6 @@ export interface FileRoutesByFullPath {
   '/website-chat/reports': typeof DashboardWebsiteChatReportsRoute
   '/website-chat/visitors': typeof DashboardWebsiteChatVisitorsRoute
   '/website-chat/widgets': typeof DashboardWebsiteChatWidgetsRoute
-  '/whatsapp/chatbot': typeof DashboardWhatsappChatbotRoute
   '/whatsapp/contacts': typeof DashboardWhatsappContactsRoute
   '/whatsapp/inbox': typeof DashboardWhatsappInboxRoute
   '/whatsapp/live-agent': typeof DashboardWhatsappLiveAgentRoute
@@ -588,6 +587,7 @@ export interface FileRoutesByFullPath {
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
   '/whatsapp/templates/new': typeof DashboardWhatsappTemplatesNewRoute
   '/whatsapp/campaigns/': typeof DashboardWhatsappCampaignsIndexRoute
+  '/whatsapp/chatbot/': typeof DashboardWhatsappChatbotIndexRoute
   '/whatsapp/templates/': typeof DashboardWhatsappTemplatesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -649,7 +649,6 @@ export interface FileRoutesByTo {
   '/website-chat/reports': typeof DashboardWebsiteChatReportsRoute
   '/website-chat/visitors': typeof DashboardWebsiteChatVisitorsRoute
   '/website-chat/widgets': typeof DashboardWebsiteChatWidgetsRoute
-  '/whatsapp/chatbot': typeof DashboardWhatsappChatbotRoute
   '/whatsapp/contacts': typeof DashboardWhatsappContactsRoute
   '/whatsapp/inbox': typeof DashboardWhatsappInboxRoute
   '/whatsapp/live-agent': typeof DashboardWhatsappLiveAgentRoute
@@ -666,6 +665,7 @@ export interface FileRoutesByTo {
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
   '/whatsapp/templates/new': typeof DashboardWhatsappTemplatesNewRoute
   '/whatsapp/campaigns': typeof DashboardWhatsappCampaignsIndexRoute
+  '/whatsapp/chatbot': typeof DashboardWhatsappChatbotIndexRoute
   '/whatsapp/templates': typeof DashboardWhatsappTemplatesIndexRoute
 }
 export interface FileRoutesById {
@@ -729,7 +729,6 @@ export interface FileRoutesById {
   '/_dashboard/website-chat/reports': typeof DashboardWebsiteChatReportsRoute
   '/_dashboard/website-chat/visitors': typeof DashboardWebsiteChatVisitorsRoute
   '/_dashboard/website-chat/widgets': typeof DashboardWebsiteChatWidgetsRoute
-  '/_dashboard/whatsapp/chatbot': typeof DashboardWhatsappChatbotRoute
   '/_dashboard/whatsapp/contacts': typeof DashboardWhatsappContactsRoute
   '/_dashboard/whatsapp/inbox': typeof DashboardWhatsappInboxRoute
   '/_dashboard/whatsapp/live-agent': typeof DashboardWhatsappLiveAgentRoute
@@ -746,6 +745,7 @@ export interface FileRoutesById {
   '/_dashboard/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
   '/_dashboard/whatsapp/templates/new': typeof DashboardWhatsappTemplatesNewRoute
   '/_dashboard/whatsapp/campaigns/': typeof DashboardWhatsappCampaignsIndexRoute
+  '/_dashboard/whatsapp/chatbot/': typeof DashboardWhatsappChatbotIndexRoute
   '/_dashboard/whatsapp/templates/': typeof DashboardWhatsappTemplatesIndexRoute
 }
 export interface FileRouteTypes {
@@ -809,7 +809,6 @@ export interface FileRouteTypes {
     | '/website-chat/reports'
     | '/website-chat/visitors'
     | '/website-chat/widgets'
-    | '/whatsapp/chatbot'
     | '/whatsapp/contacts'
     | '/whatsapp/inbox'
     | '/whatsapp/live-agent'
@@ -826,6 +825,7 @@ export interface FileRouteTypes {
     | '/whatsapp/campaigns/new'
     | '/whatsapp/templates/new'
     | '/whatsapp/campaigns/'
+    | '/whatsapp/chatbot/'
     | '/whatsapp/templates/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -887,7 +887,6 @@ export interface FileRouteTypes {
     | '/website-chat/reports'
     | '/website-chat/visitors'
     | '/website-chat/widgets'
-    | '/whatsapp/chatbot'
     | '/whatsapp/contacts'
     | '/whatsapp/inbox'
     | '/whatsapp/live-agent'
@@ -904,6 +903,7 @@ export interface FileRouteTypes {
     | '/whatsapp/campaigns/new'
     | '/whatsapp/templates/new'
     | '/whatsapp/campaigns'
+    | '/whatsapp/chatbot'
     | '/whatsapp/templates'
   id:
     | '__root__'
@@ -966,7 +966,6 @@ export interface FileRouteTypes {
     | '/_dashboard/website-chat/reports'
     | '/_dashboard/website-chat/visitors'
     | '/_dashboard/website-chat/widgets'
-    | '/_dashboard/whatsapp/chatbot'
     | '/_dashboard/whatsapp/contacts'
     | '/_dashboard/whatsapp/inbox'
     | '/_dashboard/whatsapp/live-agent'
@@ -983,6 +982,7 @@ export interface FileRouteTypes {
     | '/_dashboard/whatsapp/campaigns/new'
     | '/_dashboard/whatsapp/templates/new'
     | '/_dashboard/whatsapp/campaigns/'
+    | '/_dashboard/whatsapp/chatbot/'
     | '/_dashboard/whatsapp/templates/'
   fileRoutesById: FileRoutesById
 }
@@ -1143,13 +1143,6 @@ declare module '@tanstack/react-router' {
       path: '/whatsapp/contacts'
       fullPath: '/whatsapp/contacts'
       preLoaderRoute: typeof DashboardWhatsappContactsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/_dashboard/whatsapp/chatbot': {
-      id: '/_dashboard/whatsapp/chatbot'
-      path: '/whatsapp/chatbot'
-      fullPath: '/whatsapp/chatbot'
-      preLoaderRoute: typeof DashboardWhatsappChatbotRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/website-chat/widgets': {
@@ -1495,6 +1488,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardWhatsappTemplatesIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/whatsapp/chatbot/': {
+      id: '/_dashboard/whatsapp/chatbot/'
+      path: '/whatsapp/chatbot'
+      fullPath: '/whatsapp/chatbot/'
+      preLoaderRoute: typeof DashboardWhatsappChatbotIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/whatsapp/campaigns/': {
       id: '/_dashboard/whatsapp/campaigns/'
       path: '/whatsapp/campaigns'
@@ -1634,7 +1634,6 @@ interface DashboardRouteChildren {
   DashboardWebsiteChatReportsRoute: typeof DashboardWebsiteChatReportsRoute
   DashboardWebsiteChatVisitorsRoute: typeof DashboardWebsiteChatVisitorsRoute
   DashboardWebsiteChatWidgetsRoute: typeof DashboardWebsiteChatWidgetsRoute
-  DashboardWhatsappChatbotRoute: typeof DashboardWhatsappChatbotRoute
   DashboardWhatsappContactsRoute: typeof DashboardWhatsappContactsRoute
   DashboardWhatsappInboxRoute: typeof DashboardWhatsappInboxRoute
   DashboardWhatsappLiveAgentRoute: typeof DashboardWhatsappLiveAgentRoute
@@ -1648,6 +1647,7 @@ interface DashboardRouteChildren {
   DashboardWhatsappCampaignsNewRoute: typeof DashboardWhatsappCampaignsNewRoute
   DashboardWhatsappTemplatesNewRoute: typeof DashboardWhatsappTemplatesNewRoute
   DashboardWhatsappCampaignsIndexRoute: typeof DashboardWhatsappCampaignsIndexRoute
+  DashboardWhatsappChatbotIndexRoute: typeof DashboardWhatsappChatbotIndexRoute
   DashboardWhatsappTemplatesIndexRoute: typeof DashboardWhatsappTemplatesIndexRoute
 }
 
@@ -1706,7 +1706,6 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardWebsiteChatReportsRoute: DashboardWebsiteChatReportsRoute,
   DashboardWebsiteChatVisitorsRoute: DashboardWebsiteChatVisitorsRoute,
   DashboardWebsiteChatWidgetsRoute: DashboardWebsiteChatWidgetsRoute,
-  DashboardWhatsappChatbotRoute: DashboardWhatsappChatbotRoute,
   DashboardWhatsappContactsRoute: DashboardWhatsappContactsRoute,
   DashboardWhatsappInboxRoute: DashboardWhatsappInboxRoute,
   DashboardWhatsappLiveAgentRoute: DashboardWhatsappLiveAgentRoute,
@@ -1720,6 +1719,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardWhatsappCampaignsNewRoute: DashboardWhatsappCampaignsNewRoute,
   DashboardWhatsappTemplatesNewRoute: DashboardWhatsappTemplatesNewRoute,
   DashboardWhatsappCampaignsIndexRoute: DashboardWhatsappCampaignsIndexRoute,
+  DashboardWhatsappChatbotIndexRoute: DashboardWhatsappChatbotIndexRoute,
   DashboardWhatsappTemplatesIndexRoute: DashboardWhatsappTemplatesIndexRoute,
 }
 
@@ -1739,3 +1739,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
-  GitBranch, Search, Layers, CheckCircle, Zap, Network, Link2, Activity, X, Sparkles,
+  GitBranch, Search, Layers, CheckCircle, Zap, Network, Link2, Activity, X, Sparkles, Plus,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_dashboard/whatsapp/chatbot/")({ component: Chatbot });
@@ -19,19 +19,32 @@ const METRICS = [
 function Chatbot() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<"flows" | "analytics" | "intelligence">("flows");
-  const [aiOpen, setAiOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [goal, setGoal] = useState("");
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState<"All" | "Active" | "Draft">("All");
+  const [view, setView] = useState<"grid" | "list">("grid");
+  const [query, setQuery] = useState("");
+
+  const newId = () => `flow_${Date.now()}`;
 
   const generate = () => {
     if (!goal.trim()) { toast.error("Describe your goal"); return; }
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setAiOpen(false);
-      toast.success("Flow generated! Opening builder...");
-      navigate({ to: "/agents/workflows/canvas", search: { channel: "whatsapp" } as any });
-    }, 2000);
+      setModalOpen(false);
+      const id = newId();
+      try { localStorage.setItem(`wa_flow_${id}_seed`, "ai"); } catch {}
+      toast.success("Flow generated — review and customize");
+      navigate({ to: "/whatsapp/chatbot/flow/$id", params: { id } });
+    }, 2500);
+  };
+
+  const createBlank = () => {
+    setModalOpen(false);
+    const id = newId();
+    navigate({ to: "/whatsapp/chatbot/flow/$id", params: { id }, search: { blank: true } as any });
   };
 
   return (
@@ -52,21 +65,26 @@ function Chatbot() {
         </div>
         <div className="flex items-center gap-2">
           <button className="h-9 px-3 border border-[#1C1C34] hover:bg-[#1C1C34] text-[#8B8FA8] text-sm rounded-lg">Export</button>
-          <button onClick={() => navigate({ to: "/agents/workflows/canvas", search: { channel: "whatsapp" } as any })} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-sm font-semibold">+ New Flow</button>
+          <button onClick={() => setModalOpen(true)} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-sm font-semibold">+ New Flow</button>
         </div>
       </div>
 
       <div className="px-6 mb-4">
-        <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-5 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-white font-bold text-lg">0%</span>
-            <span className="text-[#8B8FA8] text-sm">Automation Readiness</span>
-            <span className="text-[#4A4A6A] text-xs ml-3">Get started by creating your first active flow with triggers.</span>
+        <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-5 py-3">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <span className="text-white font-bold text-lg">0%</span>
+              <span className="text-[#8B8FA8] text-sm">Automation Readiness</span>
+              <span className="text-[#4A4A6A] text-xs ml-3">Get started by creating your first active flow with triggers.</span>
+            </div>
+            <div className="flex gap-6">
+              <span className="text-[#8B8FA8] text-xs">0% AVG HEALTH</span>
+              <span className="text-[#8B8FA8] text-xs">0% ACTIVE RATE</span>
+              <span className="text-[#8B8FA8] text-xs">0 ATTENTION</span>
+            </div>
           </div>
-          <div className="flex gap-6">
-            <span className="text-[#8B8FA8] text-xs">0% AVG HEALTH</span>
-            <span className="text-[#8B8FA8] text-xs">0% ACTIVE RATE</span>
-            <span className="text-[#8B8FA8] text-xs">0 ATTENTION</span>
+          <div className="h-1.5 bg-[#1C1C34] rounded-full overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-[#00D4AA] to-[#7B5CFC]" style={{ width: "0%" }} />
           </div>
         </div>
       </div>
@@ -90,7 +108,7 @@ function Chatbot() {
         ))}
       </div>
 
-      <div className="px-6 mb-4 flex items-center gap-3">
+      <div className="px-6 mb-4 flex items-center gap-3 flex-wrap">
         <div className="flex gap-1">
           {([
             { id: "flows", label: "Flows 0" },
@@ -100,11 +118,20 @@ function Chatbot() {
             <button key={t.id} onClick={() => setTab(t.id)} className={tab === t.id ? "bg-[#00D4AA]/12 text-[#00D4AA] border border-[#00D4AA]/20 px-3 py-1.5 text-xs rounded-full font-medium" : "text-[#8B8FA8] hover:text-white text-xs px-3 py-1.5"}>{t.label}</button>
           ))}
         </div>
-        <div className="relative flex-1 ml-4">
+        <div className="relative flex-1 ml-4 min-w-[200px]">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4A4A6A]" />
-          <input placeholder="Search flows by name or description..." className="w-full h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg pl-8 pr-3 text-[#8B8FA8] text-xs" />
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search flows by name or description..." className="w-full h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg pl-8 pr-3 text-[#8B8FA8] text-xs" />
         </div>
-        <select className="h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs px-3"><option>Last Updated</option></select>
+        <div className="flex gap-1 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg p-1">
+          {(["All", "Active", "Draft"] as const).map((f) => (
+            <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 rounded-md text-xs font-medium ${filter === f ? "bg-[#00D4AA] text-black" : "text-[#8B8FA8] hover:text-white"}`}>{f}</button>
+          ))}
+        </div>
+        <select className="h-9 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg text-[#8B8FA8] text-xs px-3"><option>Last Updated</option><option>Name</option><option>Status</option></select>
+        <div className="flex gap-1 bg-[#0B0B1A] border border-[#1C1C34] rounded-lg p-1">
+          <button onClick={() => setView("grid")} className={`px-2.5 py-1 text-xs rounded ${view === "grid" ? "bg-[#1C1C34] text-white" : "text-[#8B8FA8]"}`}>Grid</button>
+          <button onClick={() => setView("list")} className={`px-2.5 py-1 text-xs rounded ${view === "list" ? "bg-[#1C1C34] text-white" : "text-[#8B8FA8]"}`}>List</button>
+        </div>
       </div>
 
       <div className="px-6 pb-6">
@@ -117,10 +144,7 @@ function Chatbot() {
             <div className="text-[#4A4A6A] text-sm text-center max-w-sm mb-8">
               Create your first conversation flow to automate WhatsApp responses with AI-powered interactions.
             </div>
-            <div className="flex gap-3 justify-center">
-              <button onClick={() => setAiOpen(true)} className="h-10 px-5 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold">Create with AI ✨</button>
-              <button onClick={() => navigate({ to: "/agents/workflows/canvas", search: { blank: "true" } as any })} className="h-10 px-5 rounded-lg border border-[#1C1C34] hover:bg-[#1C1C34] text-[#8B8FA8] text-sm">Blank Flow</button>
-            </div>
+            <button onClick={() => setModalOpen(true)} className="h-10 px-5 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-sm font-semibold">+ New Flow</button>
           </div>
         )}
 
@@ -156,23 +180,35 @@ function Chatbot() {
         )}
       </div>
 
-      {aiOpen && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setAiOpen(false)}>
-          <div className="bg-[#16161F] border border-[#1E1E2E] rounded-2xl w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setModalOpen(false)}>
+          <div className="bg-[#16161F] border border-[#1E1E2E] rounded-2xl w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between px-6 py-4 border-b border-[#1E1E2E]">
-              <div className="flex items-center gap-2">
-                <Sparkles size={16} className="text-[#7B5CFC]" />
-                <h2 className="text-white font-semibold text-base">Create with AI</h2>
-              </div>
-              <button onClick={() => setAiOpen(false)} className="text-[#8B8FA8] hover:text-white"><X size={18} /></button>
+              <h2 className="text-white font-semibold text-base">Create New Flow</h2>
+              <button onClick={() => setModalOpen(false)} className="text-[#8B8FA8] hover:text-white"><X size={18} /></button>
             </div>
-            <div className="px-6 py-5 space-y-3">
-              <label className="text-[#8B8FA8] text-xs uppercase block">Describe the flow you want</label>
-              <textarea value={goal} onChange={(e) => setGoal(e.target.value)} rows={5} placeholder="e.g. Greet new patients, ask the reason for visit, suggest available slots..." className="w-full bg-[#0B0B1A] border border-[#1E1E2E] rounded-lg p-3 text-white text-sm focus:outline-none focus:border-[#7B5CFC]/40 resize-none" />
-              <button onClick={generate} disabled={loading} className="w-full h-10 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold disabled:opacity-60 flex items-center justify-center gap-2">
-                {loading && <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
-                {loading ? "Generating Flow..." : "Generate Flow"}
-              </button>
+            <div className="px-6 py-5 grid grid-cols-2 gap-4">
+              <div className="bg-[#0B0B1A] border border-[#7B5CFC]/30 rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <Sparkles size={16} className="text-[#7B5CFC]" />
+                  <h3 className="text-white font-semibold text-sm">Create with AI</h3>
+                </div>
+                <p className="text-[#4A4A6A] text-xs mb-3">Describe your flow and we'll generate it for you.</p>
+                <textarea value={goal} onChange={(e) => setGoal(e.target.value)} rows={4} placeholder="Describe what you want your chatbot to do..." className="w-full bg-[#06060F] border border-[#1E1E2E] rounded-lg p-3 text-white text-xs focus:outline-none focus:border-[#7B5CFC]/40 resize-none mb-3" />
+                <button onClick={generate} disabled={loading} className="w-full h-9 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-xs font-semibold disabled:opacity-60 flex items-center justify-center gap-2">
+                  {loading && <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                  {loading ? "Generating your flow..." : "Generate Flow"}
+                </button>
+              </div>
+              <div className="bg-[#0B0B1A] border border-[#1E1E2E] rounded-xl p-5 flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <Plus size={16} className="text-[#00D4AA]" />
+                  <h3 className="text-white font-semibold text-sm">Blank Flow</h3>
+                </div>
+                <p className="text-[#4A4A6A] text-xs mb-3">Start with an empty canvas</p>
+                <div className="flex-1" />
+                <button onClick={createBlank} className="w-full h-9 rounded-lg border border-[#1C1C34] hover:bg-[#1C1C34] text-[#8B8FA8] text-xs">Create Blank</button>
+              </div>
             </div>
           </div>
         </div>
