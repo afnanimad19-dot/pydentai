@@ -294,6 +294,127 @@ function Campaigns() {
           </div>
         </div>
       )}
+
+      {selectedCampaign && (
+        <CampaignDetailPanel
+          campaign={selectedCampaign}
+          onClose={() => setSelectedId(null)}
+          onUpdate={(patch) => updateCampaign(selectedCampaign.id, patch)}
+        />
+      )}
     </div>
   );
 }
+
+function CampaignDetailPanel({ campaign, onClose, onUpdate }: { campaign: Campaign; onClose: () => void; onUpdate: (p: Partial<Campaign>) => void }) {
+  const [tab, setTab] = useState<"overview" | "message" | "audience" | "schedule" | "analytics">("overview");
+  const [name, setName] = useState(campaign.name);
+  const [body, setBody] = useState(campaign.body || "");
+  const [image, setImage] = useState<string | null>(null);
+  const [optOut, setOptOut] = useState(false);
+
+  const previewBody = optOut && !/STOP to unsubscribe/i.test(body) ? `${body}\n\nReply STOP to unsubscribe` : body;
+
+  const save = () => { onUpdate({ name, body: previewBody }); toast.success("Campaign updated"); };
+  const launch = () => { onUpdate({ name, body: previewBody, status: "Sending" }); toast.success("Launching campaign…"); onClose(); };
+
+  const TABS = [
+    { id: "overview", label: "Overview" },
+    { id: "message", label: "Message" },
+    { id: "audience", label: "Audience" },
+    { id: "schedule", label: "Schedule" },
+    { id: "analytics", label: "Analytics" },
+  ] as const;
+
+  return (
+    <div className="fixed inset-0 bg-black/60 z-50 flex justify-end" onClick={onClose}>
+      <div className="w-[420px] h-full bg-[#0B0B1A] border-l border-[#1C1C34] flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="px-5 py-4 border-b border-[#1C1C34] flex items-center gap-2">
+          <input value={name} onChange={(e) => setName(e.target.value)} className="flex-1 bg-transparent text-white font-semibold text-sm outline-none border-b border-transparent focus:border-[#22C55E]/40 px-1" />
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#8B8FA8]/15 text-[#8B8FA8]">{campaign.status}</span>
+          <button onClick={onClose} className="text-[#8B8FA8] hover:text-white"><X size={16} /></button>
+        </div>
+
+        <div className="px-2 border-b border-[#1C1C34] flex gap-1 overflow-x-auto">
+          {TABS.map((t) => (
+            <button key={t.id} onClick={() => setTab(t.id)} className={`px-3 py-2 text-xs whitespace-nowrap border-b-2 ${tab === t.id ? "text-white border-[#22C55E]" : "text-[#8B8FA8] border-transparent"}`}>{t.label}</button>
+          ))}
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+          {tab === "overview" && (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                {([["Sent", campaign.sent ?? 0], ["Delivered", campaign.delivered ?? 0], ["Failed", campaign.failed ?? 0], ["Open Rate", `${campaign.openRate ?? 0}%`]] as const).map(([l, v]) => (
+                  <div key={l} className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-3">
+                    <div className="text-[#4A4A6A] text-[10px] uppercase">{l}</div>
+                    <div className="text-white font-bold text-lg mt-1">{v}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-3 text-xs space-y-1">
+                <div className="flex justify-between text-[#8B8FA8]"><span>Type</span><span className="text-white">{campaign.type}</span></div>
+                <div className="flex justify-between text-[#8B8FA8]"><span>Created</span><span className="text-white">{campaign.created}</span></div>
+                <div className="flex justify-between text-[#8B8FA8]"><span>Audience</span><span className="text-white">{campaign.audience || "—"}</span></div>
+              </div>
+            </>
+          )}
+
+          {tab === "message" && (
+            <>
+              <div>
+                <div className="text-[#8B8FA8] text-[10px] uppercase mb-1.5">Message Body</div>
+                <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={6} className="w-full bg-[#06060F] border border-[#1C1C34] rounded-lg p-3 text-white text-sm focus:outline-none focus:border-[#22C55E]/40 resize-none" />
+              </div>
+              <div>
+                <label className="h-9 px-3 rounded-lg border border-[#1C1C34] text-[#8B8FA8] text-xs inline-flex items-center gap-2 cursor-pointer hover:text-white">
+                  Add Image
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) setImage(URL.createObjectURL(f)); }} />
+                </label>
+                {image && <img src={image} alt="" className="mt-2 max-h-32 rounded-lg" />}
+              </div>
+              <label className="flex items-center justify-between bg-[#06060F] border border-[#1C1C34] rounded-lg px-3 py-2">
+                <span className="text-[#8B8FA8] text-xs">Append STOP opt-out</span>
+                <button onClick={() => setOptOut((v) => !v)} className={`relative w-10 h-5 rounded-full transition-colors ${optOut ? "bg-[#22C55E]" : "bg-[#1C1C34]"}`}>
+                  <span className="absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform" style={{ transform: optOut ? "translateX(22px)" : "translateX(2px)" }} />
+                </button>
+              </label>
+              <div>
+                <div className="text-[#8B8FA8] text-[10px] uppercase mb-1.5">Preview</div>
+                <div className="bg-[#06060F] border border-[#1C1C34] rounded-lg p-3 text-xs text-[#8B8FA8] whitespace-pre-wrap">{previewBody.replace(/{{name}}/g, "Ahmed").replace(/{{clinic}}/g, "Smile Zone").replace(/{{date}}/g, "Thu, Jun 12").replace(/{{time}}/g, "3:00 PM")}</div>
+              </div>
+            </>
+          )}
+
+          {tab === "audience" && (
+            <div className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-4 text-xs space-y-2">
+              <div className="flex justify-between text-[#8B8FA8]"><span>Type</span><span className="text-white">{campaign.audience || "all"}</span></div>
+              <div className="text-[#4A4A6A]">~320 recipients matched</div>
+            </div>
+          )}
+
+          {tab === "schedule" && (
+            <div className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-4 text-xs space-y-3">
+              <div className="flex justify-between text-[#8B8FA8]"><span>Send time</span><span className="text-white">{campaign.scheduleAt || "Send now"}</span></div>
+              <button className="h-9 w-full rounded-lg border border-[#1C1C34] text-[#8B8FA8] text-xs hover:text-white">Reschedule</button>
+            </div>
+          )}
+
+          {tab === "analytics" && (
+            <div className="bg-[#06060F] border border-[#1C1C34] rounded-xl p-4 text-center text-[#4A4A6A] text-xs">
+              {campaign.status === "Sending" || campaign.status === "Completed" ? "Charts loading…" : "Analytics will appear once campaign is sent."}
+            </div>
+          )}
+        </div>
+
+        <div className="px-5 py-4 border-t border-[#1C1C34] flex justify-end gap-2">
+          <button onClick={save} className="h-9 px-4 rounded-lg border border-[#1C1C34] text-[#8B8FA8] hover:text-white text-sm">Save Changes</button>
+          {campaign.status === "Draft" && (
+            <button onClick={launch} className="h-9 px-5 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-white text-sm font-semibold">Launch Campaign</button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
