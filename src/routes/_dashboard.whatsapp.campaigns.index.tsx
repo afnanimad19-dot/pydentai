@@ -147,14 +147,15 @@ function Campaigns() {
         ) : (
           <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl divide-y divide-[#1C1C34]">
             {filtered.map((c) => (
-              <div key={c.id} className="px-5 py-4 flex items-center justify-between">
+              <button key={c.id} onClick={() => setSelectedId(c.id)} className="w-full px-5 py-4 flex items-center justify-between hover:bg-[#1C1C34]/30 text-left">
                 <div>
                   <div className="text-white text-sm font-semibold">{c.name}</div>
                   <div className="text-[#4A4A6A] text-xs">{c.type} · {c.created}</div>
                 </div>
                 <span className="bg-[#8B8FA8]/12 text-[#8B8FA8] text-[10px] px-2 py-0.5 rounded-full">{c.status}</span>
-              </div>
+              </button>
             ))}
+
           </div>
         )}
       </div>
