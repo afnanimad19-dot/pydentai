@@ -808,7 +808,7 @@ function Wizard({
                 {step === STEP_LABELS.length - 2 ? "Review" : "Continue"} <ChevronRight size={14} />
               </button>
             ) : (
-              <button onClick={handleCreate} className="h-9 px-5 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold">Create Agent</button>
+              <button onClick={handleCreate} disabled={saving} className="h-9 px-5 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold disabled:opacity-60">{saving ? "Creating…" : "Create Agent"}</button>
             )}
           </div>
         </div>
