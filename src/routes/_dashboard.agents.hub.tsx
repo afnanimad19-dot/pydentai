@@ -323,15 +323,17 @@ function ChannelCard({
 
 function AgentSlideOver({
   channel,
+  agents,
   selectedId,
   onClose,
 }: {
   channel: Channel;
+  agents: AgentOption[];
   selectedId: string | null;
   onClose: () => void;
 }) {
   const navigate = useNavigate();
-  const selected = AGENTS.find((a) => a.id === selectedId) || null;
+  const selected = agents.find((a) => a.id === selectedId) || null;
   const [active, setActive] = useState(channel.enabled);
   const [readiness, setReadiness] = useState(0);
   const targetReadiness = selected ? 84 : 12;
