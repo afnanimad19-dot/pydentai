@@ -565,7 +565,7 @@ function AgentStudioPage() {
         <Wizard
           template={wizardTemplate}
           onClose={() => setWizardOpen(false)}
-          onCreate={(a) => { onCreateAgent(a); setWizardOpen(false); }}
+          onCreate={(s) => onCreateFromWizard(s)}
         />
       )}
       {confirmDelete && (
