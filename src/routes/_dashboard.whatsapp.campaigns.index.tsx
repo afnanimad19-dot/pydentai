@@ -73,7 +73,7 @@ function Campaigns() {
   const create = () => {
     if (!name.trim()) { toast.error("Campaign name required"); setStep(1); return; }
     setCampaigns((c) => [
-      { id: String(Date.now()), name, type, status: "Draft", created: "just now" },
+      { id: crypto.randomUUID(), name, type, status: "Draft", created: "just now", body, audience, scheduleAt, sent: 0, delivered: 0, failed: 0, openRate: 0 },
       ...c,
     ]);
     toast.success("✓ Campaign created");
@@ -81,6 +81,10 @@ function Campaigns() {
     setName(""); setDesc(""); setBody("Hi {{name}}, your appointment at {{clinic}} is on {{date}} at {{time}}.");
     setAudience("all"); setGroups([]); setScheduleMode("now"); setScheduleAt("");
   };
+
+  const updateCampaign = (id: string, patch: Partial<Campaign>) => setCampaigns((cs) => cs.map((c) => (c.id === id ? { ...c, ...patch } : c)));
+  const selectedCampaign = campaigns.find((c) => c.id === selectedId) || null;
+
 
   const filtered = filter === "All" ? campaigns : campaigns.filter((c) => c.status === filter);
 
