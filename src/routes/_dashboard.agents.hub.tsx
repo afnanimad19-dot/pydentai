@@ -150,6 +150,7 @@ function AgentHubPage() {
           <ChannelCard
             key={c.key}
             channel={c}
+            agents={agents}
             selectedId={assignments[c.key]}
             onSelect={(id) => setAssignments((a) => ({ ...a, [c.key]: id }))}
             onToggle={() => toggle(i)}
@@ -172,6 +173,7 @@ function AgentHubPage() {
       {openAgentChannel && (
         <AgentSlideOver
           channel={openAgentChannel}
+          agents={agents}
           selectedId={assignments[openAgentChannel.key]}
           onClose={() => setOpenAgentChannel(null)}
         />
