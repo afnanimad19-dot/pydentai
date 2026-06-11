@@ -265,6 +265,59 @@ export type Database = {
           },
         ]
       }
+      chatbot_flows: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          edges: Json
+          id: string
+          name: string
+          nodes: Json
+          stats: Json
+          status: string
+          trigger: Json
+          updated_at: string
+          variables: Json
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          edges?: Json
+          id?: string
+          name?: string
+          nodes?: Json
+          stats?: Json
+          status?: string
+          trigger?: Json
+          updated_at?: string
+          variables?: Json
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          edges?: Json
+          id?: string
+          name?: string
+          nodes?: Json
+          stats?: Json
+          status?: string
+          trigger?: Json
+          updated_at?: string
+          variables?: Json
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_flows_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contacts: {
         Row: {
           assigned_agent_id: string | null
