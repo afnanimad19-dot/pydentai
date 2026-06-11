@@ -452,6 +452,60 @@ export type Database = {
           },
         ]
       }
+      knowledge_entries: {
+        Row: {
+          agent_id: string | null
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean
+          metadata: Json | null
+          source_type: string
+          title: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          metadata?: Json | null
+          source_type?: string
+          title: string
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          metadata?: Json | null
+          source_type?: string
+          title?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_entries_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ai_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_entries_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: Json
