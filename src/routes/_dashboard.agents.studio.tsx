@@ -64,36 +64,51 @@ interface Agent {
   model?: string;
 }
 
-const SEED_AGENTS: Agent[] = [
-  {
-    id: "dental-assistant",
-    name: "Dental Assistant",
-    sub: "Persona & Tone Guidelines",
-    type: "omnichannel",
-    status: "active",
-    readiness: 95,
-    channels: ["WhatsApp", "Voice"],
-    language: "English (US)",
-    docs: 52,
-    faqs: 0,
+type DbAgent = {
+  id: string;
+  workspace_id: string;
+  name: string;
+  type: string;
+  status: string;
+  system_prompt: string | null;
+  channels: string[] | null;
+  config: Record<string, any> | null;
+  updated_at: string;
+};
+
+function relTime(iso: string) {
+  const d = new Date(iso).getTime();
+  const diff = Date.now() - d;
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+
+function dbToAgent(r: DbAgent, knowledgeCount = 0): Agent {
+  const t: AgentType = r.type === "voice" || r.type === "omnichannel" ? r.type : "chat";
+  const channels = (r.channels ?? []).map((c) =>
+    c === "whatsapp" ? "WhatsApp" : c === "instagram" ? "Instagram" : c === "website-chat" || c === "website_chat" ? "Website Chat" : c === "sms" ? "SMS" : c === "email" ? "Email" : c === "voice" ? "Voice" : c
+  );
+  const cfg = r.config ?? {};
+  return {
+    id: r.id,
+    name: r.name,
+    sub: cfg.role || (r.system_prompt?.slice(0, 60) ?? "AI Agent"),
+    type: t,
+    status: r.status === "active" ? "active" : "inactive",
+    readiness: typeof cfg.readiness === "number" ? cfg.readiness : (r.system_prompt ? 60 : 20),
+    channels,
+    language: cfg.language || "English",
+    docs: 0,
+    faqs: knowledgeCount,
     calls: 0,
-    updatedAt: "1d ago",
-  },
-  {
-    id: "sarah",
-    name: "Sarah",
-    sub: "Front-desk chat persona",
-    type: "chat",
-    status: "active",
-    readiness: 100,
-    channels: ["Website Chat"],
-    language: "English (US)",
-    docs: 1,
-    faqs: 68,
-    calls: 0,
-    updatedAt: "12h ago",
-  },
-];
+    updatedAt: relTime(r.updated_at),
+    model: cfg.model,
+  };
+}
 
 // ----------------------- Languages -----------------------
 
