@@ -710,9 +710,10 @@ function templateDefaults(id: string | null): Partial<WizardState> {
 
 function Wizard({
   template, onClose, onCreate,
-}: { template: string | null; onClose: () => void; onCreate: (a: Agent) => void }) {
+}: { template: string | null; onClose: () => void; onCreate: (s: WizardState) => void | Promise<void> }) {
   const defaults = templateDefaults(template);
   const [step, setStep] = useState(0);
+  const [saving, setSaving] = useState(false);
   const [s, setS] = useState<WizardState>({
     channelType: null, preset: null,
     agentName: "", website: "", hasDocument: false, readiness: 0,
@@ -739,21 +740,10 @@ function Wizard({
 
   const StepIcon = STEP_ICONS[step];
 
-  const handleCreate = () => {
-    const agent: Agent = {
-      id: crypto.randomUUID(),
-      name: s.agentName || "New Agent",
-      sub: s.role || s.persona.slice(0, 60) || "Custom agent",
-      type: s.channelType ?? "chat",
-      status: "inactive",
-      readiness: 45,
-      channels: s.channels,
-      language: s.language,
-      docs: 0, faqs: 0, calls: 0,
-      updatedAt: "just now",
-      model: s.model,
-    };
-    onCreate(agent);
+  const handleCreate = async () => {
+    if (saving) return;
+    setSaving(true);
+    try { await onCreate(s); } finally { setSaving(false); }
   };
 
   return (
