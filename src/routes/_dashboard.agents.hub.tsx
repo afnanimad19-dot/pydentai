@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useWorkspace } from "@/hooks/useWorkspace";
 import {
   Bot,
   Camera,
@@ -21,18 +23,13 @@ export const Route = createFileRoute("/_dashboard/agents/hub")({
   component: AgentHubPage,
 });
 
-// Shared agents list (mirrors Agent Studio seed data)
 type AgentOption = {
   id: string;
   name: string;
   type: "voice" | "chat" | "omnichannel";
   status: "active" | "inactive";
+  channels: string[];
 };
-
-const AGENTS: AgentOption[] = [
-  { id: "dental-assistant", name: "Dental Assistant", type: "omnichannel", status: "active" },
-  { id: "sarah", name: "Sarah", type: "chat", status: "active" },
-];
 
 type ChannelKey = "ai-calling" | "whatsapp" | "instagram" | "website-chat" | "email" | "sms";
 
