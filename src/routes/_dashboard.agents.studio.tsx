@@ -270,8 +270,9 @@ function AgentStudioPage() {
     label === "WhatsApp" ? "whatsapp" : label === "Instagram" ? "instagram" : label === "Website Chat" ? "website-chat" : label === "SMS" ? "sms" : label === "Email" ? "email" : label.toLowerCase();
 
   const onCreateFromWizard = async (s: WizardState) => {
-    if (!workspaceId) { toast.error("Workspace not ready"); return; }
+    if (!workspaceId) { toast.error("Workspace not ready — refresh and try again"); return; }
     if (!s.agentName.trim()) { toast.error("Agent name required"); return; }
+    if (!s.channelType) { toast.error("Pick an agent type first"); return; }
     const systemPrompt = [
       s.persona && `Persona: ${s.persona}`,
       s.systemInstructions && `Instructions:\n${s.systemInstructions}`,
@@ -291,18 +292,51 @@ function AgentStudioPage() {
       const { data, error } = await supabase.from("ai_agents").insert({
         workspace_id: workspaceId,
         name: s.agentName.trim(),
-        type: s.channelType ?? "chat",
+        type: s.channelType,
         status: "inactive",
         system_prompt: systemPrompt || null,
         channels: s.channels.map(channelToDb),
         config,
       }).select("id").single();
-      if (error) throw error;
+      if (error) {
+        console.error("ai_agents insert failed", error);
+        throw error;
+      }
+      if (!data) throw new Error("Agent created but no id returned");
+
+      // Copy selected knowledge entries to the new agent so existing
+      // associations on other agents are not broken.
+      if (s.selectedKnowledgeIds.length > 0) {
+        const { data: sources, error: srcErr } = await supabase
+          .from("knowledge_entries")
+          .select("title, content, source_type, is_active")
+          .in("id", s.selectedKnowledgeIds);
+        if (srcErr) {
+          console.error("knowledge_entries fetch failed", srcErr);
+          toast.error(`Agent created, but couldn't attach knowledge: ${srcErr.message}`);
+        } else if (sources && sources.length > 0) {
+          const payload = sources.map((row) => ({
+            workspace_id: workspaceId,
+            agent_id: data.id,
+            title: row.title,
+            content: row.content,
+            source_type: row.source_type ?? "manual",
+            is_active: row.is_active ?? true,
+          }));
+          const { error: copyErr } = await supabase.from("knowledge_entries").insert(payload);
+          if (copyErr) {
+            console.error("knowledge_entries copy failed", copyErr);
+            toast.error(`Agent created, but couldn't attach knowledge: ${copyErr.message}`);
+          }
+        }
+      }
+
       toast.success("Agent created");
       setWizardOpen(false);
-      reload();
-      if (data) navigate({ to: "/agents/studio/$id", params: { id: data.id } });
+      await reload();
+      navigate({ to: "/agents/studio/$id", params: { id: data.id } });
     } catch (err: any) {
+      console.error("Create agent error", err);
       toast.error(err?.message ?? "Could not create agent");
     }
   };
@@ -564,8 +598,9 @@ function AgentStudioPage() {
       {wizardOpen && (
         <Wizard
           template={wizardTemplate}
+          workspaceId={workspaceId ?? null}
           onClose={() => setWizardOpen(false)}
-          onCreate={(s) => onCreateFromWizard(s)}
+          onCreate={onCreateFromWizard}
         />
       )}
       {confirmDelete && (
@@ -664,8 +699,8 @@ function SetupWizardModal({
 
 // ----------------------- Wizard -----------------------
 
-const STEP_LABELS = ["Agent Type", "Intelligence", "Identity", "Behavior", "Voice & Channel", "Review"];
-const STEP_ICONS: LucideIcon[] = [Bot, Brain, Sparkles, Settings, Phone, CheckCircle];
+const STEP_LABELS = ["Agent Type", "Intelligence", "Identity", "Behavior", "Voice & Channel", "Knowledge", "Review"];
+const STEP_ICONS: LucideIcon[] = [Bot, Brain, Sparkles, Settings, Phone, HelpCircle, CheckCircle];
 
 interface WizardState {
   channelType: AgentType | null;
@@ -688,7 +723,16 @@ interface WizardState {
   testCallVoice: string;
   channels: string[];
   model: string;
+  selectedKnowledgeIds: string[];
 }
+
+type KnowledgeRow = {
+  id: string;
+  title: string;
+  content: string;
+  is_active: boolean;
+  agent_id: string | null;
+};
 
 function templateDefaults(id: string | null): Partial<WizardState> {
   switch (id) {
@@ -709,11 +753,13 @@ function templateDefaults(id: string | null): Partial<WizardState> {
 }
 
 function Wizard({
-  template, onClose, onCreate,
-}: { template: string | null; onClose: () => void; onCreate: (s: WizardState) => void | Promise<void> }) {
+  template, workspaceId, onClose, onCreate,
+}: { template: string | null; workspaceId: string | null; onClose: () => void; onCreate: (s: WizardState) => void | Promise<void> }) {
   const defaults = templateDefaults(template);
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [knowledge, setKnowledge] = useState<KnowledgeRow[]>([]);
+  const [knowledgeLoading, setKnowledgeLoading] = useState(false);
   const [s, setS] = useState<WizardState>({
     channelType: null, preset: null,
     agentName: "", website: "", hasDocument: false, readiness: 0,
@@ -722,8 +768,27 @@ function Wizard({
     safety: { content: true, escalation: true, pii: false, topics: false },
     voiceProvider: "OIS", voice: "Sophia", stability: 70, speed: 100, testCallVoice: "Alloy",
     channels: [], model: "claude-sonnet-4-5",
+    selectedKnowledgeIds: [],
     ...defaults,
   });
+
+  useEffect(() => {
+    if (!workspaceId) return;
+    setKnowledgeLoading(true);
+    supabase
+      .from("knowledge_entries")
+      .select("id, title, content, is_active, agent_id")
+      .eq("workspace_id", workspaceId)
+      .order("created_at", { ascending: false })
+      .then(({ data, error }) => {
+        setKnowledgeLoading(false);
+        if (error) {
+          toast.error(`Couldn't load knowledge: ${error.message}`);
+          return;
+        }
+        setKnowledge((data ?? []) as KnowledgeRow[]);
+      });
+  }, [workspaceId]);
 
   const update = <K extends keyof WizardState>(k: K, v: WizardState[K]) => setS((p) => ({ ...p, [k]: v }));
 
@@ -789,7 +854,22 @@ function Wizard({
           {step === 2 && <StepIdentity s={s} update={update} />}
           {step === 3 && <StepBehavior s={s} update={update} />}
           {step === 4 && <StepVoiceChannel s={s} update={update} showVoice={showVoice} showChat={showChat} />}
-          {step === 5 && <StepReview s={s} update={update} onJump={(i) => setStep(i)} />}
+          {step === 5 && (
+            <StepKnowledge
+              s={s}
+              update={update}
+              entries={knowledge}
+              loading={knowledgeLoading}
+            />
+          )}
+          {step === 6 && (
+            <StepReview
+              s={s}
+              update={update}
+              onJump={(i) => setStep(i)}
+              entries={knowledge}
+            />
+          )}
         </div>
 
         {/* Footer */}
@@ -808,7 +888,7 @@ function Wizard({
                 {step === STEP_LABELS.length - 2 ? "Review" : "Continue"} <ChevronRight size={14} />
               </button>
             ) : (
-              <button onClick={handleCreate} disabled={saving} className="h-9 px-5 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold disabled:opacity-60">{saving ? "Creating…" : "Create Agent"}</button>
+              <button type="button" onClick={handleCreate} disabled={saving} className="h-9 px-5 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold disabled:opacity-60">{saving ? "Creating…" : "Create Agent"}</button>
             )}
           </div>
         </div>
