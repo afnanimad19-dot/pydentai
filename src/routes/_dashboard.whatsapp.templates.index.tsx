@@ -25,6 +25,8 @@ const LANGS = ["English", "Arabic (العربية)", "Hindi", "Tagalog", "Urdu",
 
 function Templates() {
   const [open, setOpen] = useState(false);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [search, setSearch] = useState("");
   const [tName, setTName] = useState("");
   const [category, setCategory] = useState("marketing");
   const [langs, setLangs] = useState<string[]>(["English"]);
@@ -38,6 +40,20 @@ function Templates() {
   const [ctaUrl, setCtaUrl] = useState({ label: "Book Now", url: "https://" });
   const [ctaPhone, setCtaPhone] = useState({ label: "Call Us", phone: "+9715" });
   const [quick, setQuick] = useState<string[]>(["Yes", "No"]);
+  const [nameError, setNameError] = useState("");
+
+  // CRITICAL: reset all fields whenever modal opens
+  useEffect(() => {
+    if (open) {
+      setTName(""); setCategory("marketing"); setLangs(["English"]);
+      setHeaderType("none"); setHeaderText("");
+      setTab("body");
+      setBody("Hi {{name}}, welcome to {{clinic}}! Reply YES to confirm.");
+      setFooter("Reply STOP to opt out"); setAutoOpt(true);
+      setBtnType("none"); setQuick(["Yes", "No"]);
+      setNameError("");
+    }
+  }, [open]);
 
   const preview = body
     .replace(/{{name}}/g, "Ahmed")
@@ -47,12 +63,19 @@ function Templates() {
 
   const insertVar = (v: string) => setBody((b) => b + " " + v);
 
-  const submit = () => {
-    if (!tName.trim()) { toast.error("Template name required"); return; }
-    toast.success("Template submitted for WhatsApp approval");
+  const persist = (status: Template["status"]) => {
+    if (!tName.trim()) { setNameError("Template name is required"); toast.error("Template name is required"); return false; }
+    const newTemplate: Template = { id: crypto.randomUUID(), name: tName, category, languages: langs, status, body, createdAt: "just now" };
+    setTemplates((prev) => [newTemplate, ...prev]);
     setOpen(false);
+    return true;
   };
-  const saveDraft = () => { toast.success("Draft saved"); setOpen(false); };
+
+  const saveDraft = () => { if (persist("Draft")) toast.success("Template saved as draft"); };
+  const submit = () => { if (persist("Pending")) toast.success("Submitted for WhatsApp approval — review takes 24-48 hours"); };
+
+  const filtered = templates.filter((t) => !search || t.name.toLowerCase().includes(search.toLowerCase()));
+
 
   return (
     <div className="font-sans">
