@@ -86,6 +86,7 @@ import { Route as DashboardWhatsappCampaignsNewRouteImport } from './routes/_das
 import { Route as DashboardEmailCampaignsNewRouteImport } from './routes/_dashboard.email.campaigns.new'
 import { Route as DashboardAgentsWorkflowsIdRouteImport } from './routes/_dashboard.agents.workflows.$id'
 import { Route as DashboardAgentsStudioIdRouteImport } from './routes/_dashboard.agents.studio.$id'
+import { Route as DashboardWhatsappChatbotFlowIdRouteImport } from './routes/_dashboard.whatsapp.chatbot.flow.$id'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -511,6 +512,12 @@ const DashboardAgentsStudioIdRoute = DashboardAgentsStudioIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => DashboardAgentsStudioRoute,
 } as any)
+const DashboardWhatsappChatbotFlowIdRoute =
+  DashboardWhatsappChatbotFlowIdRouteImport.update({
+    id: '/whatsapp/chatbot/flow/$id',
+    path: '/whatsapp/chatbot/flow/$id',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -589,6 +596,7 @@ export interface FileRoutesByFullPath {
   '/whatsapp/campaigns/': typeof DashboardWhatsappCampaignsIndexRoute
   '/whatsapp/chatbot/': typeof DashboardWhatsappChatbotIndexRoute
   '/whatsapp/templates/': typeof DashboardWhatsappTemplatesIndexRoute
+  '/whatsapp/chatbot/flow/$id': typeof DashboardWhatsappChatbotFlowIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -667,6 +675,7 @@ export interface FileRoutesByTo {
   '/whatsapp/campaigns': typeof DashboardWhatsappCampaignsIndexRoute
   '/whatsapp/chatbot': typeof DashboardWhatsappChatbotIndexRoute
   '/whatsapp/templates': typeof DashboardWhatsappTemplatesIndexRoute
+  '/whatsapp/chatbot/flow/$id': typeof DashboardWhatsappChatbotFlowIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -747,6 +756,7 @@ export interface FileRoutesById {
   '/_dashboard/whatsapp/campaigns/': typeof DashboardWhatsappCampaignsIndexRoute
   '/_dashboard/whatsapp/chatbot/': typeof DashboardWhatsappChatbotIndexRoute
   '/_dashboard/whatsapp/templates/': typeof DashboardWhatsappTemplatesIndexRoute
+  '/_dashboard/whatsapp/chatbot/flow/$id': typeof DashboardWhatsappChatbotFlowIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -827,6 +837,7 @@ export interface FileRouteTypes {
     | '/whatsapp/campaigns/'
     | '/whatsapp/chatbot/'
     | '/whatsapp/templates/'
+    | '/whatsapp/chatbot/flow/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -905,6 +916,7 @@ export interface FileRouteTypes {
     | '/whatsapp/campaigns'
     | '/whatsapp/chatbot'
     | '/whatsapp/templates'
+    | '/whatsapp/chatbot/flow/$id'
   id:
     | '__root__'
     | '/'
@@ -984,6 +996,7 @@ export interface FileRouteTypes {
     | '/_dashboard/whatsapp/campaigns/'
     | '/_dashboard/whatsapp/chatbot/'
     | '/_dashboard/whatsapp/templates/'
+    | '/_dashboard/whatsapp/chatbot/flow/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1537,6 +1550,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAgentsStudioIdRouteImport
       parentRoute: typeof DashboardAgentsStudioRoute
     }
+    '/_dashboard/whatsapp/chatbot/flow/$id': {
+      id: '/_dashboard/whatsapp/chatbot/flow/$id'
+      path: '/whatsapp/chatbot/flow/$id'
+      fullPath: '/whatsapp/chatbot/flow/$id'
+      preLoaderRoute: typeof DashboardWhatsappChatbotFlowIdRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
@@ -1649,6 +1669,7 @@ interface DashboardRouteChildren {
   DashboardWhatsappCampaignsIndexRoute: typeof DashboardWhatsappCampaignsIndexRoute
   DashboardWhatsappChatbotIndexRoute: typeof DashboardWhatsappChatbotIndexRoute
   DashboardWhatsappTemplatesIndexRoute: typeof DashboardWhatsappTemplatesIndexRoute
+  DashboardWhatsappChatbotFlowIdRoute: typeof DashboardWhatsappChatbotFlowIdRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -1721,6 +1742,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardWhatsappCampaignsIndexRoute: DashboardWhatsappCampaignsIndexRoute,
   DashboardWhatsappChatbotIndexRoute: DashboardWhatsappChatbotIndexRoute,
   DashboardWhatsappTemplatesIndexRoute: DashboardWhatsappTemplatesIndexRoute,
+  DashboardWhatsappChatbotFlowIdRoute: DashboardWhatsappChatbotFlowIdRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
@@ -1739,13 +1761,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
