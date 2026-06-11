@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
-  Users, RefreshCw, Search, UserPlus, MessageSquare, Star, Target, TrendingUp, Upload, X, Download,
+  Users, RefreshCw, Search, UserPlus, MessageSquare, Star, Target, TrendingUp, Upload, X, Download, Plus,
 } from "lucide-react";
+import { useWhatsappTags } from "@/hooks/useWhatsappTags";
 
 export const Route = createFileRoute("/_dashboard/whatsapp/contacts")({ component: Contacts });
 
@@ -18,12 +19,12 @@ const STATS = [
 
 const FILTERS = ["All", "New", "Contacted", "Qualified"];
 
-type Contact = { id: string; first: string; last: string; phone: string; email: string; tags: string; status: string };
+type Contact = { id: string; first: string; last: string; phone: string; email: string; status: string };
 
 const SEED: Contact[] = [
-  { id: "1", first: "Ahmed", last: "Al Mansouri", phone: "+971 50 123 4567", email: "ahmed@example.com", tags: "VIP", status: "Qualified" },
-  { id: "2", first: "Sara", last: "Hassan", phone: "+971 55 222 3344", email: "sara@example.com", tags: "Lead", status: "Contacted" },
-  { id: "3", first: "Mohamed", last: "K.", phone: "+971 52 988 1122", email: "m.k@example.com", tags: "Returning", status: "New" },
+  { id: "1", first: "Ahmed", last: "Al Mansouri", phone: "+971 50 123 4567", email: "ahmed@example.com", status: "Qualified" },
+  { id: "2", first: "Sara", last: "Hassan", phone: "+971 55 222 3344", email: "sara@example.com", status: "Contacted" },
+  { id: "3", first: "Mohamed", last: "K.", phone: "+971 52 988 1122", email: "m.k@example.com", status: "New" },
 ];
 
 function Contacts() {
@@ -32,7 +33,10 @@ function Contacts() {
   const [selected, setSelected] = useState<string[]>([]);
   const [showAdd, setShowAdd] = useState(false);
   const [showImport, setShowImport] = useState(false);
-  const [form, setForm] = useState({ first: "", last: "", phone: "", email: "", tags: "", status: "New" });
+  const [form, setForm] = useState({ first: "", last: "", phone: "", email: "", status: "New" });
+  const [tagMenuFor, setTagMenuFor] = useState<string | null>(null);
+  const { tags, contactTags, assignTag, unassignTag } = useWhatsappTags();
+
 
   const filtered = filter === "All" ? contacts : contacts.filter((c) => c.status === filter);
 
