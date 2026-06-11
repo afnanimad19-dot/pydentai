@@ -1215,9 +1215,145 @@ function StepVoiceChannel({
   );
 }
 
+function StepKnowledge({
+  s, update, entries, loading,
+}: {
+  s: WizardState;
+  update: <K extends keyof WizardState>(k: K, v: WizardState[K]) => void;
+  entries: KnowledgeRow[];
+  loading: boolean;
+}) {
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<"all" | "unassigned" | "assigned">("all");
+  const selectedSet = new Set(s.selectedKnowledgeIds);
+
+  const filtered = entries.filter((e) => {
+    if (filter === "unassigned" && e.agent_id) return false;
+    if (filter === "assigned" && !e.agent_id) return false;
+    if (query.trim() && !`${e.title} ${e.content}`.toLowerCase().includes(query.toLowerCase())) return false;
+    return true;
+  });
+
+  const toggle = (id: string) => {
+    update(
+      "selectedKnowledgeIds",
+      selectedSet.has(id) ? s.selectedKnowledgeIds.filter((x) => x !== id) : [...s.selectedKnowledgeIds, id],
+    );
+  };
+
+  const toggleAll = () => {
+    const visibleIds = filtered.map((e) => e.id);
+    const allSelected = visibleIds.every((id) => selectedSet.has(id));
+    if (allSelected) {
+      update("selectedKnowledgeIds", s.selectedKnowledgeIds.filter((id) => !visibleIds.includes(id)));
+    } else {
+      update("selectedKnowledgeIds", Array.from(new Set([...s.selectedKnowledgeIds, ...visibleIds])));
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-lg bg-[#7B5CFC]/15 flex items-center justify-center flex-shrink-0">
+          <HelpCircle size={18} className="text-[#7B5CFC]" />
+        </div>
+        <div>
+          <div className="text-white text-sm font-semibold">Attach knowledge</div>
+          <div className="text-[#4A4A6A] text-xs mt-0.5">
+            Pick entries this agent should use to answer questions. Selected entries are copied to this agent, leaving other agents untouched.
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4A4A6A]" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search knowledge entries…"
+            className="w-full h-9 bg-[#06060F] border border-[#1C1C34] rounded-lg text-white text-sm pl-9 pr-3 placeholder:text-[#4A4A6A] focus:outline-none focus:border-[#7B5CFC]/40"
+          />
+        </div>
+        <div className="flex gap-1 bg-[#06060F] border border-[#1C1C34] rounded-lg p-1">
+          {(["all", "unassigned", "assigned"] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-2.5 h-7 rounded-md text-xs capitalize ${filter === f ? "bg-[#7B5CFC] text-white" : "text-[#8B8FA8] hover:text-white"}`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between text-xs">
+        <div className="text-[#8B8FA8]">
+          {s.selectedKnowledgeIds.length} selected · {filtered.length} shown
+        </div>
+        {filtered.length > 0 && (
+          <button onClick={toggleAll} className="text-[#7B5CFC] hover:text-[#9B84FF]">
+            {filtered.every((e) => selectedSet.has(e.id)) ? "Clear visible" : "Select all visible"}
+          </button>
+        )}
+      </div>
+
+      <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+        {loading && <div className="text-[#4A4A6A] text-xs px-1">Loading…</div>}
+        {!loading && entries.length === 0 && (
+          <div className="bg-[#06060F] border border-dashed border-[#1C1C34] rounded-lg p-6 text-center">
+            <div className="text-white text-sm font-medium mb-1">No knowledge entries yet</div>
+            <div className="text-[#4A4A6A] text-xs">Create entries from the Knowledge Base page; you can also add them later from the agent detail view.</div>
+          </div>
+        )}
+        {!loading && entries.length > 0 && filtered.length === 0 && (
+          <div className="text-[#4A4A6A] text-xs px-1">No entries match your filters.</div>
+        )}
+        {filtered.map((e) => {
+          const checked = selectedSet.has(e.id);
+          return (
+            <label
+              key={e.id}
+              className={`flex items-start gap-3 bg-[#06060F] border rounded-lg p-3 cursor-pointer transition-colors ${
+                checked ? "border-[#22C55E]" : "border-[#1C1C34] hover:border-[#7B5CFC]/40"
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() => toggle(e.id)}
+                className="mt-1 accent-[#7B5CFC]"
+              />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <div className="text-white text-sm font-medium truncate">{e.title}</div>
+                  {e.agent_id && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#1C1C34] text-[#8B8FA8]">in use</span>
+                  )}
+                  {!e.is_active && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#1C1C34] text-[#8B8FA8]">inactive</span>
+                  )}
+                </div>
+                <div className="text-[#8B8FA8] text-xs mt-0.5 line-clamp-2">{e.content}</div>
+              </div>
+            </label>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function StepReview({
-  s, update, onJump,
-}: { s: WizardState; update: <K extends keyof WizardState>(k: K, v: WizardState[K]) => void; onJump: (i: number) => void }) {
+  s, update, onJump, entries,
+}: {
+  s: WizardState;
+  update: <K extends keyof WizardState>(k: K, v: WizardState[K]) => void;
+  onJump: (i: number) => void;
+  entries: KnowledgeRow[];
+}) {
+  const selectedEntries = entries.filter((e) => s.selectedKnowledgeIds.includes(e.id));
   return (
     <div className="space-y-3">
       <SummaryCard title="Agent Type" onEdit={() => onJump(0)}>
@@ -1238,6 +1374,21 @@ function StepReview({
           )}
         </div>
       </SummaryCard>
+      <SummaryCard title={`Knowledge (${selectedEntries.length})`} onEdit={() => onJump(5)}>
+        {selectedEntries.length === 0 ? (
+          <div className="text-[#8B8FA8] text-xs">No knowledge attached yet.</div>
+        ) : (
+          <ul className="space-y-1">
+            {selectedEntries.slice(0, 6).map((e) => (
+              <li key={e.id} className="text-[#8B8FA8] text-xs truncate">• {e.title}</li>
+            ))}
+            {selectedEntries.length > 6 && (
+              <li className="text-[#4A4A6A] text-[11px]">+{selectedEntries.length - 6} more</li>
+            )}
+          </ul>
+        )}
+      </SummaryCard>
+
 
       <div>
         <div className="text-[#8B8FA8] text-xs uppercase tracking-wider mb-1.5">AI Model</div>
