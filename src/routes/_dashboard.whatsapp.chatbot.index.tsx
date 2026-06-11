@@ -5,7 +5,7 @@ import {
   GitBranch, Search, Layers, CheckCircle, Zap, Network, Link2, Activity, X, Sparkles,
 } from "lucide-react";
 
-export const Route = createFileRoute("/_dashboard/whatsapp/chatbot")({ component: Chatbot });
+export const Route = createFileRoute("/_dashboard/whatsapp/chatbot/")({ component: Chatbot });
 
 const METRICS = [
   { icon: Layers, color: "text-[#7B5CFC]", value: "0", label: "TOTAL FLOWS", sub: "0 drafts" },
