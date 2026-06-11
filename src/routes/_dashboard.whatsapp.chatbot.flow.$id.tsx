@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useParams, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useParams, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactFlow, {
   addEdge, Background, BackgroundVariant, Controls, MiniMap,
@@ -8,7 +8,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { toast } from "sonner";
 import {
-  ArrowLeft, Search, Maximize2, Play, Eye, Loader2, Save, X, Send, Bot, Trash2,
+  ArrowLeft, Search, Play, Eye, Loader2, Save, X, Send, Bot, Trash2,
 } from "lucide-react";
 import { supabase as supabaseTyped } from "@/integrations/supabase/client";
 const supabase = supabaseTyped as any;
