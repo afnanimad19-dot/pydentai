@@ -128,7 +128,8 @@ function Chatbot() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setCreateOpen(true)} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-sm font-semibold">+ New Agent</button>
+          <a href="/agents/studio" className="h-9 px-3 rounded-lg border border-[#1C1C34] hover:border-[#7B5CFC]/40 text-[#8B8FA8] hover:text-white text-sm flex items-center">Open Agent Studio →</a>
+          <button onClick={() => { if (!workspaceId) return toast.error("Workspace not ready"); setCreateOpen(true); }} disabled={!workspaceId} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed">+ Quick Add</button>
         </div>
       </div>
 
