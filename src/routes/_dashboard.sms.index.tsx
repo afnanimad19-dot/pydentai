@@ -36,13 +36,17 @@ function SmsDashboard() {
   const navigate = useNavigate();
   const [campOpen, setCampOpen] = useState(false);
   const [creditsOpen, setCreditsOpen] = useState(false);
+  const [tplOpen, setTplOpen] = useState(false);
+  const [scheduleMode, setScheduleMode] = useState(false);
+  const openSchedule = () => { setScheduleMode(true); setCampOpen(true); };
+  const openNew = () => { setScheduleMode(false); setCampOpen(true); };
   const quickHandlers: Record<string, () => void> = {
-    "New Campaign": () => setCampOpen(true),
-    "Create Template": () => navigate({ to: "/sms/templates" }),
+    "New Campaign": openNew,
+    "Create Template": () => setTplOpen(true),
     "Import Contacts": () => navigate({ to: "/sms/contacts" }),
     "View Analytics": () => navigate({ to: "/sms/reports" }),
     "Manage Contacts": () => navigate({ to: "/sms/contacts" }),
-    "Schedule Message": () => setCampOpen(true),
+    "Schedule Message": openSchedule,
   };
   return (
     <div className="font-sans">
