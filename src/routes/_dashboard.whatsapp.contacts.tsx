@@ -43,7 +43,7 @@ function Contacts() {
   const submit = () => {
     if (!form.first.trim() || !form.phone.trim()) { toast.error("First name & phone required"); return; }
     setContacts((c) => [{ id: String(Date.now()), ...form }, ...c]);
-    setForm({ first: "", last: "", phone: "", email: "", tags: "", status: "New" });
+    setForm({ first: "", last: "", phone: "", email: "", status: "New" });
     setShowAdd(false);
     toast.success("✓ Contact added");
   };
