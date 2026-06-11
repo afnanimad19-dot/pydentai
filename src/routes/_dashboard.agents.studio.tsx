@@ -270,8 +270,9 @@ function AgentStudioPage() {
     label === "WhatsApp" ? "whatsapp" : label === "Instagram" ? "instagram" : label === "Website Chat" ? "website-chat" : label === "SMS" ? "sms" : label === "Email" ? "email" : label.toLowerCase();
 
   const onCreateFromWizard = async (s: WizardState) => {
-    if (!workspaceId) { toast.error("Workspace not ready"); return; }
+    if (!workspaceId) { toast.error("Workspace not ready — refresh and try again"); return; }
     if (!s.agentName.trim()) { toast.error("Agent name required"); return; }
+    if (!s.channelType) { toast.error("Pick an agent type first"); return; }
     const systemPrompt = [
       s.persona && `Persona: ${s.persona}`,
       s.systemInstructions && `Instructions:\n${s.systemInstructions}`,
@@ -291,18 +292,51 @@ function AgentStudioPage() {
       const { data, error } = await supabase.from("ai_agents").insert({
         workspace_id: workspaceId,
         name: s.agentName.trim(),
-        type: s.channelType ?? "chat",
+        type: s.channelType,
         status: "inactive",
         system_prompt: systemPrompt || null,
         channels: s.channels.map(channelToDb),
         config,
       }).select("id").single();
-      if (error) throw error;
+      if (error) {
+        console.error("ai_agents insert failed", error);
+        throw error;
+      }
+      if (!data) throw new Error("Agent created but no id returned");
+
+      // Copy selected knowledge entries to the new agent so existing
+      // associations on other agents are not broken.
+      if (s.selectedKnowledgeIds.length > 0) {
+        const { data: sources, error: srcErr } = await supabase
+          .from("knowledge_entries")
+          .select("title, content, source_type, is_active")
+          .in("id", s.selectedKnowledgeIds);
+        if (srcErr) {
+          console.error("knowledge_entries fetch failed", srcErr);
+          toast.error(`Agent created, but couldn't attach knowledge: ${srcErr.message}`);
+        } else if (sources && sources.length > 0) {
+          const payload = sources.map((row) => ({
+            workspace_id: workspaceId,
+            agent_id: data.id,
+            title: row.title,
+            content: row.content,
+            source_type: row.source_type ?? "manual",
+            is_active: row.is_active ?? true,
+          }));
+          const { error: copyErr } = await supabase.from("knowledge_entries").insert(payload);
+          if (copyErr) {
+            console.error("knowledge_entries copy failed", copyErr);
+            toast.error(`Agent created, but couldn't attach knowledge: ${copyErr.message}`);
+          }
+        }
+      }
+
       toast.success("Agent created");
       setWizardOpen(false);
-      reload();
-      if (data) navigate({ to: "/agents/studio/$id", params: { id: data.id } });
+      await reload();
+      navigate({ to: "/agents/studio/$id", params: { id: data.id } });
     } catch (err: any) {
+      console.error("Create agent error", err);
       toast.error(err?.message ?? "Could not create agent");
     }
   };
@@ -564,8 +598,9 @@ function AgentStudioPage() {
       {wizardOpen && (
         <Wizard
           template={wizardTemplate}
+          workspaceId={workspaceId ?? null}
           onClose={() => setWizardOpen(false)}
-          onCreate={(s) => onCreateFromWizard(s)}
+          onCreate={onCreateFromWizard}
         />
       )}
       {confirmDelete && (
@@ -664,8 +699,8 @@ function SetupWizardModal({
 
 // ----------------------- Wizard -----------------------
 
-const STEP_LABELS = ["Agent Type", "Intelligence", "Identity", "Behavior", "Voice & Channel", "Review"];
-const STEP_ICONS: LucideIcon[] = [Bot, Brain, Sparkles, Settings, Phone, CheckCircle];
+const STEP_LABELS = ["Agent Type", "Intelligence", "Identity", "Behavior", "Voice & Channel", "Knowledge", "Review"];
+const STEP_ICONS: LucideIcon[] = [Bot, Brain, Sparkles, Settings, Phone, HelpCircle, CheckCircle];
 
 interface WizardState {
   channelType: AgentType | null;
@@ -688,7 +723,16 @@ interface WizardState {
   testCallVoice: string;
   channels: string[];
   model: string;
+  selectedKnowledgeIds: string[];
 }
+
+type KnowledgeRow = {
+  id: string;
+  title: string;
+  content: string;
+  is_active: boolean;
+  agent_id: string | null;
+};
 
 function templateDefaults(id: string | null): Partial<WizardState> {
   switch (id) {
@@ -709,11 +753,13 @@ function templateDefaults(id: string | null): Partial<WizardState> {
 }
 
 function Wizard({
-  template, onClose, onCreate,
-}: { template: string | null; onClose: () => void; onCreate: (s: WizardState) => void | Promise<void> }) {
+  template, workspaceId, onClose, onCreate,
+}: { template: string | null; workspaceId: string | null; onClose: () => void; onCreate: (s: WizardState) => void | Promise<void> }) {
   const defaults = templateDefaults(template);
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [knowledge, setKnowledge] = useState<KnowledgeRow[]>([]);
+  const [knowledgeLoading, setKnowledgeLoading] = useState(false);
   const [s, setS] = useState<WizardState>({
     channelType: null, preset: null,
     agentName: "", website: "", hasDocument: false, readiness: 0,
@@ -722,8 +768,27 @@ function Wizard({
     safety: { content: true, escalation: true, pii: false, topics: false },
     voiceProvider: "OIS", voice: "Sophia", stability: 70, speed: 100, testCallVoice: "Alloy",
     channels: [], model: "claude-sonnet-4-5",
+    selectedKnowledgeIds: [],
     ...defaults,
   });
+
+  useEffect(() => {
+    if (!workspaceId) return;
+    setKnowledgeLoading(true);
+    supabase
+      .from("knowledge_entries")
+      .select("id, title, content, is_active, agent_id")
+      .eq("workspace_id", workspaceId)
+      .order("created_at", { ascending: false })
+      .then(({ data, error }) => {
+        setKnowledgeLoading(false);
+        if (error) {
+          toast.error(`Couldn't load knowledge: ${error.message}`);
+          return;
+        }
+        setKnowledge((data ?? []) as KnowledgeRow[]);
+      });
+  }, [workspaceId]);
 
   const update = <K extends keyof WizardState>(k: K, v: WizardState[K]) => setS((p) => ({ ...p, [k]: v }));
 
@@ -789,7 +854,22 @@ function Wizard({
           {step === 2 && <StepIdentity s={s} update={update} />}
           {step === 3 && <StepBehavior s={s} update={update} />}
           {step === 4 && <StepVoiceChannel s={s} update={update} showVoice={showVoice} showChat={showChat} />}
-          {step === 5 && <StepReview s={s} update={update} onJump={(i) => setStep(i)} />}
+          {step === 5 && (
+            <StepKnowledge
+              s={s}
+              update={update}
+              entries={knowledge}
+              loading={knowledgeLoading}
+            />
+          )}
+          {step === 6 && (
+            <StepReview
+              s={s}
+              update={update}
+              onJump={(i) => setStep(i)}
+              entries={knowledge}
+            />
+          )}
         </div>
 
         {/* Footer */}
@@ -808,7 +888,7 @@ function Wizard({
                 {step === STEP_LABELS.length - 2 ? "Review" : "Continue"} <ChevronRight size={14} />
               </button>
             ) : (
-              <button onClick={handleCreate} disabled={saving} className="h-9 px-5 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold disabled:opacity-60">{saving ? "Creating…" : "Create Agent"}</button>
+              <button type="button" onClick={handleCreate} disabled={saving} className="h-9 px-5 rounded-lg bg-[#7B5CFC] hover:bg-[#6047DB] text-white text-sm font-semibold disabled:opacity-60">{saving ? "Creating…" : "Create Agent"}</button>
             )}
           </div>
         </div>
@@ -1135,9 +1215,145 @@ function StepVoiceChannel({
   );
 }
 
+function StepKnowledge({
+  s, update, entries, loading,
+}: {
+  s: WizardState;
+  update: <K extends keyof WizardState>(k: K, v: WizardState[K]) => void;
+  entries: KnowledgeRow[];
+  loading: boolean;
+}) {
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<"all" | "unassigned" | "assigned">("all");
+  const selectedSet = new Set(s.selectedKnowledgeIds);
+
+  const filtered = entries.filter((e) => {
+    if (filter === "unassigned" && e.agent_id) return false;
+    if (filter === "assigned" && !e.agent_id) return false;
+    if (query.trim() && !`${e.title} ${e.content}`.toLowerCase().includes(query.toLowerCase())) return false;
+    return true;
+  });
+
+  const toggle = (id: string) => {
+    update(
+      "selectedKnowledgeIds",
+      selectedSet.has(id) ? s.selectedKnowledgeIds.filter((x) => x !== id) : [...s.selectedKnowledgeIds, id],
+    );
+  };
+
+  const toggleAll = () => {
+    const visibleIds = filtered.map((e) => e.id);
+    const allSelected = visibleIds.every((id) => selectedSet.has(id));
+    if (allSelected) {
+      update("selectedKnowledgeIds", s.selectedKnowledgeIds.filter((id) => !visibleIds.includes(id)));
+    } else {
+      update("selectedKnowledgeIds", Array.from(new Set([...s.selectedKnowledgeIds, ...visibleIds])));
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-lg bg-[#7B5CFC]/15 flex items-center justify-center flex-shrink-0">
+          <HelpCircle size={18} className="text-[#7B5CFC]" />
+        </div>
+        <div>
+          <div className="text-white text-sm font-semibold">Attach knowledge</div>
+          <div className="text-[#4A4A6A] text-xs mt-0.5">
+            Pick entries this agent should use to answer questions. Selected entries are copied to this agent, leaving other agents untouched.
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4A4A6A]" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search knowledge entries…"
+            className="w-full h-9 bg-[#06060F] border border-[#1C1C34] rounded-lg text-white text-sm pl-9 pr-3 placeholder:text-[#4A4A6A] focus:outline-none focus:border-[#7B5CFC]/40"
+          />
+        </div>
+        <div className="flex gap-1 bg-[#06060F] border border-[#1C1C34] rounded-lg p-1">
+          {(["all", "unassigned", "assigned"] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-2.5 h-7 rounded-md text-xs capitalize ${filter === f ? "bg-[#7B5CFC] text-white" : "text-[#8B8FA8] hover:text-white"}`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between text-xs">
+        <div className="text-[#8B8FA8]">
+          {s.selectedKnowledgeIds.length} selected · {filtered.length} shown
+        </div>
+        {filtered.length > 0 && (
+          <button onClick={toggleAll} className="text-[#7B5CFC] hover:text-[#9B84FF]">
+            {filtered.every((e) => selectedSet.has(e.id)) ? "Clear visible" : "Select all visible"}
+          </button>
+        )}
+      </div>
+
+      <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+        {loading && <div className="text-[#4A4A6A] text-xs px-1">Loading…</div>}
+        {!loading && entries.length === 0 && (
+          <div className="bg-[#06060F] border border-dashed border-[#1C1C34] rounded-lg p-6 text-center">
+            <div className="text-white text-sm font-medium mb-1">No knowledge entries yet</div>
+            <div className="text-[#4A4A6A] text-xs">Create entries from the Knowledge Base page; you can also add them later from the agent detail view.</div>
+          </div>
+        )}
+        {!loading && entries.length > 0 && filtered.length === 0 && (
+          <div className="text-[#4A4A6A] text-xs px-1">No entries match your filters.</div>
+        )}
+        {filtered.map((e) => {
+          const checked = selectedSet.has(e.id);
+          return (
+            <label
+              key={e.id}
+              className={`flex items-start gap-3 bg-[#06060F] border rounded-lg p-3 cursor-pointer transition-colors ${
+                checked ? "border-[#22C55E]" : "border-[#1C1C34] hover:border-[#7B5CFC]/40"
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() => toggle(e.id)}
+                className="mt-1 accent-[#7B5CFC]"
+              />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <div className="text-white text-sm font-medium truncate">{e.title}</div>
+                  {e.agent_id && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#1C1C34] text-[#8B8FA8]">in use</span>
+                  )}
+                  {!e.is_active && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#1C1C34] text-[#8B8FA8]">inactive</span>
+                  )}
+                </div>
+                <div className="text-[#8B8FA8] text-xs mt-0.5 line-clamp-2">{e.content}</div>
+              </div>
+            </label>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function StepReview({
-  s, update, onJump,
-}: { s: WizardState; update: <K extends keyof WizardState>(k: K, v: WizardState[K]) => void; onJump: (i: number) => void }) {
+  s, update, onJump, entries,
+}: {
+  s: WizardState;
+  update: <K extends keyof WizardState>(k: K, v: WizardState[K]) => void;
+  onJump: (i: number) => void;
+  entries: KnowledgeRow[];
+}) {
+  const selectedEntries = entries.filter((e) => s.selectedKnowledgeIds.includes(e.id));
   return (
     <div className="space-y-3">
       <SummaryCard title="Agent Type" onEdit={() => onJump(0)}>
@@ -1158,6 +1374,21 @@ function StepReview({
           )}
         </div>
       </SummaryCard>
+      <SummaryCard title={`Knowledge (${selectedEntries.length})`} onEdit={() => onJump(5)}>
+        {selectedEntries.length === 0 ? (
+          <div className="text-[#8B8FA8] text-xs">No knowledge attached yet.</div>
+        ) : (
+          <ul className="space-y-1">
+            {selectedEntries.slice(0, 6).map((e) => (
+              <li key={e.id} className="text-[#8B8FA8] text-xs truncate">• {e.title}</li>
+            ))}
+            {selectedEntries.length > 6 && (
+              <li className="text-[#4A4A6A] text-[11px]">+{selectedEntries.length - 6} more</li>
+            )}
+          </ul>
+        )}
+      </SummaryCard>
+
 
       <div>
         <div className="text-[#8B8FA8] text-xs uppercase tracking-wider mb-1.5">AI Model</div>
