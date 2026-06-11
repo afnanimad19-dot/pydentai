@@ -50,10 +50,13 @@ function Chatbot() {
   const reload = useCallback(async () => {
     if (!workspaceId) return;
     setLoading(true);
-    const [{ data: a }, { data: e }] = await Promise.all([
-      supabase.from("ai_agents").select("*").eq("workspace_id", workspaceId).eq("type", "whatsapp_chatbot").order("created_at", { ascending: false }),
+    // All workspace agents with WhatsApp in their channels (regardless of type)
+    const [{ data: a, error: aErr }, { data: e, error: eErr }] = await Promise.all([
+      supabase.from("ai_agents").select("*").eq("workspace_id", workspaceId).contains("channels", ["whatsapp"]).order("created_at", { ascending: false }),
       supabase.from("knowledge_entries").select("*").eq("workspace_id", workspaceId).order("created_at", { ascending: false }),
     ]);
+    if (aErr) toast.error(aErr.message);
+    if (eErr) toast.error(eErr.message);
     setAgents((a ?? []) as Agent[]);
     setEntries((e ?? []) as Entry[]);
     setLoading(false);
