@@ -84,7 +84,7 @@ import { Route as DashboardWhatsappCampaignsIndexRouteImport } from './routes/_d
 import { Route as DashboardWhatsappTemplatesNewRouteImport } from './routes/_dashboard.whatsapp.templates.new'
 import { Route as DashboardWhatsappCampaignsNewRouteImport } from './routes/_dashboard.whatsapp.campaigns.new'
 import { Route as DashboardEmailCampaignsNewRouteImport } from './routes/_dashboard.email.campaigns.new'
-import { Route as DashboardAgentsWorkflowsCanvasRouteImport } from './routes/_dashboard.agents.workflows.canvas'
+import { Route as DashboardAgentsWorkflowsIdRouteImport } from './routes/_dashboard.agents.workflows.$id'
 import { Route as DashboardAgentsStudioIdRouteImport } from './routes/_dashboard.agents.studio.$id'
 
 const SignupRoute = SignupRouteImport.update({
@@ -500,10 +500,10 @@ const DashboardEmailCampaignsNewRoute =
     path: '/new',
     getParentRoute: () => DashboardEmailCampaignsRoute,
   } as any)
-const DashboardAgentsWorkflowsCanvasRoute =
-  DashboardAgentsWorkflowsCanvasRouteImport.update({
-    id: '/canvas',
-    path: '/canvas',
+const DashboardAgentsWorkflowsIdRoute =
+  DashboardAgentsWorkflowsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
     getParentRoute: () => DashboardAgentsWorkflowsRoute,
   } as any)
 const DashboardAgentsStudioIdRoute = DashboardAgentsStudioIdRouteImport.update({
@@ -583,7 +583,7 @@ export interface FileRoutesByFullPath {
   '/website-chat/': typeof DashboardWebsiteChatIndexRoute
   '/whatsapp/': typeof DashboardWhatsappIndexRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
-  '/agents/workflows/canvas': typeof DashboardAgentsWorkflowsCanvasRoute
+  '/agents/workflows/$id': typeof DashboardAgentsWorkflowsIdRoute
   '/email/campaigns/new': typeof DashboardEmailCampaignsNewRoute
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
   '/whatsapp/templates/new': typeof DashboardWhatsappTemplatesNewRoute
@@ -661,7 +661,7 @@ export interface FileRoutesByTo {
   '/website-chat': typeof DashboardWebsiteChatIndexRoute
   '/whatsapp': typeof DashboardWhatsappIndexRoute
   '/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
-  '/agents/workflows/canvas': typeof DashboardAgentsWorkflowsCanvasRoute
+  '/agents/workflows/$id': typeof DashboardAgentsWorkflowsIdRoute
   '/email/campaigns/new': typeof DashboardEmailCampaignsNewRoute
   '/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
   '/whatsapp/templates/new': typeof DashboardWhatsappTemplatesNewRoute
@@ -741,7 +741,7 @@ export interface FileRoutesById {
   '/_dashboard/website-chat/': typeof DashboardWebsiteChatIndexRoute
   '/_dashboard/whatsapp/': typeof DashboardWhatsappIndexRoute
   '/_dashboard/agents/studio/$id': typeof DashboardAgentsStudioIdRoute
-  '/_dashboard/agents/workflows/canvas': typeof DashboardAgentsWorkflowsCanvasRoute
+  '/_dashboard/agents/workflows/$id': typeof DashboardAgentsWorkflowsIdRoute
   '/_dashboard/email/campaigns/new': typeof DashboardEmailCampaignsNewRoute
   '/_dashboard/whatsapp/campaigns/new': typeof DashboardWhatsappCampaignsNewRoute
   '/_dashboard/whatsapp/templates/new': typeof DashboardWhatsappTemplatesNewRoute
@@ -821,7 +821,7 @@ export interface FileRouteTypes {
     | '/website-chat/'
     | '/whatsapp/'
     | '/agents/studio/$id'
-    | '/agents/workflows/canvas'
+    | '/agents/workflows/$id'
     | '/email/campaigns/new'
     | '/whatsapp/campaigns/new'
     | '/whatsapp/templates/new'
@@ -899,7 +899,7 @@ export interface FileRouteTypes {
     | '/website-chat'
     | '/whatsapp'
     | '/agents/studio/$id'
-    | '/agents/workflows/canvas'
+    | '/agents/workflows/$id'
     | '/email/campaigns/new'
     | '/whatsapp/campaigns/new'
     | '/whatsapp/templates/new'
@@ -978,7 +978,7 @@ export interface FileRouteTypes {
     | '/_dashboard/website-chat/'
     | '/_dashboard/whatsapp/'
     | '/_dashboard/agents/studio/$id'
-    | '/_dashboard/agents/workflows/canvas'
+    | '/_dashboard/agents/workflows/$id'
     | '/_dashboard/email/campaigns/new'
     | '/_dashboard/whatsapp/campaigns/new'
     | '/_dashboard/whatsapp/templates/new'
@@ -1523,11 +1523,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEmailCampaignsNewRouteImport
       parentRoute: typeof DashboardEmailCampaignsRoute
     }
-    '/_dashboard/agents/workflows/canvas': {
-      id: '/_dashboard/agents/workflows/canvas'
-      path: '/canvas'
-      fullPath: '/agents/workflows/canvas'
-      preLoaderRoute: typeof DashboardAgentsWorkflowsCanvasRouteImport
+    '/_dashboard/agents/workflows/$id': {
+      id: '/_dashboard/agents/workflows/$id'
+      path: '/$id'
+      fullPath: '/agents/workflows/$id'
+      preLoaderRoute: typeof DashboardAgentsWorkflowsIdRouteImport
       parentRoute: typeof DashboardAgentsWorkflowsRoute
     }
     '/_dashboard/agents/studio/$id': {
@@ -1554,12 +1554,12 @@ const DashboardAgentsStudioRouteWithChildren =
   )
 
 interface DashboardAgentsWorkflowsRouteChildren {
-  DashboardAgentsWorkflowsCanvasRoute: typeof DashboardAgentsWorkflowsCanvasRoute
+  DashboardAgentsWorkflowsIdRoute: typeof DashboardAgentsWorkflowsIdRoute
 }
 
 const DashboardAgentsWorkflowsRouteChildren: DashboardAgentsWorkflowsRouteChildren =
   {
-    DashboardAgentsWorkflowsCanvasRoute: DashboardAgentsWorkflowsCanvasRoute,
+    DashboardAgentsWorkflowsIdRoute: DashboardAgentsWorkflowsIdRoute,
   }
 
 const DashboardAgentsWorkflowsRouteWithChildren =
