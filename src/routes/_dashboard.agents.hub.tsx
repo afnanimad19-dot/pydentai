@@ -122,7 +122,7 @@ function AgentHubPage() {
         <div className="bg-[#0B0B1A] border border-[#1C1C34] rounded-xl px-6 py-4 flex items-center gap-4">
           <Bot size={22} className="text-[#7B5CFC]" />
           <div>
-            <div className="text-white font-bold text-xl leading-none">{AGENTS.length}</div>
+            <div className="text-white font-bold text-xl leading-none">{agents.length}</div>
             <div className="text-[#4A4A6A] text-[11px] uppercase tracking-[0.06em] mt-1.5">Total Agents</div>
           </div>
         </div>
