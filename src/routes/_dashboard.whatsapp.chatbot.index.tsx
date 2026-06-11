@@ -5,7 +5,8 @@ import {
   GitBranch, Search, Layers, CheckCircle, Zap, Network, Link2, Activity,
   Plus, Sparkles, Loader2, Trash2, ExternalLink, X,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase as supabaseTyped } from "@/integrations/supabase/client";
+const supabase = supabaseTyped as any;
 import { useWorkspace } from "@/hooks/useWorkspace";
 
 export const Route = createFileRoute("/_dashboard/whatsapp/chatbot/")({ component: ChatbotIndex });
