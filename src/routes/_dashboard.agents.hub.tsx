@@ -194,12 +194,14 @@ function typeBadgeTone(t: AgentOption["type"]) {
 
 function ChannelCard({
   channel,
+  agents,
   selectedId,
   onSelect,
   onToggle,
   onOpenAgent,
 }: {
   channel: Channel;
+  agents: AgentOption[];
   selectedId: string | null;
   onSelect: (id: string | null) => void;
   onToggle: () => void;
@@ -218,7 +220,7 @@ function ChannelCard({
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
-  const selected = AGENTS.find((a) => a.id === selectedId) || null;
+  const selected = agents.find((a) => a.id === selectedId) || null;
 
   const statusBadge =
     channel.statusKind === "live" ? "bg-[#22C55E]/12 text-[#22C55E]"
