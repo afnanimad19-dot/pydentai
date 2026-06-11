@@ -194,12 +194,14 @@ function typeBadgeTone(t: AgentOption["type"]) {
 
 function ChannelCard({
   channel,
+  agents,
   selectedId,
   onSelect,
   onToggle,
   onOpenAgent,
 }: {
   channel: Channel;
+  agents: AgentOption[];
   selectedId: string | null;
   onSelect: (id: string | null) => void;
   onToggle: () => void;
@@ -218,7 +220,7 @@ function ChannelCard({
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
-  const selected = AGENTS.find((a) => a.id === selectedId) || null;
+  const selected = agents.find((a) => a.id === selectedId) || null;
 
   const statusBadge =
     channel.statusKind === "live" ? "bg-[#22C55E]/12 text-[#22C55E]"
@@ -279,7 +281,7 @@ function ChannelCard({
               <Bot size={14} className="text-[#4A4A6A]" />
               <span className="text-sm text-[#4A4A6A]">No agent</span>
             </button>
-            {AGENTS.map((a) => (
+            {agents.map((a) => (
               <button
                 key={a.id}
                 onClick={() => { onSelect(a.id); setOpen(false); }}
@@ -321,15 +323,17 @@ function ChannelCard({
 
 function AgentSlideOver({
   channel,
+  agents,
   selectedId,
   onClose,
 }: {
   channel: Channel;
+  agents: AgentOption[];
   selectedId: string | null;
   onClose: () => void;
 }) {
   const navigate = useNavigate();
-  const selected = AGENTS.find((a) => a.id === selectedId) || null;
+  const selected = agents.find((a) => a.id === selectedId) || null;
   const [active, setActive] = useState(channel.enabled);
   const [readiness, setReadiness] = useState(0);
   const targetReadiness = selected ? 84 : 12;
