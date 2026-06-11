@@ -191,9 +191,12 @@ function Chatbot() {
               <div className="w-14 h-14 bg-[#00D4AA]/10 border border-[#00D4AA]/20 rounded-2xl flex items-center justify-center mb-4">
                 <GitBranch size={26} className="text-[#00D4AA]/50" />
               </div>
-              <div className="text-white text-sm font-semibold mb-1">No agents yet</div>
-              <div className="text-[#4A4A6A] text-xs max-w-[220px] mb-4">Create a chatbot agent to start answering WhatsApp messages automatically.</div>
-              <button onClick={() => setCreateOpen(true)} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-xs font-semibold">+ New Agent</button>
+              <div className="text-white text-sm font-semibold mb-1">No WhatsApp agents yet</div>
+              <div className="text-[#4A4A6A] text-xs max-w-[240px] mb-4">Create an agent in Agent Studio and assign it to the WhatsApp channel, or quick-add one here.</div>
+              <div className="flex gap-2">
+                <a href="/agents/studio" className="h-9 px-3 rounded-lg border border-[#1C1C34] hover:border-[#7B5CFC]/40 text-[#8B8FA8] hover:text-white text-xs flex items-center">Open Studio</a>
+                <button onClick={() => { if (!workspaceId) return toast.error("Workspace not ready"); setCreateOpen(true); }} className="h-9 px-4 rounded-lg bg-[#00D4AA] hover:bg-[#00B894] text-black text-xs font-semibold">+ Quick Add</button>
+              </div>
             </div>
           ) : (
             <div className="flex flex-col gap-1">
