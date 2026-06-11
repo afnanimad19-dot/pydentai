@@ -192,7 +192,7 @@ function Contacts() {
                 <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="50 123 4567" className="flex-1 h-10 bg-[#0B0B1A] border border-[#1E1E2E] rounded-r-lg px-3 text-white text-sm" />
               </div>
               <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email" className="w-full h-10 bg-[#0B0B1A] border border-[#1E1E2E] rounded-lg px-3 text-white text-sm" />
-              <input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} placeholder="Tags (comma separated)" className="w-full h-10 bg-[#0B0B1A] border border-[#1E1E2E] rounded-lg px-3 text-white text-sm" />
+              
               <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className="w-full h-10 bg-[#0B0B1A] border border-[#1E1E2E] rounded-lg px-3 text-white text-sm">
                 <option>New</option><option>Contacted</option><option>Qualified</option>
               </select>
