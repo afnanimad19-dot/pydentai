@@ -212,7 +212,9 @@ function Stat({
 
 function AgentStudioPage() {
   const navigate = useNavigate();
-  const [agents, setAgents] = useState<Agent[]>(SEED_AGENTS);
+  const { workspaceId } = useWorkspace();
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [loading, setLoading] = useState(true);
   const [setupOpen, setSetupOpen] = useState(false);
   const [wizardOpen, setWizardOpen] = useState(false);
   const [wizardTemplate, setWizardTemplate] = useState<string | null>(null);
@@ -222,6 +224,22 @@ function AgentStudioPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [menuOpenFor, setMenuOpenFor] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Agent | null>(null);
+
+  const reload = useCallback(async () => {
+    if (!workspaceId) return;
+    setLoading(true);
+    const [{ data: rows, error }, { data: kb }] = await Promise.all([
+      supabase.from("ai_agents").select("*").eq("workspace_id", workspaceId).order("created_at", { ascending: false }),
+      supabase.from("knowledge_entries").select("agent_id").eq("workspace_id", workspaceId),
+    ]);
+    if (error) toast.error(error.message);
+    const counts = new Map<string, number>();
+    (kb ?? []).forEach((k: any) => { if (k.agent_id) counts.set(k.agent_id, (counts.get(k.agent_id) ?? 0) + 1); });
+    setAgents(((rows ?? []) as DbAgent[]).map((r) => dbToAgent(r, counts.get(r.id) ?? 0)));
+    setLoading(false);
+  }, [workspaceId]);
+
+  useEffect(() => { reload(); }, [reload]);
 
   const counts = useMemo(() => ({
     All: agents.length,
@@ -241,30 +259,76 @@ function AgentStudioPage() {
     return list;
   }, [agents, filter, query]);
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-      toast.success("Refreshed");
-    }, 1000);
+    await reload();
+    setRefreshing(false);
+    toast.success("Refreshed");
   };
 
-  const onCreateAgent = (a: Agent) => {
-    setAgents((prev) => [a, ...prev]);
-    toast.success("Agent created successfully");
+  const channelToDb = (label: string) =>
+    label === "WhatsApp" ? "whatsapp" : label === "Instagram" ? "instagram" : label === "Website Chat" ? "website-chat" : label === "SMS" ? "sms" : label === "Email" ? "email" : label.toLowerCase();
+
+  const onCreateFromWizard = async (s: WizardState) => {
+    if (!workspaceId) { toast.error("Workspace not ready"); return; }
+    if (!s.agentName.trim()) { toast.error("Agent name required"); return; }
+    const systemPrompt = [
+      s.persona && `Persona: ${s.persona}`,
+      s.systemInstructions && `Instructions:\n${s.systemInstructions}`,
+      `Safety: ${Object.entries(s.safety).filter(([, v]) => v).map(([k]) => k).join(", ") || "none"}`,
+    ].filter(Boolean).join("\n\n");
+    const config = {
+      identity: { name: s.agentName, role: s.role, organization: s.organization, website: s.website },
+      preset: s.preset,
+      language: s.language,
+      greeting_message: s.openingMessage,
+      safety: s.safety,
+      voice: s.channelType === "voice" || s.channelType === "omnichannel" ? { provider: s.voiceProvider, voice: s.voice, stability: s.stability, speed: s.speed, testCallVoice: s.testCallVoice } : null,
+      model: s.model,
+      readiness: 45,
+    };
+    try {
+      const { data, error } = await supabase.from("ai_agents").insert({
+        workspace_id: workspaceId,
+        name: s.agentName.trim(),
+        type: s.channelType ?? "chat",
+        status: "inactive",
+        system_prompt: systemPrompt || null,
+        channels: s.channels.map(channelToDb),
+        config,
+      }).select("id").single();
+      if (error) throw error;
+      toast.success("Agent created");
+      setWizardOpen(false);
+      reload();
+      if (data) navigate({ to: "/agents/studio/$id", params: { id: data.id } });
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not create agent");
+    }
   };
 
-  const onDuplicate = (a: Agent) => {
-    const copy: Agent = { ...a, id: crypto.randomUUID(), name: `${a.name} (Copy)`, updatedAt: "just now" };
-    setAgents((prev) => [copy, ...prev]);
-    toast.success("Agent duplicated");
+  const onDuplicate = async (a: Agent) => {
     setMenuOpenFor(null);
+    if (!workspaceId) { toast.error("Workspace not ready"); return; }
+    const { data: src, error: srcErr } = await supabase.from("ai_agents").select("*").eq("id", a.id).maybeSingle();
+    if (srcErr || !src) { toast.error(srcErr?.message ?? "Original not found"); return; }
+    const { error } = await supabase.from("ai_agents").insert({
+      workspace_id: workspaceId,
+      name: `${src.name} (Copy)`,
+      type: src.type, status: "inactive",
+      system_prompt: src.system_prompt, channels: src.channels, config: src.config, model: src.model,
+    });
+    if (error) return toast.error(error.message);
+    toast.success("Agent duplicated");
+    reload();
   };
 
-  const onDelete = (a: Agent) => {
-    setAgents((prev) => prev.filter((x) => x.id !== a.id));
-    toast.success("Agent deleted");
+  const onDelete = async (a: Agent) => {
+    const { error } = await supabase.from("ai_agents").delete().eq("id", a.id);
     setConfirmDelete(null);
+    if (error) return toast.error(error.message);
+    toast.success("Agent deleted");
+    reload();
   };
 
   const goToDetail = (id: string) => navigate({ to: "/agents/studio/$id", params: { id } });
